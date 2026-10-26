@@ -1,0 +1,185 @@
+<!-- RADAR DE VIRALIDAD: VIDEOS QUE EXPLOTAN EN OTRAS REGIONES + TEMAS URGENTES SIN VIDEO -->
+<section class="bento-main-card" id="trendRadarSection" hidden style="margin-top: 14px; padding: 22px;">
+    <header class="bento-card-header" style="flex-wrap: wrap; gap: 14px; align-items: center;">
+        <div class="bento-header-left">
+            <div class="app-badge-icon" style="background: linear-gradient(135deg, #ef4444, #f59e0b);" aria-hidden="true">📡</div>
+            <div>
+                <h3 style="font-size: 20px; font-weight: 800; margin: 0; color: #fff;">Radar de Viralidad</h3>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--text-muted);">Qué explota ahora en otras regiones y qué temas urgentes aún no tienen video — réplica en español con mejoras en 1 clic</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span id="radarUpdatedBadge" class="radar-updated-badge">Cargando radar…</span>
+            <div class="subcard-pills-wrap" style="margin: 0;">
+                <button type="button" class="subcard-pill-btn active" data-radar-tab="videos">🎥 Ranking viral</button>
+                <button type="button" class="subcard-pill-btn" data-radar-tab="topics">🚨 Temas sin video</button>
+                <button type="button" class="subcard-pill-btn" data-radar-tab="favorites">⭐ Favoritos (<span id="radarFavCountBadge">0</span>)</button>
+            </div>
+            <button type="button" class="subcard-pill-btn" id="radarRefreshBtn" title="Forzar barrido ahora (charts + IA)">↻</button>
+        </div>
+    </header>
+
+    <!-- PESTAÑA 1: RANKING DE VIDEOS VIRALES POR REGIÓN -->
+    <div id="radarVideosPane" style="margin-top: 16px;">
+        <div class="radar-legend">
+            <span>🟢 sube</span><span>🔴 baja</span><span>🆕 nuevo en 24h</span>
+            <span title="KAI usa fragmentos del original solo ≤6s como apoyo de comentario (uso justo, igual con gameplays); el material principal es 100% propio y el video sale listo con miniatura de estudio">© Fragmentos ≤6s de apoyo · material propio · miniatura de estudio incluida</span>
+            <span style="margin-left:auto;" id="radarRegionsLabel"></span>
+        </div>
+
+        <!-- BARRA DE FILTROS: TIPO DE CONTENIDO, PAÍS/REGIÓN Y TEMPORALIDAD -->
+        <div class="radar-filter-bar" id="radarFilterBar">
+            <div class="radar-filter-group">
+                <label class="radar-filter-label" for="radarCategoryFilter">
+                    <span class="radar-filter-icon">🎭</span> Tipo de Contenido
+                </label>
+                <select id="radarCategoryFilter" class="radar-filter-select">
+                    <option value="all">Todas las temáticas</option>
+                    <option value="entretenimiento">🍿 Entretenimiento / Viral</option>
+                    <option value="divulgacion">🔬 Divulgación & Ciencia</option>
+                    <option value="noticias">📰 Noticias & Actualidad</option>
+                    <option value="tecnologia">💻 Tecnología & IA</option>
+                    <option value="musica">🎵 Música & Arte</option>
+                    <option value="gaming">🎮 Gaming</option>
+                    <option value="deportes">⚽ Deportes</option>
+                </select>
+            </div>
+
+            <div class="radar-filter-group">
+                <label class="radar-filter-label" for="radarRegionFilter">
+                    <span class="radar-filter-icon">🌍</span> País o Región
+                </label>
+                <select id="radarRegionFilter" class="radar-filter-select">
+                    <option value="all">Todas las regiones</option>
+                    <option value="US">🇺🇸 Estados Unidos (US)</option>
+                    <option value="ES">🇪🇸 España (ES)</option>
+                    <option value="MX">🇲🇽 México / LATAM (MX)</option>
+                    <option value="GB">🇬🇧 Reino Unido (GB)</option>
+                    <option value="GLOBAL">🌐 Global / Otras</option>
+                </select>
+            </div>
+
+            <div class="radar-filter-group">
+                <label class="radar-filter-label" for="radarRecencyFilter">
+                    <span class="radar-filter-icon">⏱️</span> Frescura / Fecha
+                </label>
+                <select id="radarRecencyFilter" class="radar-filter-select">
+                    <option value="all">Cualquier momento</option>
+                    <option value="fresh">🔥 Muy recientes (&lt; 24h / Hoy)</option>
+                    <option value="recent">⚡ Recientes (1 a 3 días / 72h)</option>
+                    <option value="older">📈 En tendencia (+3 días / Evergreen)</option>
+                </select>
+            </div>
+
+            <div class="radar-filter-group radar-search-group">
+                <label class="radar-filter-label" for="radarSearchInput">
+                    <span class="radar-filter-icon">🔍</span> Buscar
+                </label>
+                <div class="radar-search-wrap">
+                    <input type="text" id="radarSearchInput" class="radar-search-input" placeholder="Título, canal o tema..." autocomplete="off">
+                    <button type="button" id="radarSearchClearBtn" class="radar-search-clear" hidden title="Borrar búsqueda">✕</button>
+                </div>
+            </div>
+
+            <div class="radar-filter-status">
+                <span id="radarFilterCount" class="radar-filter-count"></span>
+                <button type="button" id="radarFilterResetBtn" class="radar-filter-reset-btn" hidden title="Restablecer todos los filtros">
+                    ↻ Limpiar filtros
+                </button>
+            </div>
+        </div>
+
+        <div id="radarVideosList" class="radar-video-list"></div>
+    </div>
+
+    <!-- PESTAÑA 2: TEMAS URGENTES SIN COBERTURA & FAVORITOS -->
+    <div id="radarTopicsPane" hidden style="margin-top: 16px;">
+        <div class="radar-legend">
+            <span>Puntuados por la IA: fuerza de viralidad · urgencia · ángulo listo para producir</span>
+            <span style="margin-left: auto;">⭐ Guarda tus temas preferidos para producirlos en cualquier momento</span>
+        </div>
+
+        <!-- BARRA DE FILTROS DE TEMAS -->
+        <div class="radar-filter-bar" id="radarTopicsFilterBar">
+            <div class="radar-filter-group" style="flex: 1 1 150px; max-width: 190px;">
+                <label class="radar-filter-label" for="radarTopicViewFilter">
+                    <span class="radar-filter-icon">📑</span> Vista / Sección
+                </label>
+                <select id="radarTopicViewFilter" class="radar-filter-select">
+                    <option value="all">🌐 Todos los temas</option>
+                    <option value="favorites">⭐ Mis Favoritos Guardados</option>
+                </select>
+            </div>
+
+            <div class="radar-filter-group" style="flex: 1 1 180px;">
+                <label class="radar-filter-label" for="radarTopicCategoryFilter">
+                    <span class="radar-filter-icon">🎭</span> Categoría de Tema
+                </label>
+                <select id="radarTopicCategoryFilter" class="radar-filter-select">
+                    <option value="all">Todas las categorías</option>
+                    <option value="divulgacion">🔬 Divulgación & Ciencia</option>
+                    <option value="tecnologia">💻 Tecnología & IA</option>
+                    <option value="espacio">🪐 Espacio & Cosmos</option>
+                    <option value="noticias">📰 Noticias & Urgentes</option>
+                    <option value="arqueologia">🏛️ Arqueología & Misterio</option>
+                    <option value="salud">❤️ Salud & Bienestar</option>
+                    <option value="entretenimiento">🍿 Entretenimiento / Viral</option>
+                </select>
+            </div>
+
+            <div class="radar-filter-group radar-search-group">
+                <label class="radar-filter-label" for="radarTopicSearchInput">
+                    <span class="radar-filter-icon">🔍</span> Buscar Tema
+                </label>
+                <div class="radar-search-wrap">
+                    <input type="text" id="radarTopicSearchInput" class="radar-search-input" placeholder="Buscar por palabra clave, ángulo o concepto..." autocomplete="off">
+                    <button type="button" id="radarTopicSearchClearBtn" class="radar-search-clear" hidden title="Borrar búsqueda">✕</button>
+                </div>
+            </div>
+
+            <div class="radar-filter-status">
+                <span id="radarTopicFilterCount" class="radar-filter-count"></span>
+                <button type="button" id="radarTopicFilterResetBtn" class="radar-filter-reset-btn" hidden title="Restablecer filtros">
+                    ↻ Limpiar filtros
+                </button>
+            </div>
+        </div>
+
+        <div id="radarTopicsGrid" class="radar-topics-grid"></div>
+    </div>
+</section>
+
+<!-- MODAL ESTRATEGIA DE RÉPLICA: la IA analiza el original y tú eliges el enfoque -->
+<div id="radarStrategyModal" class="video-modal-backdrop" hidden>
+    <div class="video-modal-dialog" style="max-width: 720px;">
+        <header class="video-modal-header">
+            <div class="video-modal-title-wrap">
+                <span class="video-modal-badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);">🧠 ESTRATEGIA DE RÉPLICA</span>
+                <h3 id="radarStrategyTitle" class="video-modal-title">Analizando el original…</h3>
+                <p id="radarStrategySub" class="video-modal-sub">La IA estudia los datos del video y propone qué producir</p>
+            </div>
+            <div class="video-modal-actions">
+                <button type="button" id="radarStrategyCloseBtn" class="video-modal-close-btn" title="Cerrar">✕</button>
+            </div>
+        </header>
+        <div style="padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto;">
+            <div id="radarStrategyAnalysis" class="radar-strategy-analysis" hidden>
+                <p id="radarStrategyWhy" style="margin: 0 0 6px;"></p>
+                <p id="radarStrategyAudience" style="margin: 0; color: #7dd3fc; font-size: 12px;"></p>
+            </div>
+            <div id="radarStrategyLoading" style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 30px; color: #94a3b8; font-size: 13px;">
+                <div class="pub-spinner"></div>
+                <span>La IA está analizando el video original…</span>
+            </div>
+            <div id="radarStrategyOptions" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            <div id="radarStrategyCustom" hidden>
+                <label style="font-size: 10px; font-weight: 800; letter-spacing: 0.07em; color: #94a3b8; display: block; margin-bottom: 6px;">INSTRUCCIONES LIBRES PARA KAI (OPCIONAL)</label>
+                <textarea id="radarStrategyInstructions" class="text-input" rows="2" maxlength="400" placeholder="Ej.: enfócate en el aspecto polémico, menciona cifras exactas, tono serio…"></textarea>
+            </div>
+            <button type="button" id="radarStrategyProduceBtn" class="pub-primary-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%); box-shadow: 0 6px 24px rgba(168,85,247,.35), inset 0 1px 0 rgba(255,255,255,.18);" disabled>🎬 Producir con KAI</button>
+            <div class="radar-legend" style="padding: 0;">
+                <span title="Uso justo: fragmentos del original solo como apoyo de comentario/reacción, nunca más de 6 segundos seguidos, siempre con narración propia encima. Gameplays: misma condición. El material principal es 100% del estudio.">© Fragmentos del original solo ≤6s como apoyo de comentario · material principal 100% propio · el video sale listo con miniatura de estudio</span>
+            </div>
+        </div>
+    </div>
+</div>

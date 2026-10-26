@@ -1,0 +1,162 @@
+<!-- APARTADO EXCLUSIVO: PRODUCCIÓN MASTER & ESTUDIO DE MATERIALES -->
+<section class="bento-main-card" id="resultsSection" hidden style="display: none !important;">
+    <header class="bento-card-header" style="flex-wrap: wrap; gap: 12px; align-items: flex-start;">
+        <div>
+            <span class="bento-subcard-title" style="display:inline-flex; align-items:center; gap:6px; color:#22c55e;">
+                <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e;"></span>
+                PRODUCCIÓN MASTER BROADCAST LISTA
+            </span>
+            <h3 id="resVideoTitle" style="margin:4px 0 2px; font-size:20px; font-weight:800; color:#fff;">Producción KAI Completada</h3>
+            <p id="resVideoSub" style="margin:0; font-size:12px; color:var(--text-muted);">Transmisión completa en 1080p FHD con escenas modulares, B-roll y tarjetas Bento</p>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <a href="#" class="subcard-pill-btn active" id="downloadMasterBtnSec" download="KAI_Master.mp4" style="text-decoration:none; padding:8px 16px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px;">
+                📥 Descargar Video Master (.MP4)
+            </a>
+            <a href="#" class="subcard-pill-btn" id="downloadZipBtn" download="Materiales_KAI.zip" style="text-decoration:none; padding:8px 16px; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+                📦 Descargar Todos los Materiales (.ZIP)
+            </a>
+            <button type="button" class="subcard-pill-btn" id="openFolderBtn" style="padding:8px 16px; font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                📂 Abrir Carpeta en Windows
+            </button>
+        </div>
+    </header>
+
+    <!-- REPRODUCTOR CINE MASTER GRANDE CON HUD PROMAX -->
+    <div class="preview-mode-bar" id="previewModeBar">
+        <span style="font-size:10px; color:#475569; font-weight:600; letter-spacing:0.05em; margin-right:4px;">MODO PREVIEW</span>
+        <button type="button" class="preview-mode-btn active" id="previewMode169" title="YouTube Horizontal 16:9">▬ 16:9</button>
+        <button type="button" class="preview-mode-btn" id="previewMode916" title="YouTube Shorts / Vertical 9:16">▮ 9:16</button>
+    </div>
+    <div class="stage-preview-box" id="masterStageWrap" style="margin-top:0;">
+        <video id="masterVideoPlayer" playsinline preload="metadata"></video>
+        <div class="stage-badge-rec" style="top:12px; left:12px;"><i></i> MASTER BROADCAST 1080p</div>
+        <div class="video-hud-overlay" id="masterHud">
+            <div class="video-hud-scrubber-wrap" id="masterScrubberWrap">
+                <div class="video-hud-scrubber-bar" id="masterScrubberBar"></div>
+            </div>
+            <div class="video-hud-controls-row">
+                <div class="video-hud-left">
+                    <button type="button" class="hud-btn" id="masterPlayBtn" title="Reproducir / Pausar">▶</button>
+                    <button type="button" class="hud-btn" id="masterMuteBtn" title="Silenciar / Activar sonido">🔊</button>
+                    <span class="hud-timecode" id="masterTimecode">00:00 / 00:00</span>
+                </div>
+                <div class="video-hud-right">
+                    <button type="button" class="hud-btn" id="masterSpeedBtn" title="Velocidad">1x</button>
+                    <a href="#" class="hud-dl-pill" id="masterDownloadHudBtn" download title="Descargar Video .MP4">📥 Descargar .MP4</a>
+                    <button type="button" class="hud-btn" id="masterFullscreenBtn" title="Pantalla completa">⛶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LECTURA DE MÉTRICAS BROADCAST -->
+    <div class="subcard-readout-row" style="margin-top:16px;">
+        <div class="readout-col">
+            <span>Estado Broadcast</span>
+            <strong style="color:#22c55e;">● Master 1080p</strong>
+        </div>
+        <div class="readout-col">
+            <span>Escenas Dirigidas</span>
+            <strong id="resScenesCount">0</strong>
+        </div>
+        <div class="readout-col">
+            <span>B-Rolls &amp; Fondos</span>
+            <strong id="statBRolls">0</strong>
+        </div>
+        <div class="readout-col">
+            <span>Tarjetas Bento HUD</span>
+            <strong id="statCards">0</strong>
+        </div>
+        <div class="readout-col">
+            <span>Pausas Cortadas</span>
+            <strong id="statCuts">0</strong>
+        </div>
+        <div class="readout-col">
+            <span>Tiempo Optimizado</span>
+            <strong id="statTimeSaved">0 s</strong>
+        </div>
+    </div>
+
+    <!-- DESGLOSE DE ESCENAS DIRIGIDAS POR LA IA -->
+    <div style="margin-top:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span class="bento-subcard-title" style="margin:0; font-size:13px; font-weight:700; color:#fff;">
+                🎬 Desglose de Escenas del AI Director
+            </span>
+            <span style="font-size:11px; color:var(--text-muted);">Estructura audiovisual cronometrada</span>
+        </div>
+        <div id="resScenesList" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px;"></div>
+    </div>
+
+    <!-- INVENTARIO COMPLETO DE MATERIALES Y ARCHIVOS -->
+    <div style="margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <span class="bento-subcard-title" style="margin:0; font-size:13px; font-weight:700; color:#fff;">
+                📁 Inventario de Materiales del Proyecto
+            </span>
+            <span style="font-size:11px; color:var(--text-muted);">Clips por escena, audio neural, subtítulos y tarjetas</span>
+        </div>
+        <div id="resFilesList" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    </div>
+
+    <!-- PORTADA YOUTUBE HD & REEL SHORT VERTICAL -->
+    <div style="margin-top:18px; display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:14px;">
+        <!-- CARD 1: PORTADA YOUTUBE HD (THUMBNAIL MAKER) -->
+        <div id="resThumbnailCard" style="display:none; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:12px; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px;">
+                    🎨 Portada YouTube 1280x720 HD
+                </span>
+                <a id="btnDownloadThumbnail" href="#" download="portada_youtube.jpg" class="subcard-pill-btn active" style="font-size:11px; padding:4px 10px; text-decoration:none;">
+                    📥 Descargar JPG
+                </a>
+            </div>
+            <div style="width:100%; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:#0b0f19; border:1px solid rgba(255,255,255,0.06);">
+                <img id="resThumbnailImg" src="" alt="Portada YouTube" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+        </div>
+
+        <!-- CARD 2: AUTO-SHORT VERTICAL 9:16 -->
+        <div id="resShortCard" style="display:none; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:12px; font-weight:700; color:#fff; display:flex; align-items:center; gap:6px;">
+                    📱 Short Vertical 9:16 (TikTok / Reels)
+                </span>
+                <a id="btnDownloadShort" href="#" download="kai_short_vertical.mp4" class="subcard-pill-btn active" style="font-size:11px; padding:4px 10px; text-decoration:none;">
+                    📥 Descargar Short
+                </a>
+            </div>
+            <div style="display:flex; justify-content:center; background:#0b0f19; border-radius:8px; padding:8px; border:1px solid rgba(255,255,255,0.06);">
+                <video id="resShortVideo" controls playsinline style="max-height:220px; border-radius:6px; aspect-ratio:9/16;"></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- PUBLICACIÓN Y WEBHOOK DIRECTO -->
+    <div id="webhookBox" style="margin-top:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:10px 14px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🚀</span>
+            <div>
+                <strong style="font-size:12px; color:#fff; display:block;">Publicación y Webhook Directo</strong>
+                <span style="font-size:11px; color:var(--text-muted);">Envía video, portada y metadatos a Discord, Make, Zapier o Notion</span>
+            </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <input type="url" id="webhookInputUrl" class="text-input" placeholder="https://webhook.site/..." style="font-size:11px; padding:6px 10px; width:220px;">
+            <button type="button" id="btnSendWebhook" class="subcard-pill-btn active" style="font-size:11px; padding:6px 14px; cursor:pointer;">
+                Enviar
+            </button>
+            <button type="button" id="btnCopyMeta" class="subcard-pill-btn" style="font-size:11px; padding:6px 10px; cursor:pointer;" title="Copiar ficha técnica al portapapeles">
+                📋 Copiar Ficha
+            </button>
+        </div>
+        <span id="webhookStatusMsg" style="width:100%; font-size:11px; display:none;"></span>
+    </div>
+
+    <div id="shortsList" style="display:flex; gap:8px; margin-top:12px;" hidden></div>
+    <!-- Elementos de soporte ocultos para compatibilidad -->
+    <div id="shortContainer" style="display:none;" aria-hidden="true">
+        <video id="shortVideoPlayer" style="display:none;" aria-hidden="true"></video>
+    </div>
+</section>

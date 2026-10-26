@@ -1,0 +1,150 @@
+<!-- SIDEBAR CON ESTILO Y TEXTURA PRISM STUDIO PERO CON NUESTROS NOMBRES Y SECCIONES REALES -->
+<aside class="prism-sidebar" id="mainSidebarDock" aria-label="Navegación principal de AetherCut Studio">
+    <!-- Logotipo y Nombre del Estudio (Estilo Prism Studio) -->
+    <div class="prism-sidebar-brand">
+        <div class="prism-brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                <polyline points="2 17 12 22 22 17"/>
+                <polyline points="2 12 12 17 22 12"/>
+            </svg>
+        </div>
+        <div class="prism-brand-text">
+            <h2>Angel R</h2>
+            <span>STUDIO ARCHITECT</span>
+        </div>
+    </div>
+
+    <!-- SECCIÓN 1: PRINCIPAL -->
+    <div class="prism-nav-section">
+        <span class="prism-section-heading">PRINCIPAL</span>
+
+        <!-- 1. KAI Streamer (Transmisión y Emisión Autónoma) -->
+        <button type="button" class="prism-nav-item active" id="dockStreamer" title="KAI Streamer Transmisión">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="8" y1="22" x2="16" y2="22"/>
+            </svg>
+            <span class="prism-nav-label">KAI Streamer</span>
+            <span class="prism-active-dot"></span>
+        </button>
+
+        <!-- 2. Editor Co-Piloto (Corte automático y subida de videos) -->
+        <button type="button" class="prism-nav-item" id="dockCopilot" title="Editor Co-Piloto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/>
+                <polyline points="17 2 12 7 7 2"/>
+            </svg>
+            <span class="prism-nav-label">Editor Co-Piloto</span>
+        </button>
+
+        <!-- 3. Mesa de Edición & Timeline (Secuenciador) -->
+        <button type="button" class="prism-nav-item" id="dockStudio" title="Mesa de Edición &amp; Timeline">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+            </svg>
+            <span class="prism-nav-label">Mesa &amp; Timeline</span>
+        </button>
+
+        <!-- 4. Biblioteca de Proyectos (Proyectos Guardados) -->
+        <button type="button" class="prism-nav-item" id="dockProjects" title="Proyectos Guardados">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
+            </svg>
+            <span class="prism-nav-label">Proyectos Guardados</span>
+        </button>
+
+        <!-- 5. Radar de Viralidad (Ranking global + temas urgentes) -->
+        <button type="button" class="prism-nav-item" id="dockRadar" title="Radar de Viralidad">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2">
+                <circle cx="12" cy="12" r="2"/>
+                <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/>
+            </svg>
+            <span class="prism-nav-label">Radar Viral</span>
+        </button>
+
+        <!-- 5. Agente Copilot Autónomo (Multi-Modelo) -->
+        <button type="button" class="prism-nav-item" id="dockAgentLauncher" title="Agente Copilot Multi-Modelo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2">
+                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+                <path d="M4 11a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-7z"/>
+                <circle cx="9" cy="15" r="1.2"/>
+                <circle cx="15" cy="15" r="1.2"/>
+            </svg>
+            <span class="prism-nav-label">Agente Copilot</span>
+        </button>
+    </div>
+
+    <!-- SECCIÓN 2: HERRAMIENTAS -->
+    <div class="prism-nav-section">
+        <span class="prism-section-heading">HERRAMIENTAS</span>
+
+        <!-- Video (Formato, Aspect Ratio 9:16 / 16:9) -->
+        <button type="button" class="prism-nav-item" id="toolVideo" title="Formato &amp; Resolución">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+                <polygon points="10 7 15 10 10 13 10 7" fill="currentColor"/>
+            </svg>
+            <span class="prism-nav-label">Video</span>
+        </button>
+
+        <!-- Audio (Voces Neurales KAI & Locutores) -->
+        <button type="button" class="prism-nav-item" id="toolAudio" title="Voces Neurales &amp; Audio">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18V5l12-2v13"/>
+                <circle cx="6" cy="18" r="3"/>
+                <circle cx="18" cy="16" r="3"/>
+            </svg>
+            <span class="prism-nav-label">Audio &amp; Voces</span>
+        </button>
+
+        <!-- Texto (Subtítulos dinámicos & Tarjetas Bento) -->
+        <button type="button" class="prism-nav-item" id="toolText" title="Subtítulos &amp; Tarjetas Bento">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="4 7 4 4 20 4 20 7"/>
+                <line x1="9" y1="20" x2="15" y2="20"/>
+                <line x1="12" y1="4" x2="12" y2="20"/>
+            </svg>
+            <span class="prism-nav-label">Subtítulos</span>
+        </button>
+
+        <!-- Analytics & Telemetría en Vivo -->
+        <button type="button" class="prism-nav-item" id="toolAnalytics" title="Telemetría de la IA">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <span class="prism-nav-label">Telemetría IA</span>
+        </button>
+    </div>
+
+    <!-- SECCIÓN 3: PIE / AJUSTES & AYUDA -->
+    <div class="prism-nav-footer">
+        <button type="button" class="prism-nav-item" id="cleanupStorageBtn" title="Limpiar almacenamiento temporal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span class="prism-nav-label">Ajustes &amp; Limpieza</span>
+        </button>
+
+        <button type="button" class="prism-nav-item" id="btnHelpStudio" title="Ayuda y Soporte">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span class="prism-nav-label">Ayuda</span>
+        </button>
+
+        <!-- Indicador de conexión SSE (actualizado por telemetry.js) -->
+        <span id="connectionStatusSidebar" style="display:block; font-size:10px; color:#22c55e; padding:4px 8px; opacity:0.7;">● Listo</span>
+    </div>
+</aside>

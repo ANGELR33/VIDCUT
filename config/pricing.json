@@ -1,0 +1,17 @@
+{
+  "_comment": "Tarifas para estimar costos en run_report.md. USD por 1 millón de tokens, por prefijo de modelo (gana el prefijo más largo). null = sin tarifa: el reporte lo marca como 'sin tarifa' en vez de inventar un precio. Completa estos valores con los de la página oficial de precios de cada proveedor, o pon 0 si usas cupo gratuito.",
+  "llm_per_million_tokens": {
+    "gemini-flash-lite": {"input": null, "output": null},
+    "gemini-3.5-flash-lite": {"input": null, "output": null},
+    "gemini-3.1-flash-lite": {"input": null, "output": null},
+    "gemini-flash": {"input": null, "output": null},
+    "meta/llama-3.2-11b-vision-instruct": {"input": null, "output": null},
+    "nvidia/nemotron": {"input": null, "output": null}
+  },
+  "services_per_unit": {
+    "_comment": "USD por unidad de cada servicio (ej. 'speechify': USD por 1000 caracteres). Omite o pon null si no aplica.",
+    "speechify": null,
+    "ddgs_search": 0,
+    "wikimedia": 0
+  }
+}

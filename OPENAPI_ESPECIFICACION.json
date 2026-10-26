@@ -1,0 +1,6022 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AetherCut AI Video Editor",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Serve Index",
+        "operationId": "serve_index__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/process-video": {
+      "post": {
+        "summary": "Process Video",
+        "operationId": "process_video_api_process_video_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_process_video_api_process_video_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/streamer/create": {
+      "post": {
+        "summary": "Create Streamer Broadcast",
+        "operationId": "create_streamer_broadcast_api_streamer_create_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/system/health": {
+      "get": {
+        "tags": [
+          "System & Health"
+        ],
+        "summary": "Get System Health",
+        "description": "Comprueba el estado operativo del motor, FFmpeg, GPU y almacenamiento.",
+        "operationId": "get_system_health_api_v1_system_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_SystemHealthResponse_"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/system/status": {
+      "get": {
+        "tags": [
+          "System & Health"
+        ],
+        "summary": "Get System Status",
+        "description": "Devuelve la carga actual del servidor, cola de renderizado y tareas activas.",
+        "operationId": "get_system_status_api_v1_system_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/system/models": {
+      "get": {
+        "tags": [
+          "System & Health"
+        ],
+        "summary": "Get Available Models",
+        "description": "Lista todos los modelos de IA configurados (Gemini, NVIDIA NIM, GLM, Kimi).",
+        "operationId": "get_available_models_api_v1_system_models_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/videos/process": {
+      "post": {
+        "tags": [
+          "Video Ingestion & Processing"
+        ],
+        "summary": "Process Uploaded Video",
+        "description": "Carga un archivo de video mediante multipart/form-data e inicia la edición con IA.",
+        "operationId": "process_uploaded_video_api_v1_videos_process_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_process_uploaded_video_api_v1_videos_process_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_VideoProcessResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/videos/process-url": {
+      "post": {
+        "tags": [
+          "Video Ingestion & Processing"
+        ],
+        "summary": "Process Video By Url",
+        "description": "Descarga un video desde una URL remota (HTTP direct link o YouTube) e inicia la edición.",
+        "operationId": "process_video_by_url_api_v1_videos_process_url_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoProcessUrlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_VideoProcessResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/streamer/create": {
+      "post": {
+        "tags": [
+          "Autonomous AI Streamer"
+        ],
+        "summary": "Create Autonomous Broadcast",
+        "description": "Crea y produce un video completo con IA desde cero a partir de un tema o premisa.",
+        "operationId": "create_autonomous_broadcast_api_v1_streamer_create_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StreamerCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_StreamerCreateResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/tasks": {
+      "get": {
+        "tags": [
+          "Task Progress & Tracking"
+        ],
+        "summary": "List Recent Tasks",
+        "description": "Lista todas las tareas activas y recientes registradas en memoria.",
+        "operationId": "list_recent_tasks_api_v1_tasks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_List_TaskStatusResponse__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/tasks/{task_id}": {
+      "get": {
+        "tags": [
+          "Task Progress & Tracking"
+        ],
+        "summary": "Get Task Status",
+        "description": "Obtiene el estado detallado, porcentaje de avance y resultado de una tarea.",
+        "operationId": "get_task_status_api_v1_tasks__task_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_TaskStatusResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/events": {
+      "get": {
+        "tags": [
+          "Task Progress & Tracking"
+        ],
+        "summary": "Stream Task Events",
+        "description": "Transmite eventos en tiempo real vía Server-Sent Events (SSE).",
+        "operationId": "stream_task_events_api_v1_tasks__task_id__events_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/{task_id}/cancel": {
+      "post": {
+        "tags": [
+          "Task Progress & Tracking"
+        ],
+        "summary": "Cancel Task",
+        "description": "Cancela una tarea activa en ejecución.",
+        "operationId": "cancel_task_api_v1_tasks__task_id__cancel_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects": {
+      "get": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "List Projects",
+        "description": "Lista todos los proyectos guardados con soporte de paginación y búsqueda.",
+        "operationId": "list_projects_api_v1_projects_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Límite de resultados a retornar",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Límite de resultados a retornar"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Desplazamiento para paginación",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "Desplazamiento para paginación"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filtro de búsqueda por nombre o tema",
+              "title": "Search"
+            },
+            "description": "Filtro de búsqueda por nombre o tema"
+          },
+          {
+            "name": "status_filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filtro por estado (done, running, error, queued)",
+              "title": "Status Filter"
+            },
+            "description": "Filtro por estado (done, running, error, queued)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_ProjectListResponse_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}": {
+      "get": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Get Project Details",
+        "description": "Obtiene el manifiesto completo, plan editorial y resultados de un proyecto.",
+        "operationId": "get_project_details_api_v1_projects__project_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Delete Project",
+        "description": "Elimina permanentemente un proyecto y libera el espacio ocupado en disco.",
+        "operationId": "delete_project_api_v1_projects__project_id__delete",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/timeline": {
+      "get": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Get Project Timeline",
+        "description": "Obtiene la línea de tiempo, cortes, tarjetas y material de apoyo del plan.",
+        "operationId": "get_project_timeline_api_v1_projects__project_id__timeline_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Update Project Timeline",
+        "description": "Guarda modificaciones en la línea de tiempo (activar/desactivar cortes, mover tarjetas, etc.).",
+        "operationId": "update_project_timeline_api_v1_projects__project_id__timeline_put",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TimelineUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/export": {
+      "post": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Export Project Revision",
+        "description": "Inicia una reexportación renderizada a partir de los cambios guardados.",
+        "operationId": "export_project_revision_api_v1_projects__project_id__export_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/download/{asset_type}": {
+      "get": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Download Project Asset",
+        "description": "Descarga directa de artefactos: master, short, subtitles, transcript, thumbnail o archivo por nombre.",
+        "operationId": "download_project_asset_api_v1_projects__project_id__download__asset_type__get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "asset_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Asset Type"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/materials/download": {
+      "get": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Download Materials Zip",
+        "description": "Empaqueta todos los materiales (audio, b-rolls, cards, subtítulos) en un archivo ZIP.",
+        "operationId": "download_materials_zip_api_v1_projects__project_id__materials_download_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{project_id}/webhook": {
+      "post": {
+        "tags": [
+          "Project Management & Exports"
+        ],
+        "summary": "Test Project Webhook",
+        "description": "Despacha manualmente el resumen y artefactos del proyecto a la URL de webhook provista.",
+        "operationId": "test_project_webhook_api_v1_projects__project_id__webhook_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clips/{project_id}": {
+      "get": {
+        "tags": [
+          "Shorts & Viral Clips Studio"
+        ],
+        "summary": "List Project Clips",
+        "description": "Lista todos los clips y Shorts 9:16 generados para un proyecto.",
+        "operationId": "list_project_clips_api_v1_clips__project_id__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_List_ClipSummary__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clips/{project_id}/extract": {
+      "post": {
+        "tags": [
+          "Shorts & Viral Clips Studio"
+        ],
+        "summary": "Extract Clip From Project",
+        "description": "Extrae un Short vertical 9:16 personalizado o automático con gancho dinámico.",
+        "operationId": "extract_clip_from_project_api_v1_clips__project_id__extract_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ClipExtractRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tts/voices": {
+      "get": {
+        "tags": [
+          "Voiceover & TTS Studio"
+        ],
+        "summary": "List Available Voices",
+        "description": "Lista las voces neuronales disponibles para narración y doblaje de videos.",
+        "operationId": "list_available_voices_api_v1_tts_voices_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_List_VoiceSummary__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/tts/synthesize": {
+      "post": {
+        "tags": [
+          "Voiceover & TTS Studio"
+        ],
+        "summary": "Synthesize Speech",
+        "description": "Sintetiza audio a partir de texto utilizando modelos neuronales EdgeTTS.",
+        "operationId": "synthesize_speech_api_v1_tts_synthesize_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TTSGenerateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/trends": {
+      "get": {
+        "tags": [
+          "Trend Radar & Viral Intelligence"
+        ],
+        "summary": "Get Trending Topics",
+        "description": "Consulta los videos y temas virales en tiempo real detectados por el Radar.",
+        "operationId": "get_trending_topics_api_v1_trends_get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Código de región ISO alpha-2, ej: US, ES, MX",
+              "title": "Region"
+            },
+            "description": "Código de región ISO alpha-2, ej: US, ES, MX"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/trends/refresh": {
+      "post": {
+        "tags": [
+          "Trend Radar & Viral Intelligence"
+        ],
+        "summary": "Refresh Trends",
+        "description": "Ejecuta una búsqueda y actualización en vivo de videos más virales en YouTube.",
+        "operationId": "refresh_trends_api_v1_trends_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/trends/replicate": {
+      "post": {
+        "tags": [
+          "Trend Radar & Viral Intelligence"
+        ],
+        "summary": "Replicate Trending Topic",
+        "description": "Convierte un tema viral detectado directamente en un video autónomo de alta retención.",
+        "operationId": "replicate_trending_topic_api_v1_trends_replicate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrendReplicateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/publish/prepare": {
+      "post": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "Prepare Publication Metadata",
+        "description": "Genera títulos de alto CTR, descripción optimizada para SEO y etiquetas con IA.",
+        "operationId": "prepare_publication_metadata_api_v1_publish_prepare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishPrepareRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/publish/thumbnail": {
+      "post": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "Generate Project Thumbnail",
+        "description": "Genera una miniatura profesional optimizada para alta tasa de clics (CTR).",
+        "operationId": "generate_project_thumbnail_api_v1_publish_thumbnail_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishThumbnailRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/publish/youtube/status": {
+      "get": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "Check Youtube Connection",
+        "description": "Verifica si el servidor tiene un canal de YouTube vinculado por OAuth 2.0.",
+        "operationId": "check_youtube_connection_api_v1_publish_youtube_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/publish/youtube/upload": {
+      "post": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "Upload To Youtube",
+        "description": "Sube el video producido directamente a la cuenta conectada de YouTube.",
+        "operationId": "upload_to_youtube_api_v1_publish_youtube_upload_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/YouTubeUploadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/publish/channels": {
+      "get": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "List Configured Channels",
+        "description": "Lista todos los canales y nichos configurados en el sistema.",
+        "operationId": "list_configured_channels_api_v1_publish_channels_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_List_Dict_str__Any___"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "Upsert Channel",
+        "description": "Crea o actualiza un canal en la configuración multi-nicho.",
+        "operationId": "upsert_channel_api_v1_publish_channels_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChannelSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/publish/channels/{channel_id}": {
+      "delete": {
+        "tags": [
+          "Publishing & Multi-Channel Studio"
+        ],
+        "summary": "Delete Channel",
+        "description": "Elimina un canal configurado.",
+        "operationId": "delete_channel_api_v1_publish_channels__channel_id__delete",
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Channel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agent/chat": {
+      "post": {
+        "tags": [
+          "AI Director Copilot"
+        ],
+        "summary": "Agent Chat",
+        "description": "Envía un mensaje o instrucción al Agente Director IA y recibe respuestas estructuradas.",
+        "operationId": "agent_chat_api_v1_agent_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/agent/chat/stream": {
+      "post": {
+        "tags": [
+          "AI Director Copilot"
+        ],
+        "summary": "Agent Chat Stream",
+        "description": "Transmite la respuesta del agente palabra por palabra en tiempo real (SSE).",
+        "operationId": "agent_chat_stream_api_v1_agent_chat_stream_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/templates": {
+      "get": {
+        "tags": [
+          "Visual Templates & Overlays"
+        ],
+        "summary": "List Visual Templates",
+        "description": "Devuelve el catálogo completo de plantillas visuales con parámetros y variantes.",
+        "operationId": "list_visual_templates_api_v1_templates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          },
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/templates/preview": {
+      "get": {
+        "tags": [
+          "Visual Templates & Overlays"
+        ],
+        "summary": "Preview Template",
+        "description": "Genera y sirve una imagen PNG de muestra renderizada con la plantilla seleccionada.",
+        "operationId": "preview_template_api_v1_templates_preview_get",
+        "parameters": [
+          {
+            "name": "template",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "ID de la plantilla visual",
+              "default": "verdict_badge",
+              "title": "Template"
+            },
+            "description": "ID de la plantilla visual"
+          },
+          {
+            "name": "variant",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Variante cromática del tema",
+              "default": "orange_noir",
+              "title": "Variant"
+            },
+            "description": "Variante cromática del tema"
+          },
+          {
+            "name": "headline",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Headline"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Title"
+            }
+          },
+          {
+            "name": "subtitle",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subtitle"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Body"
+            }
+          },
+          {
+            "name": "stat_value",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stat Value"
+            }
+          },
+          {
+            "name": "stat_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stat Label"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1": {
+      "get": {
+        "summary": "Api V1 Index",
+        "description": "Punto de entrada y descubrimiento de servicios de la API v1.",
+        "operationId": "api_v1_index_api_v1_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse_Dict_str__Any__"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/docs": {
+      "get": {
+        "summary": "Api Developer Portal",
+        "description": "Portal interactivo para desarrolladores con snippets en cURL, Python y JavaScript.",
+        "operationId": "api_developer_portal_api_v1_docs_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/resume": {
+      "post": {
+        "summary": "Resume Project",
+        "description": "Reanuda un proyecto interrumpido (Streamer o Co-Piloto) sin perder escenas ya grabadas.",
+        "operationId": "resume_project_api_projects__task_id__resume_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}": {
+      "get": {
+        "summary": "Get Project",
+        "operationId": "get_project_api_projects__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Project",
+        "description": "Elimina un proyecto y libera espacio en disco.",
+        "operationId": "delete_project_api_projects__task_id__delete",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/publish-info": {
+      "get": {
+        "summary": "Get Project Publish Info",
+        "description": "Devuelve título, descripción estructurada y hashtags listos para copiar y publicar.",
+        "operationId": "get_project_publish_info_api_projects__task_id__publish_info_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/broadcast-plan": {
+      "get": {
+        "summary": "Get Broadcast Plan",
+        "description": "Escenas dirigidas por la IA (guion, emoción, tipo) para la Mesa & Timeline.",
+        "operationId": "get_broadcast_plan_api_projects__task_id__broadcast_plan_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "summary": "List Projects",
+        "operationId": "list_projects_api_projects_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/preview": {
+      "get": {
+        "summary": "Get Project Preview",
+        "operationId": "get_project_preview_api_projects__task_id__preview_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/download/{filename}": {
+      "get": {
+        "summary": "Download Project Master",
+        "description": "Descarga el video final con nombre descriptivo y formato MP4 garantizado para cualquier navegador.",
+        "operationId": "download_project_master_api_projects__task_id__download__filename__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Filename"
+            }
+          },
+          {
+            "name": "burn_subtitles",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Burn Subtitles"
+            }
+          },
+          {
+            "name": "style",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "classic",
+              "title": "Style"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/download": {
+      "get": {
+        "summary": "Download Project Master",
+        "description": "Descarga el video final con nombre descriptivo y formato MP4 garantizado para cualquier navegador.",
+        "operationId": "download_project_master_api_projects__task_id__download_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "filename",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Filename"
+            }
+          },
+          {
+            "name": "burn_subtitles",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Burn Subtitles"
+            }
+          },
+          {
+            "name": "style",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "classic",
+              "title": "Style"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/export-to-downloads": {
+      "post": {
+        "summary": "Export Project To Downloads",
+        "description": "Copia directa e inmediata del video final a la carpeta Descargas del usuario local.",
+        "operationId": "export_project_to_downloads_api_projects__task_id__export_to_downloads_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/clips": {
+      "get": {
+        "summary": "Get Project Clips",
+        "description": "Lista todos los clips / Shorts 9:16 generados para este proyecto.",
+        "operationId": "get_project_clips_api_projects__task_id__clips_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/extract-clips": {
+      "post": {
+        "summary": "Extract Project Clips",
+        "description": "Extrae automáticamente 3 clips verticales (Shorts / Reels 9:16) con gancho de alto impacto.",
+        "operationId": "extract_project_clips_api_projects__task_id__extract_clips_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/materials-zip": {
+      "get": {
+        "summary": "Download Project Materials Zip",
+        "description": "Empaqueta y descarga todos los recursos del proyecto (video master, guión, audios, tarjetas, subtítulos) en un ZIP.",
+        "operationId": "download_project_materials_zip_api_projects__task_id__materials_zip_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/open-folder": {
+      "post": {
+        "summary": "Open Project Folder",
+        "description": "Abre la carpeta del proyecto en el Explorador de Windows y resalta el archivo .mp4.",
+        "operationId": "open_project_folder_api_projects__task_id__open_folder_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/save-to-downloads": {
+      "post": {
+        "summary": "Save Project To Downloads",
+        "description": "Guarda una copia directa del archivo .mp4 en la carpeta Descargas del usuario de Windows.",
+        "operationId": "save_project_to_downloads_api_projects__task_id__save_to_downloads_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/materials": {
+      "get": {
+        "summary": "Get Project Materials",
+        "description": "Devuelve el inventario completo de archivos generados por escena.",
+        "operationId": "get_project_materials_api_projects__task_id__materials_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/webhook": {
+      "post": {
+        "summary": "Dispatch Project Webhook",
+        "description": "Despacha la información completa de la transmisión a un Webhook (Make, Zapier, Discord, Notion).",
+        "operationId": "dispatch_project_webhook_api_projects__task_id__webhook_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/timeline": {
+      "put": {
+        "summary": "Update Project Timeline",
+        "description": "Guarda ajustes editoriales sin perder la investigación ni los assets.",
+        "operationId": "update_project_timeline_api_projects__task_id__timeline_put",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{task_id}/export": {
+      "post": {
+        "summary": "Export Project",
+        "description": "Exporta una nueva versión a partir de las decisiones ya guardadas.",
+        "operationId": "export_project_api_projects__task_id__export_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cancel-task/{task_id}": {
+      "post": {
+        "summary": "Cancel Task",
+        "operationId": "cancel_task_api_cancel_task__task_id__post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stream-progress/{task_id}": {
+      "get": {
+        "summary": "Stream Progress",
+        "operationId": "stream_progress_api_stream_progress__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks/active": {
+      "get": {
+        "summary": "Get Active Tasks",
+        "description": "Retorna las tareas en segundo plano que están ejecutándose activamente.",
+        "operationId": "get_active_tasks_api_tasks_active_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/progress/{task_id}": {
+      "get": {
+        "summary": "Get Task Progress",
+        "operationId": "get_task_progress_api_progress__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trending-topics": {
+      "get": {
+        "summary": "Get Trending Topics",
+        "description": "Devuelve temas y noticias en tendencia reales extraídos de la web (ciencia, polémicas, descubrimientos, virales).",
+        "operationId": "get_trending_topics_api_trending_topics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cleanup": {
+      "post": {
+        "summary": "Cleanup Storage Endpoint",
+        "description": "Limpia de forma segura los archivos temporales intermedios de render (.mov pesados, etc.) sin borrar videos master.",
+        "operationId": "cleanup_storage_endpoint_api_cleanup_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tts-preview": {
+      "post": {
+        "summary": "Tts Preview Endpoint",
+        "description": "Genera o entrega una muestra de voz en tiempo real para preescucha en el editor.",
+        "operationId": "tts_preview_endpoint_api_tts_preview_post",
+        "parameters": [
+          {
+            "name": "voice",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Voice"
+            }
+          },
+          {
+            "name": "voice_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Voice Query"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Tts Preview Endpoint",
+        "description": "Genera o entrega una muestra de voz en tiempo real para preescucha en el editor.",
+        "operationId": "tts_preview_endpoint_api_tts_preview_get",
+        "parameters": [
+          {
+            "name": "voice",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Voice"
+            }
+          },
+          {
+            "name": "voice_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Voice Query"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/speechify/status": {
+      "get": {
+        "summary": "Speechify Status Endpoint",
+        "description": "Estado en tiempo real de los créditos y claves de Speechify.",
+        "operationId": "speechify_status_endpoint_api_speechify_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/multiagent/run": {
+      "post": {
+        "summary": "Run Multiagent Project",
+        "description": "Inicia un ciclo autónomo de desarrollo coordinado entre GLM-5.3, GLM-5.3-flash y Kimi-k3.",
+        "operationId": "run_multiagent_project_api_multiagent_run_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/multiagent/status/{session_id}": {
+      "get": {
+        "summary": "Get Multiagent Status",
+        "description": "Consulta el progreso en vivo y bitácora del desarrollo multi-agente.",
+        "operationId": "get_multiagent_status_api_multiagent_status__session_id__get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/models": {
+      "get": {
+        "summary": "Get Agent Models",
+        "description": "Retorna la lista de modelos de IA disponibles para el Agente Copilot.",
+        "operationId": "get_agent_models_api_agent_models_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/chat": {
+      "post": {
+        "summary": "Agent Chat Endpoint",
+        "description": "Procesa una consulta u orden del usuario con el modelo seleccionado y ejecuta acciones.",
+        "operationId": "agent_chat_endpoint_api_agent_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/chat/stream": {
+      "post": {
+        "summary": "Agent Chat Stream",
+        "description": "Chat del agente con STREAMING en tiempo real (SSE).\n\nEventos emitidos:\n  {\"type\": \"status\",   \"message\": \"...\"}   — etapa del motor (contactando modelo…)\n  {\"type\": \"reasoning\",\"text\": \"...\"}      — razonamiento acumulado del modelo, en vivo\n  {\"type\": \"final\",    \"payload\": {...}}   — respuesta completa (reply, actions, extra)\n  {\"type\": \"error\",    \"message\": \"...\"}   — fallo del flujo",
+        "operationId": "agent_chat_stream_api_agent_chat_stream_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/oc/action": {
+      "post": {
+        "summary": "Oc Action Endpoint",
+        "description": "Encola una acción de interfaz emitida por las herramientas de OpenCode.",
+        "operationId": "oc_action_endpoint_api_oc_action_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/oc/events": {
+      "get": {
+        "summary": "Oc Events Endpoint",
+        "description": "SSE en vivo: transmite al navegador cada acción de UI del agente en el instante\nen que se publica (desde el chat de la app o desde una sesión de opencode en terminal).",
+        "operationId": "oc_events_endpoint_api_oc_events_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/oc/status": {
+      "get": {
+        "summary": "Oc Status Endpoint",
+        "description": "Estado de tareas en curso del servidor para el agente OpenCode.",
+        "operationId": "oc_status_endpoint_api_oc_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/oc/permission/reply": {
+      "post": {
+        "summary": "Oc Permission Reply Endpoint",
+        "description": "Responde a una solicitud de confirmación de permiso de OpenCode.",
+        "operationId": "oc_permission_reply_endpoint_api_oc_permission_reply_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/chats": {
+      "get": {
+        "summary": "List Agent Chats",
+        "description": "Lista los chats guardados del asistente (máximo 20, recientes primero).",
+        "operationId": "list_agent_chats_api_agent_chats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Save Agent Chat",
+        "description": "Crea o actualiza un chat del asistente. El almacén conserva hasta 20.",
+        "operationId": "save_agent_chat_api_agent_chats_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/chats/{chat_id}": {
+      "get": {
+        "summary": "Get Agent Chat",
+        "description": "Devuelve un chat guardado completo (título + mensajes).",
+        "operationId": "get_agent_chat_api_agent_chats__chat_id__get",
+        "parameters": [
+          {
+            "name": "chat_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Chat Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Agent Chat",
+        "operationId": "delete_agent_chat_api_agent_chats__chat_id__delete",
+        "parameters": [
+          {
+            "name": "chat_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Chat Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/generate-thumbnail": {
+      "post": {
+        "summary": "Agent Generate Thumbnail",
+        "description": "Genera una miniatura para YouTube de alta conversión.",
+        "operationId": "agent_generate_thumbnail_api_agent_generate_thumbnail_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/prepare": {
+      "post": {
+        "summary": "Publish Prepare",
+        "description": "Resumen de exactamente lo que se va a publicar + estado del canal.",
+        "operationId": "publish_prepare_api_publish_prepare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/metadata": {
+      "post": {
+        "summary": "Publish Metadata",
+        "description": "Título, descripción y etiquetas SEO generados con IA.",
+        "operationId": "publish_metadata_api_publish_metadata_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/thumbnail": {
+      "post": {
+        "summary": "Publish Thumbnail",
+        "description": "Miniatura 1280x720 con el modelo de imagen de Gemini (Nano Banana).",
+        "operationId": "publish_thumbnail_api_publish_thumbnail_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/youtube/status": {
+      "get": {
+        "summary": "Publish Youtube Status",
+        "operationId": "publish_youtube_status_api_publish_youtube_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/youtube/connect": {
+      "get": {
+        "summary": "Publish Youtube Connect",
+        "description": "Redirige al consentimiento OAuth de Google (PKCE).",
+        "operationId": "publish_youtube_connect_api_publish_youtube_connect_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/youtube/callback": {
+      "get": {
+        "summary": "Publish Youtube Callback",
+        "description": "Google regresa aquí tras el consentimiento; guarda el token del canal.",
+        "operationId": "publish_youtube_callback_api_publish_youtube_callback_get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Code"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "State"
+            }
+          },
+          {
+            "name": "error",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Error"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/youtube/disconnect": {
+      "post": {
+        "summary": "Publish Youtube Disconnect",
+        "operationId": "publish_youtube_disconnect_api_publish_youtube_disconnect_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/channels": {
+      "get": {
+        "summary": "Get Channels",
+        "description": "Lista todos los canales configurados para publicación multi-nicho.",
+        "operationId": "get_channels_api_channels_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Upsert Channel",
+        "description": "Crea o actualiza un canal en el sistema.",
+        "operationId": "upsert_channel_api_channels_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Channel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/channels/{channel_id}": {
+      "delete": {
+        "summary": "Delete Channel",
+        "description": "Elimina un canal configurado.",
+        "operationId": "delete_channel_api_channels__channel_id__delete",
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Channel Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/channels/classify": {
+      "post": {
+        "summary": "Classify Content Channel",
+        "description": "Clasifica una temática o guion para determinar el canal óptimo de publicación.",
+        "operationId": "classify_content_channel_api_channels_classify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/publish/youtube/upload": {
+      "post": {
+        "summary": "Publish Youtube Upload",
+        "description": "Sube el video master directamente al canal conectado (tarea en background).",
+        "operationId": "publish_youtube_upload_api_publish_youtube_upload_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trend-radar": {
+      "get": {
+        "summary": "Get Trend Radar",
+        "description": "Ranking viral y temas urgentes (caché viva; se auto-refresca si caducó).",
+        "operationId": "get_trend_radar_api_trend_radar_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trend-radar/favorites": {
+      "get": {
+        "summary": "Get Trend Radar Favorites",
+        "description": "Obtiene los temas guardados en favoritos de forma persistente.",
+        "operationId": "get_trend_radar_favorites_api_trend_radar_favorites_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Save Trend Radar Favorites",
+        "description": "Guarda, añade o quita un tema de favoritos de forma persistente.",
+        "operationId": "save_trend_radar_favorites_api_trend_radar_favorites_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/viral-niches/refresh": {
+      "get": {
+        "summary": "Refresh Viral Niches",
+        "description": "Busca en Internet tendencias reales y sintetiza con IA temas virales frescos\ncubriendo todas las categorías (finanzas, misterio, ciencia, amor, terror, etc.)\ncon cálculo de puntuación de viralidad real (+85 a +99).",
+        "operationId": "refresh_viral_niches_api_viral_niches_refresh_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Refresh Viral Niches",
+        "description": "Busca en Internet tendencias reales y sintetiza con IA temas virales frescos\ncubriendo todas las categorías (finanzas, misterio, ciencia, amor, terror, etc.)\ncon cálculo de puntuación de viralidad real (+85 a +99).",
+        "operationId": "refresh_viral_niches_api_viral_niches_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trend-radar/refresh": {
+      "post": {
+        "summary": "Refresh Trend Radar",
+        "description": "Fuerza un barrido nuevo en background (charts + temas con IA).",
+        "operationId": "refresh_trend_radar_api_trend_radar_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trend-radar/analyze": {
+      "post": {
+        "summary": "Analyze Trend Item",
+        "description": "La IA analiza el video original o el tema y propone enfoques estratégicos con duración calculada.",
+        "operationId": "analyze_trend_item_api_trend_radar_analyze_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trend-radar/replicate": {
+      "post": {
+        "summary": "Replicate Trend Item",
+        "description": "Replica un video viral (en español, con mejoras) o produce un tema urgente con duración óptima.\n\nLa IA convierte los parámetros del original en una brief en español y\narranca directamente la producción autónoma de KAI (streamer pipeline).\nSi viene \"choice\" (enfoque elegido en el panel de estrategia), la brief se\nconstruye alrededor de esa decisión; \"instructions\" añade notas libres.",
+        "operationId": "replicate_trend_item_api_trend_radar_replicate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/edit-files": {
+      "post": {
+        "summary": "Agent Edit Files",
+        "description": "Permite al agente modificar archivos REALES del proyecto en disco.\nAcepta una lista de operaciones:\n  - { \"op\": \"write\",      \"path\": \"web/static/css/...\", \"content\": \"...\" }\n  - { \"op\": \"append\",     \"path\": \"web/static/css/...\", \"content\": \"...\" }\n  - { \"op\": \"replace\",    \"path\": \"...\", \"old\": \"...\", \"new\": \"...\" }\nRetorna { \"ok\": true, \"files_written\": [...], \"reload\": true }",
+        "operationId": "agent_edit_files_api_agent_edit_files_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "type": "object",
+                "title": "Payload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agent/read-file": {
+      "get": {
+        "summary": "Agent Read File",
+        "description": "Permite al agente leer un archivo del proyecto para inspeccionarlo antes de editar.",
+        "operationId": "agent_read_file_api_agent_read_file_get",
+        "parameters": [
+          {
+            "name": "path",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Path"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/visual-templates": {
+      "get": {
+        "summary": "Get Visual Templates",
+        "description": "Catálogo completo de la librería de plantillas visuales con variantes temáticas y animaciones.",
+        "operationId": "get_visual_templates_api_visual_templates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/visual-templates/preview": {
+      "get": {
+        "summary": "Preview Visual Template",
+        "description": "Genera o sirve la vista previa renderizada en PNG de una plantilla visual.",
+        "operationId": "preview_visual_template_api_visual_templates_preview_get",
+        "parameters": [
+          {
+            "name": "template",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "verdict_badge",
+              "title": "Template"
+            }
+          },
+          {
+            "name": "variant",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "orange_noir",
+              "title": "Variant"
+            }
+          },
+          {
+            "name": "headline",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Headline"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Title"
+            }
+          },
+          {
+            "name": "subtitle",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subtitle"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Body"
+            }
+          },
+          {
+            "name": "stat_value",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stat Value"
+            }
+          },
+          {
+            "name": "stat_label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stat Label"
+            }
+          },
+          {
+            "name": "side_a",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Side A"
+            }
+          },
+          {
+            "name": "side_b",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Side B"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentChatRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Message",
+            "description": "Mensaje, consulta o instrucción para el agente"
+          },
+          "model_id": {
+            "type": "string",
+            "title": "Model Id",
+            "description": "Modelo LLM a utilizar",
+            "default": "gemini"
+          },
+          "app_context": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "App Context"
+          },
+          "history": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "History"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "AgentChatRequest"
+      },
+      "ApiResponse_Dict_str__Any__": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data",
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[Dict[str, Any]]"
+      },
+      "ApiResponse_List_ClipSummary__": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ClipSummary"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data",
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[List[ClipSummary]]"
+      },
+      "ApiResponse_List_Dict_str__Any___": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data",
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[List[Dict[str, Any]]]"
+      },
+      "ApiResponse_List_TaskStatusResponse__": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TaskStatusResponse"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data",
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[List[TaskStatusResponse]]"
+      },
+      "ApiResponse_List_VoiceSummary__": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/VoiceSummary"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data",
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[List[VoiceSummary]]"
+      },
+      "ApiResponse_ProjectListResponse_": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProjectListResponse"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[ProjectListResponse]"
+      },
+      "ApiResponse_StreamerCreateResponse_": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StreamerCreateResponse"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[StreamerCreateResponse]"
+      },
+      "ApiResponse_SystemHealthResponse_": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SystemHealthResponse"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[SystemHealthResponse]"
+      },
+      "ApiResponse_TaskStatusResponse_": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskStatusResponse"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[TaskStatusResponse]"
+      },
+      "ApiResponse_VideoProcessResponse_": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Indica si la solicitud fue exitosa",
+            "default": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje informativo",
+            "default": "Operación completada"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VideoProcessResponse"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Datos de la respuesta"
+          }
+        },
+        "type": "object",
+        "title": "ApiResponse[VideoProcessResponse]"
+      },
+      "Body_process_uploaded_video_api_v1_videos_process_post": {
+        "properties": {
+          "video": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "Video",
+            "description": "Archivo de video binario (MP4, MOV, MKV, etc.)"
+          },
+          "silence_threshold": {
+            "type": "number",
+            "title": "Silence Threshold",
+            "description": "Umbral de silencio en segundos",
+            "default": 1.5
+          },
+          "enable_broll": {
+            "type": "boolean",
+            "title": "Enable Broll",
+            "description": "Activar inserción de B-Roll",
+            "default": true
+          },
+          "enable_captions": {
+            "type": "boolean",
+            "title": "Enable Captions",
+            "description": "Activar subtítulos dinámicos",
+            "default": true
+          },
+          "enable_shorts": {
+            "type": "boolean",
+            "title": "Enable Shorts",
+            "description": "Extraer Shorts verticales 9:16",
+            "default": true
+          },
+          "enable_cards": {
+            "type": "boolean",
+            "title": "Enable Cards",
+            "description": "Generar tarjetas de contexto",
+            "default": true
+          },
+          "voice": {
+            "type": "string",
+            "title": "Voice",
+            "description": "Voz neuronal para locución",
+            "default": "es-MX-JorgeNeural"
+          },
+          "webhook_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Url",
+            "description": "URL de webhook para notificación al finalizar"
+          }
+        },
+        "type": "object",
+        "required": [
+          "video"
+        ],
+        "title": "Body_process_uploaded_video_api_v1_videos_process_post"
+      },
+      "Body_process_video_api_process_video_post": {
+        "properties": {
+          "video": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "Video"
+          },
+          "silence_threshold": {
+            "type": "number",
+            "title": "Silence Threshold",
+            "default": 1.5
+          },
+          "enable_broll": {
+            "type": "boolean",
+            "title": "Enable Broll",
+            "default": true
+          },
+          "enable_captions": {
+            "type": "boolean",
+            "title": "Enable Captions",
+            "default": true
+          },
+          "enable_shorts": {
+            "type": "boolean",
+            "title": "Enable Shorts",
+            "default": true
+          },
+          "enable_cards": {
+            "type": "boolean",
+            "title": "Enable Cards",
+            "default": true
+          },
+          "voice": {
+            "type": "string",
+            "title": "Voice",
+            "default": "es-MX-JorgeNeural"
+          }
+        },
+        "type": "object",
+        "required": [
+          "video"
+        ],
+        "title": "Body_process_video_api_process_video_post"
+      },
+      "ChannelSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "niche": {
+            "type": "string",
+            "title": "Niche"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "preferred_voice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preferred Voice"
+          },
+          "target_audience": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Audience"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "niche"
+        ],
+        "title": "ChannelSchema"
+      },
+      "ClipExtractRequest": {
+        "properties": {
+          "start_sec": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Sec",
+            "description": "Segundo de inicio del clip"
+          },
+          "end_sec": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Sec",
+            "description": "Segundo de finalización del clip"
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "title": "Aspect Ratio",
+            "description": "Relación de aspecto: '9:16' o '16:9'",
+            "default": "9:16"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "Título del clip / Short"
+          }
+        },
+        "type": "object",
+        "title": "ClipExtractRequest"
+      },
+      "ClipSummary": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "size_mb": {
+            "type": "number",
+            "title": "Size Mb"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "filename",
+          "name",
+          "url",
+          "size_mb"
+        ],
+        "title": "ClipSummary"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ProjectListResponse": {
+        "properties": {
+          "projects": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummary"
+            },
+            "type": "array",
+            "title": "Projects"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "projects",
+          "total"
+        ],
+        "title": "ProjectListResponse"
+      },
+      "ProjectSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "duration": {
+            "type": "number",
+            "title": "Duration",
+            "default": 0.0
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topic"
+          },
+          "thumbnail_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumbnail Url"
+          },
+          "master_video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Master Video Url"
+          },
+          "has_plan": {
+            "type": "boolean",
+            "title": "Has Plan",
+            "default": false
+          },
+          "has_result": {
+            "type": "boolean",
+            "title": "Has Result",
+            "default": false
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "status"
+        ],
+        "title": "ProjectSummary"
+      },
+      "PublishPrepareRequest": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "title": "Project Id",
+            "description": "ID del proyecto"
+          },
+          "custom_instructions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Instructions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_id"
+        ],
+        "title": "PublishPrepareRequest"
+      },
+      "PublishThumbnailRequest": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "title": "Project Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topic"
+          },
+          "style": {
+            "type": "string",
+            "title": "Style",
+            "description": "bold_contrast, minimal, neon, etc.",
+            "default": "bold_contrast"
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_id",
+          "title"
+        ],
+        "title": "PublishThumbnailRequest"
+      },
+      "StreamerCreateRequest": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "minLength": 3,
+            "title": "Topic",
+            "description": "Tema o premisa central del video a generar"
+          },
+          "style": {
+            "type": "string",
+            "title": "Style",
+            "description": "Estilo de guion y ritmo: divulgacion, polemica, misterio, etc.",
+            "default": "divulgacion"
+          },
+          "duration_sec": {
+            "type": "integer",
+            "maximum": 300.0,
+            "minimum": 15.0,
+            "title": "Duration Sec",
+            "description": "Duración estimada del video en segundos",
+            "default": 45
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "title": "Aspect Ratio",
+            "description": "Relación de aspecto: '16:9' (horizontal) o '9:16' (vertical)",
+            "default": "16:9"
+          },
+          "card_theme": {
+            "type": "string",
+            "title": "Card Theme",
+            "description": "Tema visual de tarjetas: dark, light, neon, etc.",
+            "default": "dark"
+          },
+          "voice": {
+            "type": "string",
+            "title": "Voice",
+            "description": "Voz de narración TTS a utilizar",
+            "default": "es-MX-JorgeNeural"
+          },
+          "visual_mode": {
+            "type": "string",
+            "title": "Visual Mode",
+            "description": "Modo visual: mixed, ai_remotion, broll_only, motion_graphics",
+            "default": "mixed"
+          },
+          "rtmp_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rtmp Url",
+            "description": "URL RTMP opcional para streaming en vivo directo"
+          },
+          "webhook_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Url",
+            "description": "URL de webhook a notificar cuando termine la transmisión"
+          },
+          "extra_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra Notes",
+            "description": "Instrucciones o requerimientos editoriales adicionales"
+          },
+          "auto_publish": {
+            "type": "boolean",
+            "title": "Auto Publish",
+            "description": "Publicar automáticamente a YouTube al completar",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "topic"
+        ],
+        "title": "StreamerCreateRequest"
+      },
+      "StreamerCreateResponse": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id",
+            "description": "ID de la tarea en ejecución"
+          },
+          "project_id": {
+            "type": "string",
+            "title": "Project Id",
+            "description": "ID del proyecto generado"
+          },
+          "topic": {
+            "type": "string",
+            "title": "Topic",
+            "description": "Tema en producción"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Mensaje de confirmación"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "project_id",
+          "topic",
+          "message"
+        ],
+        "title": "StreamerCreateResponse"
+      },
+      "SystemHealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "ok"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "default": "2.0.0"
+          },
+          "server_time": {
+            "type": "string",
+            "title": "Server Time"
+          },
+          "ffmpeg_available": {
+            "type": "boolean",
+            "title": "Ffmpeg Available"
+          },
+          "ffprobe_available": {
+            "type": "boolean",
+            "title": "Ffprobe Available"
+          },
+          "gpu_available": {
+            "type": "boolean",
+            "title": "Gpu Available"
+          },
+          "storage_free_gb": {
+            "type": "number",
+            "title": "Storage Free Gb"
+          },
+          "active_tasks_count": {
+            "type": "integer",
+            "title": "Active Tasks Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "server_time",
+          "ffmpeg_available",
+          "ffprobe_available",
+          "gpu_available",
+          "storage_free_gb",
+          "active_tasks_count"
+        ],
+        "title": "SystemHealthResponse"
+      },
+      "TTSGenerateRequest": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text",
+            "description": "Texto a sintetizar con voz neuronal"
+          },
+          "voice": {
+            "type": "string",
+            "title": "Voice",
+            "description": "Identificador de la voz",
+            "default": "es-MX-JorgeNeural"
+          },
+          "rate": {
+            "type": "string",
+            "title": "Rate",
+            "description": "Ajuste de velocidad, ej: '+10%', '-5%'",
+            "default": "+0%"
+          },
+          "pitch": {
+            "type": "string",
+            "title": "Pitch",
+            "description": "Ajuste de tono, ej: '+5Hz'",
+            "default": "+0Hz"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "TTSGenerateRequest"
+      },
+      "TaskStatusResponse": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "step": {
+            "type": "string",
+            "title": "Step",
+            "description": "Etapa actual: init, audio, silence, llm, assets, render, done, error, cancelled"
+          },
+          "progress": {
+            "type": "number",
+            "title": "Progress",
+            "description": "Porcentaje de avance (0 a 100)"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Descripción del paso actual"
+          },
+          "completed": {
+            "type": "boolean",
+            "title": "Completed"
+          },
+          "cancelled": {
+            "type": "boolean",
+            "title": "Cancelled",
+            "default": false
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "file_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Name"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "events": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Events",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "step",
+          "progress",
+          "message",
+          "completed"
+        ],
+        "title": "TaskStatusResponse"
+      },
+      "TimelineBrollUpdate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "TimelineBrollUpdate"
+      },
+      "TimelineCardUpdate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "duration": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "avatar_spoken_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Spoken Text"
+          },
+          "avatar_enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "TimelineCardUpdate"
+      },
+      "TimelineUpdateRequest": {
+        "properties": {
+          "cards": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TimelineCardUpdate"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cards"
+          },
+          "brolls": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TimelineBrollUpdate"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brolls"
+          }
+        },
+        "type": "object",
+        "title": "TimelineUpdateRequest"
+      },
+      "TrendReplicateRequest": {
+        "properties": {
+          "topic": {
+            "type": "string",
+            "title": "Topic",
+            "description": "Tema a replicar en un nuevo video"
+          },
+          "style": {
+            "type": "string",
+            "title": "Style",
+            "description": "Estilo narrativo",
+            "default": "divulgacion"
+          },
+          "duration_sec": {
+            "type": "integer",
+            "maximum": 300.0,
+            "minimum": 15.0,
+            "title": "Duration Sec",
+            "default": 45
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "title": "Aspect Ratio",
+            "default": "16:9"
+          },
+          "webhook_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "topic"
+        ],
+        "title": "TrendReplicateRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VideoProcessResponse": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id",
+            "description": "ID único asignado a la tarea"
+          },
+          "project_id": {
+            "type": "string",
+            "title": "Project Id",
+            "description": "ID del proyecto creado"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Estado inicial de la tarea",
+            "default": "queued"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Detalles del inicio del procesamiento"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "project_id",
+          "message"
+        ],
+        "title": "VideoProcessResponse"
+      },
+      "VideoProcessUrlRequest": {
+        "properties": {
+          "silence_threshold": {
+            "type": "number",
+            "maximum": 5.0,
+            "minimum": 0.5,
+            "title": "Silence Threshold",
+            "description": "Umbral en segundos para cortar silencios",
+            "default": 1.5
+          },
+          "enable_broll": {
+            "type": "boolean",
+            "title": "Enable Broll",
+            "description": "Buscar y superponer material de apoyo (B-Roll)",
+            "default": true
+          },
+          "enable_captions": {
+            "type": "boolean",
+            "title": "Enable Captions",
+            "description": "Generar y quemar subtítulos dinámicos de alto impacto",
+            "default": true
+          },
+          "enable_shorts": {
+            "type": "boolean",
+            "title": "Enable Shorts",
+            "description": "Extraer automáticamente Shorts / Reels verticales 9:16",
+            "default": true
+          },
+          "enable_cards": {
+            "type": "boolean",
+            "title": "Enable Cards",
+            "description": "Generar tarjetas informativas contrastadas con IA",
+            "default": true
+          },
+          "voice": {
+            "type": "string",
+            "title": "Voice",
+            "description": "Voz neuronal para narración o doblaje de tarjetas",
+            "default": "es-MX-JorgeNeural"
+          },
+          "webhook_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Webhook Url",
+            "description": "URL de webhook a invocar al finalizar o fallar el proceso"
+          },
+          "video_url": {
+            "type": "string",
+            "title": "Video Url",
+            "description": "URL pública del video (enlace directo MP4, YouTube, Drive, etc.)"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "Título o nombre opcional para identificar el video"
+          }
+        },
+        "type": "object",
+        "required": [
+          "video_url"
+        ],
+        "title": "VideoProcessUrlRequest"
+      },
+      "VoiceSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "accent": {
+            "type": "string",
+            "title": "Accent"
+          },
+          "gender": {
+            "type": "string",
+            "title": "Gender"
+          },
+          "preview_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "language",
+          "accent",
+          "gender"
+        ],
+        "title": "VoiceSummary"
+      },
+      "YouTubeUploadRequest": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "title": "Project Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tags",
+            "default": []
+          },
+          "privacy": {
+            "type": "string",
+            "title": "Privacy",
+            "description": "private, unlisted, public",
+            "default": "private"
+          },
+          "category_id": {
+            "type": "string",
+            "title": "Category Id",
+            "description": "Categoría YouTube (27=Educación, 28=Ciencia y Tecnología)",
+            "default": "27"
+          },
+          "made_for_kids": {
+            "type": "boolean",
+            "title": "Made For Kids",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "project_id",
+          "title",
+          "description"
+        ],
+        "title": "YouTubeUploadRequest"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      },
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

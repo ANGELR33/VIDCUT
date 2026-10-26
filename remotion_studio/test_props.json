@@ -1,0 +1,21 @@
+{
+  "words": [
+    { "text": "En", "start": 0.2, "end": 0.4 },
+    { "text": "2026", "start": 0.4, "end": 0.95, "emphasis": true },
+    { "text": "la", "start": 1.0, "end": 1.15 },
+    { "text": "NASA", "start": 1.15, "end": 1.7, "emphasis": true },
+    { "text": "detectó", "start": 1.7, "end": 2.2 },
+    { "text": "algo", "start": 2.2, "end": 2.5 },
+    { "text": "inexplicable", "start": 2.5, "end": 3.3 },
+    { "text": "en", "start": 3.3, "end": 3.45 },
+    { "text": "la", "start": 3.45, "end": 3.6 },
+    { "text": "Luna.", "start": 3.6, "end": 4.3 }
+  ],
+  "durationSec": 5,
+  "width": 1920,
+  "height": 300,
+  "fps": 30,
+  "vertical": false,
+  "activeColor": "#FFE14D",
+  "emphasisColor": "#38BDF8"
+}

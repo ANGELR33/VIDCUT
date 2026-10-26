@@ -1,0 +1,80 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "google/gemini-2.5-flash",
+  "instructions": [
+    "core/opencode_instructions.md"
+  ],
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "{env:NVIDIA_API_KEY}"
+      },
+      "models": {
+        "z-ai/glm-5.3": {
+          "name": "GLM-5.3 Senior"
+        },
+        "z-ai/glm-5.3-flash": {
+          "name": "GLM-5.3 Flash"
+        },
+        "moonshotai/kimi-k3": {
+          "name": "Kimi-k3"
+        }
+      }
+    },
+    "google-gemini": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Google Gemini",
+      "options": {
+        "baseURL": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "apiKey": "{env:GEMINI_API_KEY}"
+      },
+      "models": {
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash"
+        },
+        "gemini-2.0-flash": {
+          "name": "Gemini 2.0 Flash"
+        }
+      }
+    },
+    "google": {
+      "npm": "@ai-sdk/google",
+      "name": "Google Gemini",
+      "options": {
+        "apiKey": "{env:GEMINI_API_KEY}"
+      },
+      "models": {
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash"
+        }
+      }
+    }
+  },
+  "permission": {
+    "edit": "allow",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny"
+    },
+    "bash": {
+      "*": "allow",
+      "rm *": "ask",
+      "del *": "ask",
+      "rmdir *": "ask",
+      "Remove-Item *": "ask",
+      "git push*": "ask",
+      "git reset*": "ask",
+      "git clean*": "ask",
+      "pip uninstall*": "ask",
+      "npm uninstall*": "ask",
+      "shutdown*": "deny"
+    },
+    "external_directory": "ask",
+    "webfetch": "allow",
+    "question": "deny"
+  }
+}

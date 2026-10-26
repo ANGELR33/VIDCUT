@@ -1,0 +1,370 @@
+<!-- =========================================================================
+     KAI STREAMER - CREATOR STUDIO COMPOSER (APARTADO LIMPIO DE CONFIGURACIÓN)
+     Diseño limpio tipo Chat prompt, duraciones expandidas, audición de voces,
+     estilos de subtítulos y opciones visuales previas a la creación.
+     ========================================================================= -->
+<div class="kai-composer-container" id="streamerTabPane">
+
+    <!-- CABECERA LIMPIA Y MINIMALISTA DEL ESTUDIO -->
+    <div class="kai-composer-header-minimal">
+        <div class="kai-title-group">
+            <span class="kai-status-dot"></span>
+            <span class="kai-studio-badge">ESTUDIO DE TRANSMISIÓN</span>
+        </div>
+        <div class="kai-composer-header-actions">
+            <button type="button" class="kai-btn-chip-action" id="btnToggleQueue" title="Generar transmisiones en cola">
+                📋 Modo Cola
+            </button>
+            <button type="button" class="kai-btn-chip-action" id="btnComposerVoiceTester" title="Abrir Laboratorio de Voces">
+                🎧 Voces
+            </button>
+        </div>
+    </div>
+
+    <!-- COLA DE TEMAS (COLLAPSIBLE) -->
+    <div id="queueInputWrap" style="display:none; margin-bottom: 16px;">
+        <div class="kai-card-nested">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <label style="font-size:11px; font-weight:700; color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em;">
+                    📋 Cola Automática de Temas (Uno por línea)
+                </label>
+                <span id="queueBadgeInfo" style="font-size:11px; color:#22c55e; display:none;">0 temas</span>
+            </div>
+            <textarea id="streamerQueueTopics" rows="3" class="kai-textarea-clean" placeholder="Ej:&#10;Descubrimiento astronómico James Webb&#10;Inteligencia artificial en medicina 2026&#10;Historia oculta de la computación cuántica"></textarea>
+        </div>
+    </div>
+
+    <!-- AREA PRINCIPAL: CHAT-STYLE PROMPT & CONFIGURACIÓN -->
+    <form id="streamerForm" class="kai-composer-form">
+
+        <!-- 1. CHAT PROMPT BOX PRINCIPAL (INSPIRADO EN CHATBOTS MODERNOS DE ALTA GAMA) -->
+        <div class="kai-prompt-box">
+            <div class="kai-prompt-input-wrapper">
+                <textarea
+                    id="streamerTopic"
+                    class="kai-prompt-textarea"
+                    rows="3"
+                    placeholder="Escribe el tema, idea o guión para tu transmisión... (Ej: Night Drive Cyberpunk 2026: Cómo Tokio y Dubai se convirtieron en las capitales de la noche...)"
+                    required
+                ></textarea>
+            </div>
+
+            <!-- MODO ANÁLISIS DE CASO: video concreto que KAI analiza visualmente.
+                 Opcional: si se llena, KAI descarga el video, extrae fotogramas
+                 reales, los analiza con Gemini y los usa como fondos del análisis. -->
+            <div class="kai-case-url-row" style="display:flex; align-items:center; gap:8px; padding:6px 10px; margin-top:6px; border:1px solid rgba(168,85,247,0.35); border-radius:10px; background:rgba(168,85,247,0.07);">
+                <span style="font-size:14px;" title="Modo análisis: KAI analiza ESTE video real y usa sus fotogramas">🎯</span>
+                <input type="url" id="streamerCaseUrl" placeholder="Opcional: URL del video/caso a analizar (YouTube) — KAI examinará sus fotogramas reales"
+                       style="flex:1; background:transparent; border:none; outline:none; color:#cbd5e1; font-size:11.5px; font-family:inherit;">
+            </div>
+
+            <!-- FILA INFERIOR DEL CHAT BOX: TENDENCIAS RÁPIDAS Y BOTÓN PRINCIPAL -->
+            <div class="kai-prompt-footer">
+                <div class="kai-trending-compact">
+                    <span class="kai-trending-tag">🔥 TENDENCIAS:</span>
+                    <div id="trendingChipsRow" class="kai-chips-scroll"></div>
+                    <button type="button" id="refreshTrendingBtn" class="kai-chip-btn-icon" title="Refrescar tendencias">↻</button>
+                </div>
+
+                <div class="kai-submit-group">
+                    <button type="submit" class="kai-btn-generate" id="startStreamerBtn">
+                        <span class="kai-gen-icon">🚀</span>
+                        <span id="startStreamerBtnText">Crear y Transmitir Video</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. BARRA DE PARÁMETROS RÁPIDOS COMPACTA (UNA SOLA LÍNEA ELEGANTE) -->
+        <div class="kai-quick-bar">
+            <!-- Selector de Duración -->
+            <div class="kai-quick-pill">
+                <span class="kai-pill-prefix">⏱️ Duración</span>
+                <select id="streamerDuration" class="kai-quick-select">
+                    <option value="45">45s (Micro Reel)</option>
+                    <option value="60">1 min (Short / TikTok)</option>
+                    <option value="180">3 min (Resumen)</option>
+                    <option value="300" selected>5 min (Estándar)</option>
+                    <option value="420">7 min (Análisis)</option>
+                    <option value="480">8 min (Reportaje)</option>
+                    <option value="600">10 min (Docu Corto)</option>
+                    <option value="900">15 min (Profundidad)</option>
+                    <option value="1200">20 min (Masterclass)</option>
+                    <option value="1500">25 min (Podcast)</option>
+                    <option value="2400">40 min (Transmisión)</option>
+                </select>
+            </div>
+
+            <!-- Selector de Voz con preview integrado -->
+            <div class="kai-quick-pill kai-voice-pill">
+                <span class="kai-pill-prefix">🎙️ Voz</span>
+                <select id="streamerVoice" class="kai-quick-select">
+                    <optgroup label="Voces Principales">
+                        <option value="es-MX-JorgeNeural" selected>Jorge (México)</option>
+                        <option value="es-US-AlonsoNeural">Alonso (Latino)</option>
+                        <option value="es-CO-GonzaloNeural">Gonzalo (Colombia)</option>
+                        <option value="es-AR-TomasNeural">Tomás (Argentina)</option>
+                        <option value="es-MX-DaliaNeural">Dalia (México - Fem)</option>
+                        <option value="es-AR-ElenaNeural">Elena (Argentina - Fem)</option>
+                        <option value="es-ES-AlvaroNeural">Álvaro (España)</option>
+                    </optgroup>
+                    <optgroup label="Especializadas">
+                        <option value="voicestudio-omni-es">OmniVoice Neutro</option>
+                        <option value="voicestudio-piper-dave">Locutor Docu</option>
+                    </optgroup>
+                </select>
+                <button type="button" id="btnInlineVoicePreview" class="kai-btn-inline-play" title="Escuchar muestra">
+                    <span id="btnInlineVoicePreviewIcon">▶</span>
+                </button>
+            </div>
+
+            <!-- Selector de Formato -->
+            <div class="kai-quick-pill">
+                <span class="kai-pill-prefix">📐 Formato</span>
+                <select id="streamerFormat" class="kai-quick-select">
+                    <option value="9:16" selected>9:16 Vertical</option>
+                    <option value="16:9">16:9 Horizontal</option>
+                </select>
+            </div>
+
+            <!-- Botón de Ajustes Creativos -->
+            <button type="button" class="kai-btn-accordion-toggle" id="btnToggleCreativeSettings">
+                <span>⚙️ Ajustes Creativos</span>
+                <span class="kai-chevron" id="creativeSettingsChevron">▾</span>
+            </button>
+        </div>
+
+        <!-- Reproductor de Audio Inline flotante para audición rápida -->
+        <div id="inlineVoiceAudioPlayerWrap" style="display:none;" class="kai-floating-audio-bar">
+            <span style="font-size:11px; font-weight:700; color:#38bdf8;">🔊 Muestra de Voz:</span>
+            <span id="inlineVoiceStatus" style="display:none; font-size:11px; color:#94a3b8; font-style:italic;"></span>
+            <audio id="inlineVoiceAudioPlayer" controls style="height:28px; flex:1;"></audio>
+            <button type="button" id="btnCloseAudioPreview" style="background:none; border:none; color:#94a3b8; cursor:pointer;">✕</button>
+        </div>
+
+        <!-- 3. MENÚ DESPLEGABLE ELEGANTE: DETALLES VISUALES, TONOS Y SUBTÍTULOS -->
+        <div id="creativeSettingsPanel" class="kai-accordion-content" style="display:none;">
+            <div class="kai-accordion-grid">
+
+                <!-- COLUMNA 1: TONALIDAD NARRATIVA (MULTI-SELECT EN PILLS COMPACTAS) -->
+                <div class="kai-setting-box">
+                    <strong class="kai-setting-heading">🎭 Tono &amp; Personalidad Narrativa (Multi-selección)</strong>
+                    <div class="kai-pills-wrap" id="stylePillsWrap">
+                        <button type="button" class="kai-pill-btn active" data-style="divulgacion">🔬 Divulgador</button>
+                        <button type="button" class="kai-pill-btn" data-style="sarcasmo">😏 Sarcasmo</button>
+                        <button type="button" class="kai-pill-btn" data-style="debate">⚡ Debate</button>
+                        <button type="button" class="kai-pill-btn" data-style="noticias">📰 Periodístico</button>
+                        <button type="button" class="kai-pill-btn" data-style="analisis">📊 Análisis</button>
+                        <button type="button" class="kai-pill-btn" data-style="podcast">🎙️ Podcast</button>
+                        <button type="button" class="kai-pill-btn" data-style="mitos">❌ Mitos</button>
+                    </div>
+                    <select id="streamerStyle" style="display:none;"><option value="divulgacion" selected>divulgacion</option></select>
+                </div>
+
+                <!-- COLUMNA 2: ESTILO VISUAL & MOTOR -->
+                <div class="kai-setting-box">
+                    <strong class="kai-setting-heading">🎨 Diseño Audiovisual</strong>
+                    <div class="kai-visual-choice-compact">
+                        <label class="kai-radio-pill-mini">
+                            <input type="radio" name="kaiVisualModeRadio" value="mixed" checked>
+                            <span>🔀 Híbrido Cinemático</span>
+                        </label>
+                        <label class="kai-radio-pill-mini">
+                            <input type="radio" name="kaiVisualModeRadio" value="svg">
+                            <span>✨ Animaciones Propias (SVG / Vector)</span>
+                        </label>
+                        <label class="kai-radio-pill-mini">
+                            <input type="radio" name="kaiVisualModeRadio" value="stock">
+                            <span>🎬 B-Roll Real Stock</span>
+                        </label>
+                    </div>
+
+                    <div class="kai-toggles-row-mini">
+                        <label class="kai-check-mini"><input type="checkbox" id="kaiToggleBentoCards" checked> Tarjetas Bento</label>
+                        <label class="kai-check-mini"><input type="checkbox" id="kaiToggleBRoll" checked> B-Roll HD</label>
+                        <label class="kai-check-mini"><input type="checkbox" id="kaiToggleFlashAudit" checked> Auditoría GLM Flash</label>
+                    </div>
+                </div>
+
+                <!-- COLUMNA 3: SUBTÍTULOS Y EMISIÓN EN VIVO -->
+                <div class="kai-setting-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <strong class="kai-setting-heading" style="margin:0;">💬 Estilo de Subtítulos</strong>
+                        <label class="kai-check-mini"><input type="checkbox" id="kaiToggleSubs" checked> Quemar en video</label>
+                    </div>
+
+                    <div class="kai-sub-styles-row" id="subStylesWrap">
+                        <button type="button" class="kai-sub-card active" data-sub="classic">
+                            <div class="kai-sub-preview classic">Clásico</div>
+                            <span>Blanco</span>
+                        </button>
+                        <button type="button" class="kai-sub-card" data-sub="viral">
+                            <div class="kai-sub-preview viral">VIRAL</div>
+                            <span>Bold</span>
+                        </button>
+                        <button type="button" class="kai-sub-card" data-sub="neon">
+                            <div class="kai-sub-preview neon">NEON</div>
+                            <span>Cyan</span>
+                        </button>
+                        <button type="button" class="kai-sub-card" data-sub="outline">
+                            <div class="kai-sub-preview outline">BORDE</div>
+                            <span>Outline</span>
+                        </button>
+                        <button type="button" class="kai-sub-card" data-sub="minimal">
+                            <div class="kai-sub-preview minimal">Minimal</div>
+                            <span>Fino</span>
+                        </button>
+                        <button type="button" class="kai-sub-card" data-sub="cinema">
+                            <div class="kai-sub-preview cinema">Cine</div>
+                            <span>Serif</span>
+                        </button>
+                    </div>
+
+                    <!-- Enlace discreto a RTMP -->
+                    <div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.06);">
+                        <button type="button" class="kai-btn-subtle" id="toggleAdvancedDrawer" style="font-size:10px; padding:4px 8px;">
+                            ⚙️ Configurar Servidor RTMP (YouTube Live / Twitch / Kick)
+                        </button>
+                        <div id="advancedDrawer" hidden style="margin-top:8px;">
+                            <select id="streamerLivePlatform" class="kai-select-compact" style="width:100%; margin-bottom:6px;">
+                                <option value="none" selected>Solo grabación local (Sin emitir)</option>
+                                <option value="youtube">YouTube Live</option>
+                                <option value="twitch">Twitch</option>
+                                <option value="kick">Kick</option>
+                                <option value="custom">RTMP Personalizado</option>
+                            </select>
+                            <input type="text" id="streamerStreamKey" class="kai-input-mini" placeholder="Clave de emisión..." style="width:100%; display:none; margin-bottom:4px;">
+                            <input type="text" id="streamerCustomRtmp" class="kai-input-mini" placeholder="rtmp://..." style="width:100%; display:none;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMNA 4: PRODUCCIÓN PROFESIONAL (NUEVO) -->
+                <div class="kai-setting-box">
+                    <strong class="kai-setting-heading">🎬 Producción Profesional</strong>
+
+                    <!-- Color Grading -->
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;">🎨 Color Grading</label>
+                        <div class="kai-pills-wrap" id="colorGradePillsWrap" style="gap:4px;flex-wrap:wrap;">
+                            <button type="button" class="kai-pill-btn" data-grade="raw" style="font-size:10px;padding:3px 8px;">📷 Raw</button>
+                            <button type="button" class="kai-pill-btn active" data-grade="cinema" style="font-size:10px;padding:3px 8px;">🎥 Cine</button>
+                            <button type="button" class="kai-pill-btn" data-grade="broadcast" style="font-size:10px;padding:3px 8px;">📺 Broadcast</button>
+                            <button type="button" class="kai-pill-btn" data-grade="neon" style="font-size:10px;padding:3px 8px;">💜 Neon</button>
+                            <button type="button" class="kai-pill-btn" data-grade="warm" style="font-size:10px;padding:3px 8px;">🟠 Cálido</button>
+                            <button type="button" class="kai-pill-btn" data-grade="cool" style="font-size:10px;padding:3px 8px;">🔵 Frío</button>
+                        </div>
+                        <input type="hidden" id="kaiColorGrade" value="cinema">
+                    </div>
+
+                    <!-- FPS -->
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;">⚡ Frames por segundo</label>
+                        <div class="kai-pills-wrap" id="fpsPillsWrap" style="gap:4px;">
+                            <button type="button" class="kai-pill-btn" data-fps="24" style="font-size:10px;padding:3px 8px;">24fps Cine</button>
+                            <button type="button" class="kai-pill-btn active" data-fps="30" style="font-size:10px;padding:3px 8px;">30fps Web</button>
+                            <button type="button" class="kai-pill-btn" data-fps="60" style="font-size:10px;padding:3px 8px;">60fps Gaming</button>
+                        </div>
+                        <input type="hidden" id="kaiVideoFps" value="30">
+                    </div>
+
+                    <!-- BGM Volume -->
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;">
+                            🎵 Música de Fondo: <span id="bgmVolLabel">12%</span>
+                        </label>
+                        <input type="range" id="kaiBgmVolume" min="0" max="0.20" step="0.01" value="0.12" style="width:100%;accent-color:#38bdf8;">
+                    </div>
+
+                    <!-- Música Track -->
+                    <div style="margin-bottom:8px;">
+                        <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px;">🎶 Track BGM</label>
+                        <select id="kaiBgmTrack" class="kai-quick-select" style="font-size:11px;padding:4px 8px;width:100%;">
+                            <option value="default" selected>🎵 Estudio (Default)</option>
+                            <option value="cinematic">🎬 YouTube Library: Cinemático</option>
+                            <option value="tension">⚡ YouTube Library: Tensión / Noticia</option>
+                            <option value="upbeat">🚀 YouTube Library: Enérgico / Upbeat</option>
+                            <option value="ambient">🌊 YouTube Library: Documental / Ambient</option>
+                            <option value="lofi">☕ YouTube Library: Lo-Fi Chill</option>
+                            <option value="silent">🔇 Sin música</option>
+                        </select>
+                    </div>
+
+                    <!-- Toggles de calidad -->
+                    <div class="kai-toggles-row-mini" style="margin-top:8px;border-top:1px solid rgba(255,255,255,.06);padding-top:8px;">
+                        <label class="kai-check-mini"><input type="checkbox" id="kaiAudioNormalize" checked> 🔊 Loudnorm EBU R128</label>
+                        <label class="kai-check-mini"><input type="checkbox" id="kaiOutroEnabled" checked> 🏁 Pantalla de Cierre</label>
+                        <label class="kai-check-mini" title="Sube a YouTube si el canal está conectado o prepara paquete asistido de inmediato"><input type="checkbox" id="kaiAutoPublish"> 🚀 Publicar al finalizar</label>
+                    </div>
+
+                    <!-- CRF calidad visual -->
+                    <div style="margin-top:8px;">
+                        <label style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px;">
+                            🔬 Calidad Visual (CRF): <span id="crfLabel">18 — Alta</span>
+                        </label>
+                        <input type="range" id="kaiCrfQuality" min="14" max="28" step="1" value="18" style="width:100%;accent-color:#22c55e;">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+    <!-- FORMULARIO SECUNDARIO DE SUBIDA PARA MODO COPILOT (COMPATIBILIDAD INTEGRADA) -->
+    <div id="copilotDropWrap" hidden style="margin-top:20px; padding:24px; border:2px dashed rgba(255,255,255,0.1); border-radius:14px; text-align:center; background:rgba(15,19,31,0.5);">
+        <form id="uploadForm">
+            <input type="file" id="videoFileInput" accept="video/mp4,video/quicktime,video/x-matroska,video/webm,video/x-msvideo,.m4v" hidden>
+            <button class="dropzone-bento" id="dropzone" type="button" style="background:transparent; border:none; color:inherit; cursor:pointer;">
+                <span style="font-size:36px; display:block; margin-bottom:8px;">📥</span>
+                <strong style="font-size:14px; color:#fff;">Arrastra un video para que KAI actúe de Co-Piloto</strong>
+                <p style="font-size:12px; color:var(--prism-text-muted); margin:4px 0 0;">Detección inteligente de silencios, tarjetas Bento y B-roll automático</p>
+            </button>
+            <div class="file-chip" id="selectedFileBadge" hidden style="margin-top:12px;">
+                <span class="file-mark">▶</span>
+                <span id="selectedFileName">video.mp4</span>
+                <button id="removeFileBtn" type="button" style="background:none; border:none; color:#f87171; cursor:pointer; font-weight:bold;">×</button>
+            </div>
+            <div id="uploadControls" style="margin-top:16px;">
+                <button type="submit" id="startBtn" class="kai-btn-generate" disabled>
+                    <span id="startBtnText">Comenzar Edición Co-Piloto</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ELEMENTOS OCULTOS DE COMPATIBILIDAD CON APP.JS (NO VISIBLES EN COMPOSITOR) -->
+    <div style="display:none;" aria-hidden="true">
+        <button type="button" id="cancelTaskBtn"></button>
+        <select id="streamerCardTheme"><option value="dark" selected>dark</option></select>
+        <input type="checkbox" id="enableBRoll" checked>
+        <input type="checkbox" id="enableCards" checked>
+        <input type="checkbox" id="enableCaptions" checked>
+        <input type="checkbox" id="enableShorts" checked>
+        <input type="range" id="silenceThreshold" min="0.5" max="3.0" step="0.1" value="1.5">
+        <span id="silenceVal">1.5 s</span>
+        <span id="pipelineStatusText"></span>
+        <strong id="progressPctText"></strong>
+        <div id="progressBarFill"></div>
+        <div id="broadcastCompleteBanner">
+            <button id="bannerWatchBtn"></button>
+            <a id="bannerDownloadBtn"></a>
+            <button id="bannerFolderBtn"></button>
+        </div>
+        <button id="fullscreenExpandBtn"></button>
+        <span id="readoutTopicShort"></span>
+        <span id="readoutVoiceName"></span>
+        <span id="readoutDuration"></span>
+        <span id="readoutFormat"></span>
+        <span id="heroDurationVal"></span>
+        <span id="heroResolutionVal"></span>
+        <span id="heroTitle"></span>
+        <span id="heroSubtitle"></span>
+        <span id="bentoCardTitle"></span>
+        <span id="bentoCardSub"></span>
+        <div id="donutProgressArc"></div>
+        <span id="donutPctText"></span>
+        <span id="donutLabelText"></span>
+    </div>
+
+</div>

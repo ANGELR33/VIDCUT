@@ -1,0 +1,103 @@
+<!-- PANTALLA DEDICADA DE TELEMETRÍA Y CONTROL DE EMISIÓN EN TIEMPO REAL (MISSION CONTROL) -->
+<section class="bento-main-card telemetry-mission-control" id="liveTelemetryCard" hidden style="margin-top: 14px; padding: 24px;">
+    <header class="bento-card-header" style="flex-wrap: wrap; gap: 12px; align-items: flex-start;">
+        <div class="bento-header-left">
+            <div class="app-badge-icon live-pulse-badge" aria-hidden="true">📡</div>
+            <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="live-status-pill" id="telemetryLiveBadge">● EN VIVO</span>
+                    <h3 id="telemetryTopicTitle" style="font-size:20px; font-weight:800; margin:0; color:#fff;">KAI Studio Mission Control</h3>
+                </div>
+                <p id="telemetrySubTitle" style="margin:4px 0 0; font-size:12px; color:var(--text-muted);">
+                    Monitoreo en tiempo real: investigación web, generación de clips, tarjetas Bento y renderizado
+                </p>
+            </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" id="telemetryMinimizeBtn" class="subcard-pill-btn" style="padding:8px 14px; font-size:12px; cursor:pointer; background:rgba(255,255,255,0.08); color:var(--text-secondary);" title="Volver a la mesa de configuración">
+                ↙ Minimizar a Segundo Plano
+            </button>
+            <button type="button" id="telemetryCancelBtn" class="subcard-pill-btn" style="padding:8px 14px; font-size:12px; cursor:pointer; background:rgba(239,68,68,0.18); color:#f87171; border:1px solid rgba(239,68,68,0.3);">
+                ✕ Cancelar Proceso
+            </button>
+        </div>
+    </header>
+
+    <!-- BARRA PRINCIPAL DE PROGRESO CON FASE Y TIEMPO -->
+    <div class="telemetry-progress-banner" style="margin-top:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span class="telemetry-step-pill" id="telemetryCurrentStep">Investigación</span>
+                <strong id="telemetryCurrentMsg" style="font-size:13px; color:#fff;">Iniciando motor de transmisión...</strong>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:12px; color:var(--text-muted);" id="telemetryTimeElapsed">⏱ 00:00</span>
+                <span class="telemetry-pct-tag" id="telemetryPctTag">0%</span>
+            </div>
+        </div>
+        <div class="telemetry-bar-track">
+            <div class="telemetry-bar-fill" id="telemetryBarFill" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- GRID DE 2 COLUMNAS: TERMINAL DE EVENTOS EN VIVO + MONITOR VISUAL & TABLERO DE ESCENAS -->
+    <div class="telemetry-dual-grid" style="display:grid; grid-template-columns: 1fr 380px; gap: 16px; margin-top: 18px;">
+        
+        <!-- COLUMNA 1: TERMINAL DE EVENTOS EN TIEMPO REAL -->
+        <div class="telemetry-terminal-box">
+            <div class="terminal-header">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="terminal-title">TERMINAL DE ACCIONES EN VIVO (EVENT STREAM)</span>
+                </div>
+                <span class="terminal-count" id="telemetryEventCount">0 eventos</span>
+            </div>
+            <div class="terminal-body" id="telemetryConsoleFeed">
+                <div class="terminal-empty">Esperando el primer evento de la transmisión...</div>
+            </div>
+        </div>
+
+        <!-- COLUMNA 2: MONITOR VISUAL ACTIVO + TABLERO DE ESCENAS -->
+        <div class="telemetry-side-panel">
+            
+            <!-- MONITOR VISUAL EN VIVO -->
+            <div class="live-visual-stage" id="telemetryLiveStage">
+                <div class="stage-badge-rec" style="position:absolute; top:8px; left:8px; z-index:2;"><i></i> MONITOR DE ESCENA</div>
+                <img id="telemetryStageImg" class="stage-visual-asset" src="/static/images/app_bg.jpg" alt="Visualización activa">
+                <div class="stage-visual-caption" id="telemetryStageCaption">
+                    <strong id="telemetryStageSceneTitle">Escena en preparación</strong>
+                    <span id="telemetryStageSceneMeta">Buscando clips y generando composiciones...</span>
+                </div>
+            </div>
+
+            <div class="side-panel-header" style="margin-top:14px;">
+                <span style="font-size:12px; font-weight:700; color:#fff;">🎬 Secuencia de Escenas</span>
+                <span style="font-size:11px; color:var(--text-muted);" id="telemetrySceneRatio">0 / 0</span>
+            </div>
+            <div class="telemetry-scenes-list" id="telemetryScenesList">
+                <div class="scene-item-placeholder">
+                    <div style="font-size:12px; color:var(--text-muted);">Las escenas se poblarán al iniciar la dirección de IA.</div>
+                </div>
+            </div>
+
+            <!-- MINI TARJETA DE RECURSOS ACTIVOS -->
+            <div class="telemetry-metrics-mini" style="margin-top:12px;">
+                <div class="metric-mini-row">
+                    <span>Motor de Video:</span>
+                    <strong style="color:#38bdf8;">FFmpeg Multi-Thread</strong>
+                </div>
+                <div class="metric-mini-row">
+                    <span>Lip-Sync KAI:</span>
+                    <strong style="color:#22c55e;">Sincronizado</strong>
+                </div>
+                <div class="metric-mini-row">
+                    <span>Clips Dinámicos:</span>
+                    <strong style="color:#fbbf24;">HD H.264 Direct</strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

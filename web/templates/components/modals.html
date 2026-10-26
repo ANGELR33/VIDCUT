@@ -1,0 +1,101 @@
+<!-- MODAL VENTANA FLOTANTE DE REPRODUCCIÓN (PROYECTOS & MASTER PREVIEWS) -->
+<div id="videoPlayerModal" class="video-modal-backdrop" hidden>
+    <div class="video-modal-dialog">
+        <header class="video-modal-header">
+            <div class="video-modal-title-wrap">
+                <span class="video-modal-badge">🎬 REPRODUCTOR DE PROYECTO</span>
+                <h3 id="modalVideoTitle" class="video-modal-title">Título del Video</h3>
+                <p id="modalVideoSub" class="video-modal-sub">Metadatos del video</p>
+            </div>
+            <div class="video-modal-actions">
+                <button type="button" id="modalExtractClipsBtn" class="yt-open-pill-btn" style="background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.4); color: #c084fc; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Extraer automáticamente clips verticales 9:16 para Shorts / Reels">✂️ Extraer Clips</button>
+                <a href="#" id="modalDownloadBtn" class="yt-open-pill-btn" download title="Descargar Video .MP4">📥 Descargar .MP4</a>
+                <button type="button" id="modalCloseBtn" class="video-modal-close-btn" title="Cerrar reproductor">✕</button>
+            </div>
+        </header>
+        <div class="video-modal-stage">
+            <video id="modalVideoElement" controls playsinline></video>
+        </div>
+        <!-- SECCIÓN DE CLIPS VERTICALES (SHORTS & REELS) -->
+        <div id="modalClipsSection" style="padding: 14px 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(15, 23, 42, 0.4);" hidden>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: #c084fc; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 6px;">
+                    ✨ CLIPS &amp; SHORTS 9:16 LISTOS PARA VIRALIZAR
+                </span>
+                <span id="modalClipsLoadingText" style="font-size: 11px; color: var(--text-muted);" hidden>⏳ Procesando clips verticales...</span>
+            </div>
+            <div id="modalClipsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">
+                <!-- Dinámico en app.js -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FLOTANTE DE AUDICIÓN DE VOCES & PRUEBA DE ORACIONES LARGAS -->
+<div id="voiceTesterModal" class="video-modal-backdrop" hidden>
+    <div class="video-modal-dialog" style="max-width: 640px; border: 1px solid rgba(255, 255, 255, 0.14);">
+        <header class="video-modal-header" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+            <div class="video-modal-title-wrap">
+                <span class="video-modal-badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">🎙️ AUDICIÓN DE VOCES EN VIVO</span>
+                <h3 class="video-modal-title">Laboratorio de Locutores &amp; Fluidez</h3>
+                <p class="video-modal-sub">Escucha y compara la dicción con oraciones largas de prueba antes de generar videos</p>
+            </div>
+            <div class="video-modal-actions">
+                <button type="button" id="voiceTesterCloseBtn" class="video-modal-close-btn" title="Cerrar ventana">✕</button>
+            </div>
+        </header>
+
+        <div style="padding: 20px 22px; display: flex; flex-direction: column; gap: 14px;">
+            <div>
+                <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;">
+                    Seleccionar Locutor / Modelo de Voz
+                </label>
+                <select id="modalVoiceSelect" class="select-input" style="width: 100%; font-size: 13px; padding: 10px 12px;">
+                    <optgroup label="✨ Voces Neurales Dinámicas (Sin frenazos)">
+                        <option value="es-MX-JorgeNeural" selected>🎙️ Jorge (México - Conversacional &amp; Dinámico - RECOMENDADO)</option>
+                        <option value="es-US-AlonsoNeural">🎙️ Alonso (Latino - Broadcast Internacional)</option>
+                        <option value="es-CO-GonzaloNeural">🎙️ Gonzalo (Colombia - Neutro &amp; Calmo)</option>
+                        <option value="es-AR-TomasNeural">🎙️ Tomás (Argentina - Directo &amp; Enérgico)</option>
+                        <option value="es-MX-DaliaNeural">🎙️ Dalia (México - Femenina Cálida)</option>
+                        <option value="es-AR-ElenaNeural">🎙️ Elena (Argentina - Femenina Expresiva)</option>
+                        <option value="es-ES-AlvaroNeural">🎙️ Álvaro (España - Tech &amp; Divulgación)</option>
+                    </optgroup>
+                    <optgroup label="🌐 Motor VoiceStudio / Multilingüe (646 Idiomas)">
+                        <option value="voicestudio-omni-es">🎧 VoiceStudio - OmniVoice Español Neutro</option>
+                        <option value="voicestudio-piper-dave">🎧 VoiceStudio - Locutor Documental</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <label style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;">
+                        Texto u Oración Larga a Probar
+                    </label>
+                    <div style="display: flex; gap: 6px;">
+                        <button type="button" class="sample-phrase-btn" data-phrase="¡Ojo amiguito! Se te acaba de escapar un dato que no es tan cierto: sobre el gasto público, los registros oficiales confirman que la cifra real descendió un ocho por ciento en el último trimestre. ¡Dato mata relato, mi gente!">Frase 1 (Debate)</button>
+                        <button type="button" class="sample-phrase-btn" data-phrase="¡Paren las rotativas un segundo! El número real que define esto es contundente: según las últimas investigaciones de astrofísica y datos del telescopio espacial, se han identificado más de cinco mil quinientos exoplanetas habitables en nuestra galaxia.">Frase 2 (Ciencia)</button>
+                    </div>
+                </div>
+                <textarea id="modalVoiceText" rows="4" class="text-input" style="width: 100%; font-size: 12px; line-height: 1.5;" placeholder="Escribe aquí cualquier frase larga o corta para escuchar la pronunciación y comprobar si hay silencios o trabas...">¡Ojo amiguito! Se te acaba de escapar un dato que no es tan cierto: sobre el gasto público, los registros oficiales confirman que la cifra real descendió un ocho por ciento en el último trimestre. ¡Dato mata relato, mi gente!</textarea>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
+                <button type="button" id="btnSynthesizeVoiceTest" class="subcard-pill-btn active" style="padding: 10px 18px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; flex-shrink: 0;">
+                    <span>▶ Escuchar Voz</span>
+                </button>
+                <div id="voiceTesterStatus" style="font-size: 11px; color: #94a3b8; font-style: italic;">
+                    Presiona «Escuchar Voz» para generar la prueba en directo.
+                </div>
+            </div>
+
+            <!-- Reproductor de Audio estilizado en cristal -->
+            <div id="voicePlayerContainer" style="background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; display: none; align-items: center; gap: 12px;">
+                <audio id="modalVoiceAudioPlayer" controls style="width: 100%; height: 36px; border-radius: 8px;"></audio>
+                <button type="button" id="btnApplyVoiceToStudio" class="yt-open-pill-btn" style="white-space: nowrap; font-size: 11px; padding: 6px 12px;" title="Seleccionar esta voz para todos los videos">
+                    ✓ Usar esta voz
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

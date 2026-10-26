@@ -1,0 +1,76 @@
+<!-- HEADER ESTILO PRISM STUDIO (IDÉNTICO A LA REFERENCIA) -->
+<header class="prism-topbar">
+    <div class="prism-topbar-left">
+        <div class="prism-title-pill">
+            <h1 id="topbarProjectTitle">Night Drive · Reel</h1>
+            <span class="prism-saved-badge" id="topbarSaveStatus">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                <span>GUARDADO</span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Pestañas centrales de Prism Studio: Biblioteca | Monitor | Ajustes -->
+    <nav class="prism-segmented-nav" role="tablist">
+        <button type="button" class="prism-tab-btn" id="tabModeProjects" role="tab" aria-selected="false">
+            Biblioteca
+        </button>
+        <button type="button" class="prism-tab-btn" id="tabModeRadar" role="tab" aria-selected="false" style="color:#f87171; border-color:rgba(239,68,68,0.3);">
+            📡 Radar
+        </button>
+        <button type="button" class="prism-tab-btn active" id="tabModeStreamer" role="tab" aria-selected="true">
+            Monitor
+        </button>
+        <button type="button" class="prism-tab-btn" id="tabModeStudio" role="tab" aria-selected="false">
+            Mesa &amp; Timeline
+        </button>
+        <button type="button" class="prism-tab-btn" id="tabModeCopilot" role="tab" aria-selected="false">
+            Ajustes
+        </button>
+        <button type="button" class="prism-tab-btn" id="tabModeMultiAgent" role="tab" aria-selected="false" style="color:#c084fc; border-color:rgba(168,85,247,0.3);">
+            🤖 Dev Studio
+        </button>
+    </nav>
+
+    <!-- Barra de acciones superior derecha: Controles de Pilotos, Exportar, etc. -->
+    <div class="prism-topbar-right">
+        <!-- Toggle Piloto Anime (Black Clover / Shonen) -->
+        <button type="button" class="prism-icon-btn" id="btnToggleAnimeAutopilot" title="Clic para Activar o Pausar la Creación de la Serie de Anime" style="width:auto; padding:5px 12px; gap:6px; border-radius:18px; font-size:11.5px; font-weight:700; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.4); color:#c084fc; cursor:pointer;">
+            <span>⚔️ Anime:</span>
+            <span id="animeAutopilotStateLabel">ACTIVO</span>
+        </button>
+
+        <!-- Lanzador Recorrido Universal -->
+        <button type="button" class="prism-icon-btn" id="btnRunUniversalTour" title="Lanzar ronda secuencial por todas las páginas y canales" style="width:auto; padding:5px 12px; gap:6px; border-radius:18px; font-size:11.5px; font-weight:700; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.4); color:#38bdf8; cursor:pointer;">
+            <span>🌐 Todos los Canales</span>
+        </button>
+
+        <button type="button" class="prism-icon-btn" id="btnUndoStudio" title="Deshacer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+        <button type="button" class="prism-icon-btn" id="btnRedoStudio" title="Rehacer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <button type="button" class="prism-icon-btn" id="btnCloudSync" title="Sincronización en la nube">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </button>
+        <button type="button" class="prism-icon-btn" id="btnShareStudio" title="Compartir">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </button>
+
+        <!-- Botón Exportar estilizado con destellos (Azul eléctrico Prism Studio) -->
+        <button type="button" class="prism-export-btn" id="btnPrismExport" title="Exportar Video Master">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+            <span>Exportar</span>
+        </button>
+
+        <!-- Avatar circular AV -->
+        <div class="prism-user-avatar" title="Perfil de Usuario">AV</div>
+    </div>
+</header>

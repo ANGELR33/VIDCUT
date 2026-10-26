@@ -1,0 +1,25 @@
+<!-- PROYECTOS GUARDADOS (BIBLIOTECA BENTO PROFESIONAL) -->
+<section class="bento-main-card" id="savedProjectsCard" hidden style="margin-top: 14px; padding: 22px;">
+    <header class="bento-card-header" style="flex-wrap: wrap; gap: 14px; align-items: center;">
+        <div class="bento-header-left">
+            <div class="app-badge-icon" style="background: linear-gradient(135deg, #6366f1, #3b82f6);" aria-hidden="true">📁</div>
+            <div>
+                <h3 style="font-size: 20px; font-weight: 800; margin: 0; color: #fff;">Biblioteca de Proyectos</h3>
+                <p style="margin: 4px 0 0; font-size: 12px; color: var(--text-muted);">Producciones autónomas de KAI y videos generados en el estudio</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div class="projects-search-wrap">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="projectSearchInput" class="projects-search-field" placeholder="Buscar por tema o título...">
+            </div>
+            <div class="subcard-pills-wrap" id="projectFilterPills" style="margin: 0;">
+                <button type="button" class="subcard-pill-btn active" data-filter="all">Todos</button>
+                <button type="button" class="subcard-pill-btn" data-filter="done">Completados</button>
+                <button type="button" class="subcard-pill-btn" data-filter="progress">En proceso</button>
+            </div>
+            <button type="button" class="subcard-pill-btn" id="refreshProjectsBtn" title="Actualizar lista">↻</button>
+        </div>
+    </header>
+    <div id="savedProjectsList" class="saved-projects-bento-grid" style="margin-top: 16px;"></div>
+</section>

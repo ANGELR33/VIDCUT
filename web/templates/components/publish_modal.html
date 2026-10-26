@@ -1,0 +1,124 @@
+<!-- MODAL ESTUDIO DE PUBLICACIÓN (PREVIEW + MINIATURA IA + SUBIDA A YOUTUBE) -->
+<div id="publishModal" class="video-modal-backdrop" hidden>
+    <div class="video-modal-dialog publish-studio-dialog">
+        <header class="video-modal-header">
+            <div class="video-modal-title-wrap">
+                <span class="video-modal-badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.3);">📡 ESTUDIO DE PUBLICACIÓN</span>
+                <h3 id="pubModalTitle" class="video-modal-title">Preparando publicación...</h3>
+                <p id="pubModalSub" class="video-modal-sub">Revisa exactamente lo que se va a publicar antes de subirlo a YouTube</p>
+            </div>
+            <div class="video-modal-actions">
+                <button type="button" id="pubCloseBtn" class="video-modal-close-btn" title="Cerrar estudio de publicación">✕</button>
+            </div>
+        </header>
+
+        <div class="publish-studio-body">
+            <!-- COLUMNA IZQUIERDA: VIDEO + MINIATURA -->
+            <section class="publish-left-col">
+                <div class="pub-preview-stage">
+                    <video id="pubVideoElement" controls playsinline preload="metadata"></video>
+                </div>
+                <div id="pubVideoMeta" class="pub-video-meta">Cargando datos del video...</div>
+
+                <!-- MINIATURA -->
+                <div class="pub-block">
+                    <div class="pub-block-title">🖼️ MINIATURA DEL VIDEO <span style="font-weight:400; opacity:.6;">1280×720 · generada con IA</span></div>
+                    <div class="pub-thumb-frame">
+                        <img id="pubThumbImg" alt="Miniatura de YouTube" hidden>
+                        <div id="pubThumbEmpty" class="pub-thumb-empty">
+                            <span style="font-size:30px;">🖼️</span>
+                            <span>Aún no hay miniatura</span>
+                            <span style="font-size:11px; opacity:.6;">Genérala con Nano Banana en un clic</span>
+                        </div>
+                        <div id="pubThumbLoading" class="pub-thumb-loading" hidden>
+                            <div class="pub-spinner"></div>
+                            <span id="pubThumbLoadingText">Generando miniatura con IA...</span>
+                        </div>
+                    </div>
+                    <div class="pub-thumb-controls">
+                        <select id="pubThumbStyle" class="select-input" title="Estilo visual de la miniatura"></select>
+                        <input type="text" id="pubThumbText" class="text-input" maxlength="40" placeholder="Texto gigante para la miniatura (opcional)">
+                        <label class="pub-check-row" title="El modelo mejora un fotograma real de tu video">
+                            <input type="checkbox" id="pubUseFrame"> Usar fotograma del video como base
+                        </label>
+                        <div class="pub-thumb-btns">
+                            <button type="button" id="pubThumbGenBtn" class="subcard-pill-btn active" title="Generar miniatura con el modelo de imagen de Gemini">✨ Generar Miniatura IA</button>
+                            <a href="#" id="pubThumbDownload" class="yt-open-pill-btn" download="miniatura_youtube.jpg" hidden>⬇ JPG</a>
+                        </div>
+                        <div id="pubThumbNote" class="pub-note" hidden></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLUMNA DERECHA: CANAL + METADATOS + PUBLICACIÓN -->
+            <section class="publish-right-col">
+                <!-- SELECTOR MULTI-CANAL INTELIGENTE (ENRUTAMIENTO IA) -->
+                <div class="pub-block" style="margin-bottom: 12px; background: rgba(12, 13, 18, 0.7); border: 1px solid rgba(255, 148, 54, 0.3); border-radius: 10px; padding: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #ff9436; text-transform: uppercase; letter-spacing: 0.5px;">🎯 Canal de Destino</span>
+                        <span id="pubChannelBadge" class="pub-counter" style="color: #cbd5e1; font-weight: 600;">Detectando nicho...</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <select id="pubChannelSelect" class="select-input" style="flex: 1; font-size: 13px; font-weight: 600; background: #0c0d12; border-color: rgba(255, 148, 54, 0.4); color: #fff;">
+                            <option value="divulgacion">🔬 Divulgación & Descubrimientos</option>
+                            <option value="curiosidades">💡 Curiosidades & Tops</option>
+                            <option value="reacciones">🎙️ Reacciones & Casos Virales</option>
+                            <option value="tecnologia">⚡ Tecnología & Futuro IA</option>
+                        </select>
+                        <span id="pubClassifyChip" style="font-size: 11px; padding: 4px 8px; border-radius: 6px; background: rgba(255, 148, 54, 0.15); border: 1px solid rgba(255, 148, 54, 0.4); color: #ff9436; white-space: nowrap;">✨ IA Sugerido</span>
+                    </div>
+                </div>
+
+                <!-- ESTADO DEL CANAL -->
+                <div id="pubChannelBox" class="pub-channel-box">
+                    <div class="pub-channel-info" id="pubChannelInfo">
+                        <span class="pub-channel-scan">Comprobando canal de YouTube...</span>
+                    </div>
+                    <div class="pub-channel-actions">
+                        <button type="button" id="pubConnectBtn" class="yt-open-pill-btn" style="background: rgba(239,68,68,.18); border-color: rgba(239,68,68,.4); color:#f87171;" hidden>🔗 Conectar canal</button>
+                        <button type="button" id="pubRefreshChannelBtn" class="yt-open-pill-btn" title="Ya autorizé en la pestaña de Google" hidden>↻ Revisar</button>
+                        <button type="button" id="pubDisconnectBtn" class="yt-open-pill-btn" style="color:#94a3b8;" title="Desconectar este canal" hidden>Desconectar</button>
+                    </div>
+                </div>
+
+                <!-- METADATOS -->
+                <div class="pub-block">
+                    <div class="pub-block-title">📝 METADATOS SEO <button type="button" id="pubMetaBtn" class="pub-mini-btn" title="Regenerar título, descripción y etiquetas con IA">✨ Regenerar con IA</button></div>
+                    <label class="pub-field-label">TÍTULO <span id="pubTitleCount" class="pub-counter">0/100</span></label>
+                    <input type="text" id="pubTitle" class="text-input" maxlength="100" placeholder="Título del video en YouTube">
+                    <label class="pub-field-label">DESCRIPCIÓN <span id="pubDescCount" class="pub-counter">0/5000</span></label>
+                    <textarea id="pubDescription" class="text-input pub-desc-area" rows="7" maxlength="5000" placeholder="Descripción optimizada para búsqueda y retención"></textarea>
+                    <label class="pub-field-label">ETIQUETAS <span id="pubTagsCount" class="pub-counter">0/500</span></label>
+                    <input type="text" id="pubTags" class="text-input" placeholder="etiqueta1, etiqueta2, etiqueta3...">
+                </div>
+
+                <!-- OPCIONES DE PUBLICACIÓN -->
+                <div class="pub-block">
+                    <div class="pub-block-title">⚙️ OPCIONES DE PUBLICACIÓN</div>
+                    <div class="pub-options-row">
+                        <select id="pubPrivacy" class="select-input" title="Privacidad del video">
+                            <option value="public">🌍 Pública</option>
+                            <option value="unlisted">🔗 Oculta (con enlace)</option>
+                            <option value="private">🔒 Privada</option>
+                        </select>
+                        <label class="pub-check-row"><input type="checkbox" id="pubNotify" checked> Notificar suscriptores</label>
+                    </div>
+                    <label class="pub-check-row"><input type="checkbox" id="pubKids"> Contenido hecho para niños</label>
+                </div>
+
+                <!-- ACCIONES DE PUBLICACIÓN -->
+                <div class="pub-publish-actions">
+                    <button type="button" id="pubUploadBtn" class="pub-primary-btn" disabled title="Sube el video master directamente a tu canal">🚀 Publicar en YouTube</button>
+                    <button type="button" id="pubAssistBtn" class="yt-open-pill-btn" title="Copia todos los metadatos, descarga la miniatura y abre YouTube Studio">🧭 Publicación asistida</button>
+                </div>
+
+                <div id="pubProgressWrap" class="pub-progress-wrap" hidden>
+                    <div class="pub-progress-bar"><div id="pubProgressFill" class="pub-progress-fill"></div></div>
+                    <div id="pubProgressText" class="pub-progress-text">0%</div>
+                </div>
+                <div id="pubStatusLine" class="pub-note" hidden></div>
+                <div id="pubResultBox" class="pub-result-box" hidden></div>
+            </section>
+        </div>
+    </div>
+</div>

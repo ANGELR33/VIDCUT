@@ -1,0 +1,4201 @@
+/* ==========================================================================
+   PRISM STUDIO MASTER THEME - EXACT PIXEL MATCH & TEXTURE REPLICATION
+   Colors: Deep Obsidian (#07090e), Electric Prism Blue (#2563eb / #3b82f6),
+           Neon Cyan (#38bdf8), Forest Emerald (#22c55e), Border (#1e293b)
+   ========================================================================== */
+
+:root {
+    --prism-bg: #07090e;
+    --prism-sidebar-bg: #090c13;
+    --prism-card-bg: #0b0e17;
+    --prism-card-sub: #0f131f;
+    --prism-border: rgba(255, 255, 255, 0.08);
+    --prism-border-active: #2563eb;
+    --prism-blue: #2563eb;
+    --prism-blue-light: #3b82f6;
+    --prism-cyan: #38bdf8;
+    --prism-emerald: #10b981;
+    --prism-text: #f1f5f9;
+    --prism-text-muted: #64748b;
+    --prism-sidebar-w: 230px;
+}
+
+/* 1. RESET Y FONDO GLOBAL */
+body {
+    background-color: var(--prism-bg) !important;
+    color: var(--prism-text) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+    min-height: 100vh !important;
+    overflow-x: hidden !important;
+}
+
+body::before {
+    background: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37, 99, 235, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.4) 0%, transparent 50%),
+        #07090e !important;
+}
+
+/* 2. SIDEBAR PRISM STUDIO LATERAL IZQUIERDO (PROFESIONAL MATTE DARK) */
+.prism-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--prism-sidebar-w);
+    background: linear-gradient(180deg, #07090e 0%, #05070a 100%) !important;
+    border-right: 1px solid rgba(37, 99, 235, 0.22) !important;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    z-index: 1000;
+    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.75), inset -1px 0 0 rgba(37, 99, 235, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    overflow-y: auto;
+}
+
+.prism-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.prism-brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb 60%, #38bdf8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.prism-brand-text h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.prism-brand-text span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+}
+
+.prism-nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 14px;
+}
+
+.prism-section-heading {
+    font-size: 10px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.08em;
+    padding: 6px 10px 2px;
+}
+
+.prism-nav-item {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    border-radius: 9px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prism-nav-item svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: inherit;
+    transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.prism-nav-label {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.prism-nav-item:hover {
+    color: #f8fafc;
+    background: rgba(30, 41, 59, 0.4);
+    border-color: rgba(56, 189, 248, 0.25);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.prism-nav-item:hover svg {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5));
+}
+
+.prism-nav-item.active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.26), rgba(15, 23, 42, 0.85)) !important;
+    border-color: rgba(56, 189, 248, 0.45) !important;
+    box-shadow: 0 0 18px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+}
+
+.prism-nav-item.active svg {
+    color: #38bdf8;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}
+
+.prism-active-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8, 0 0 14px rgba(56, 189, 248, 0.6);
+}
+
+.prism-nav-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--prism-border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* 3. CONTENEDOR PRINCIPAL DEL ESTUDIO */
+.glass-studio-window {
+    margin-left: var(--prism-sidebar-w) !important;
+    width: calc(100vw - var(--prism-sidebar-w)) !important;
+    min-height: 100vh !important;
+    padding: 16px 24px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 4. BARRA SUPERIOR (HEADER ESTILO PRISM STUDIO) */
+.prism-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px 14px;
+    border-bottom: 1px solid var(--prism-border);
+    margin-bottom: 16px;
+}
+
+.prism-title-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.prism-title-pill h1 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+}
+
+.prism-saved-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+/* Píldoras centrales Biblioteca | Monitor | Ajustes */
+.prism-segmented-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #0b0e17;
+    border: 1px solid var(--prism-border);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.prism-tab-btn {
+    height: 32px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.prism-tab-btn:hover {
+    color: #fff;
+}
+
+.prism-tab-btn.active {
+    background: #1e2433;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.prism-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prism-icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.prism-icon-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.prism-icon-btn:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.prism-export-btn {
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transition: all 0.15s ease;
+}
+
+.prism-export-btn:hover {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    transform: translateY(-1px);
+}
+
+.prism-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #1e2433;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 5. SECCIÓN MONITOR DE VIDEO (EXACTO A LA IMAGEN) */
+.prism-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.prism-monitor-card {
+    background: #090c14;
+    border: 1px solid var(--prism-border);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.prism-monitor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.prism-monitor-badge-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.prism-rec-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.prism-rec-pill i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 0 0 6px #ef4444;
+}
+
+.prism-spec-pill {
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    color: #38bdf8;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.prism-aspect-toggle-group {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+}
+
+.prism-aspect-toggle-btn {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.2;
+}
+
+.prism-aspect-toggle-btn:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.prism-aspect-toggle-btn.active {
+    background: linear-gradient(135deg, #0284c7, #2563eb);
+    color: #ffffff;
+    box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+}
+
+.prism-monitor-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prism-select-compact {
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 11px;
+    padding: 4px 8px;
+}
+
+.prism-btn-compact {
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    border-radius: 6px;
+    color: #e2e8f0;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+/* Escenario Central y Tablero Dual de Producción */
+.prism-stage-deck {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 16px;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .prism-stage-deck {
+        grid-template-columns: 1fr;
+    }
+}
+
+.prism-stage-viewport {
+    position: relative;
+    width: 100%;
+    min-height: 380px;
+    max-height: 440px;
+    background: #05070b;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.prism-stage-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prism-viewport-screen {
+    height: 370px;
+    position: relative;
+    overflow: hidden;
+    background: #05070b;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100%;
+    max-width: 100%;
+    transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.28s ease;
+}
+
+/* Modo 16:9 Horizontal (YouTube / Panorámico) */
+.prism-viewport-screen.aspect-16-9,
+.prism-viewport-screen:not(.aspect-9-16) {
+    height: 370px;
+    width: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+}
+
+/* Modo 9:16 Vertical (Shorts / Reels / TikTok) */
+.prism-viewport-screen.aspect-9-16 {
+    height: 370px;
+    width: auto;
+    aspect-ratio: 9 / 16;
+    border-radius: 18px;
+}
+
+.prism-viewport-screen video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.prism-viewport-fallback-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+/* Tablero de Monitoreo en Vivo KAI en la Mesa */
+.prism-live-sideboard {
+    background: #07090e;
+    border: 1px solid var(--prism-border);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 380px;
+    max-height: 440px;
+    box-sizing: border-box;
+}
+
+.prism-sideboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.prism-sideboard-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prism-live-dot-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+    animation: prismPulse 1.4s infinite;
+}
+
+@keyframes prismPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.prism-sideboard-title-group strong {
+    font-size: 11px;
+    font-weight: 800;
+    color: #38bdf8;
+    letter-spacing: 0.05em;
+}
+
+.prism-sideboard-pct {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(56, 189, 248, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.prism-sideboard-msg {
+    font-size: 11px;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    min-height: 34px;
+}
+
+.prism-sideboard-tabs {
+    display: flex;
+    gap: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.prism-sb-tab-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+}
+
+.prism-sb-tab-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.prism-sb-tab-btn.active {
+    background: rgba(37, 99, 235, 0.2);
+    color: #38bdf8;
+    border-color: rgba(37, 99, 235, 0.4);
+}
+
+.prism-sb-pane {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.prism-sb-scenes-scroll,
+.prism-sb-cards-scroll,
+.prism-sb-facts-box {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 4px;
+}
+
+.prism-sb-empty-note {
+    font-size: 11px;
+    color: var(--prism-text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 24px 8px;
+}
+
+/* Elemento de Escena en el Tablero de la Mesa */
+.prism-sb-scene-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 5px 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.prism-sb-scene-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.prism-sb-scene-row.active {
+    border-color: #38bdf8;
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.prism-sb-scene-thumb {
+    width: 44px;
+    height: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #000;
+}
+
+.prism-sb-scene-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.prism-sb-scene-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.prism-sb-scene-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prism-sb-scene-sub {
+    font-size: 9px;
+    color: #94a3b8;
+    display: flex;
+    gap: 6px;
+}
+
+.prism-sb-scene-status {
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 700;
+}
+
+.prism-sb-scene-status.done {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+}
+
+.prism-sb-scene-status.active {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38bdf8;
+}
+
+.prism-sb-scene-status.queued {
+    background: rgba(255, 255, 255, 0.05);
+    color: #64748b;
+}
+
+/* Tarjeta Bento Row */
+.prism-sb-card-row {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.prism-sb-card-badge {
+    align-self: flex-start;
+    font-size: 8px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+}
+
+.prism-sb-card-headline {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.prism-sb-card-stat {
+    font-size: 11px;
+    font-weight: 800;
+    color: #38bdf8;
+}
+
+.prism-sb-card-body {
+    font-size: 10px;
+    color: #94a3b8;
+    line-height: 1.3;
+}
+
+/* Fact Row */
+.prism-sb-fact-row {
+    font-size: 10px;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 2px solid #38bdf8;
+    padding: 6px 8px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.4;
+}
+
+/* Controles de Reproducción: Flechas, Play Circular Blanco, Timecode */
+.prism-monitor-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding: 4px 8px;
+}
+
+.prism-ctrl-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.prism-ctrl-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.prism-ctrl-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.prism-ctrl-btn:hover {
+    color: #fff;
+}
+
+/* Botón Play Circular Blanco (Idéntico a la imagen) */
+.prism-play-btn-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: none;
+    color: #07090e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.35);
+    transition: transform 0.15s ease;
+}
+
+.prism-play-btn-circle:hover {
+    transform: scale(1.06);
+}
+
+.prism-play-btn-circle svg {
+    width: 18px;
+    height: 18px;
+    margin-left: 2px;
+}
+
+.prism-timecode-display {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #cbd5e1;
+    letter-spacing: 0.05em;
+}
+
+.prism-timecode-display span {
+    color: var(--prism-text-muted);
+}
+
+/* 6. SECCIÓN TIMELINE & MULTIPISTA (VID & TXT) */
+.prism-timeline-section {
+    background: #090c14;
+    border: 1px solid var(--prism-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.prism-timeline-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--prism-border);
+}
+
+.prism-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.prism-tb-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.prism-tb-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+.prism-tb-btn:hover {
+    color: #fff;
+}
+
+.prism-tb-btn.active {
+    background: #2563eb;
+    color: #fff;
+    border-color: #3b82f6;
+}
+
+.prism-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prism-topic-input {
+    background: #0b0e17;
+    border: 1px solid var(--prism-border);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 11px;
+    padding: 6px 12px;
+    width: 240px;
+}
+
+.prism-ai-gen-btn {
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* PISTAS DE EDICIÓN VID Y TXT */
+.prism-timeline-stage {
+    display: flex;
+    gap: 8px;
+    background: #05070b;
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.prism-tracks-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 24px;
+    width: 44px;
+}
+
+.prism-track-badge {
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.prism-track-badge.vid {
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    color: #38bdf8;
+    height: 54px;
+}
+
+.prism-track-badge.txt {
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    color: #a855f7;
+    height: 28px;
+}
+
+.prism-tracks-scrollable {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-x: auto;
+}
+
+.prism-ruler {
+    position: relative;
+    height: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 4px;
+}
+
+.prism-ruler span {
+    position: absolute;
+    top: 2px;
+    font-size: 10px;
+    font-family: 'Geist Mono', monospace;
+    color: var(--prism-text-muted);
+    transform: translateX(-50%);
+}
+
+.prism-tracks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.prism-track-row {
+    position: relative;
+    width: 100%;
+}
+
+.prism-track-row.vid-row {
+    height: 54px;
+}
+
+.prism-track-row.txt-row {
+    height: 28px;
+}
+
+/* Tarjeta de Clip en la Línea de Tiempo (Miniatura + Ondas + Badges) */
+.prism-clip-card {
+    position: absolute;
+    height: 54px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.prism-clip-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.4;
+    filter: brightness(0.7);
+}
+
+.prism-clip-content {
+    position: relative;
+    z-index: 1;
+    padding: 4px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.prism-clip-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.prism-clip-waveform {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 8px;
+    opacity: 0.7;
+}
+
+.prism-clip-waveform i {
+    width: 2px;
+    height: 100%;
+    background: #38bdf8;
+    border-radius: 1px;
+}
+
+.prism-clip-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.prism-clip-pill {
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Píldora de Texto TXT en Línea de Tiempo */
+.prism-text-pill-clip {
+    position: absolute;
+    height: 26px;
+    border-radius: 6px;
+    background: #111522;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: #e2e8f0;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.prism-t-icon {
+    font-size: 10px;
+    font-weight: 900;
+    color: #c084fc;
+}
+
+/* ==========================================================================
+   KAI COMPOSER - ESTUDIO DE CREACIÓN LIMPIO (ESTILO CHAT & PARÁMETROS PREVIOS)
+   ========================================================================== */
+
+.kai-composer-container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+/* Cabecera Minimalista del Compositor */
+.kai-composer-header-minimal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: #090c13;
+    border: 1px solid var(--prism-border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+
+.kai-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kai-status-dot {
+    width: 7px;
+    height: 7px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.kai-studio-badge {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #e2e8f0;
+}
+
+.kai-composer-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.kai-btn-chip-action {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--prism-border);
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.kai-btn-chip-action:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Chat Prompt Box */
+.kai-prompt-box {
+    background: #0b0e17;
+    border: 1px solid var(--prism-border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kai-prompt-box:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+}
+
+.kai-prompt-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 52px;
+    box-sizing: border-box;
+}
+
+.kai-prompt-textarea::placeholder {
+    color: #475569;
+}
+
+.kai-prompt-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.kai-trending-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    flex: 1;
+}
+
+.kai-trending-tag {
+    font-size: 10px;
+    font-weight: 800;
+    color: #f59e0b;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+}
+
+.kai-chips-scroll {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.kai-chip-btn-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--prism-border);
+    color: #94a3b8;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.kai-btn-generate {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #fff;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.kai-btn-generate:hover {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+.kai-btn-generate:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Barra Rápida Compacta - Diseño de Píldoras Alineadas */
+.kai-quick-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #070a10;
+    border: 1px solid var(--prism-border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.kai-quick-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0d111c;
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    padding: 4px 8px;
+    transition: border-color 0.15s ease;
+}
+
+.kai-quick-pill:focus-within {
+    border-color: #3b82f6;
+}
+
+.kai-voice-pill {
+    flex: 1.2;
+    min-width: 220px;
+}
+
+.kai-pill-prefix {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.kai-quick-select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f1f5f9;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 2px 4px;
+    flex: 1;
+}
+
+.kai-quick-select option, .kai-quick-select optgroup {
+    background: #090c13;
+    color: #f8fafc;
+}
+
+.kai-btn-inline-play {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: rgba(37, 99, 235, 0.2);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    color: #38bdf8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 9px;
+    transition: all 0.15s ease;
+    padding: 0;
+    margin-left: 2px;
+}
+
+.kai-btn-inline-play:hover {
+    background: rgba(37, 99, 235, 0.45);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.kai-btn-accordion-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0d111c;
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.kai-btn-accordion-toggle:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.kai-btn-accordion-toggle.active {
+    background: #1e2433;
+    border-color: #2563eb;
+    color: #38bdf8;
+}
+    color: #38bdf8;
+}
+
+.kai-chevron {
+    transition: transform 0.2s ease;
+}
+
+.kai-btn-accordion-toggle.active .kai-chevron {
+    transform: rotate(180deg);
+}
+
+/* Reproductor de audio flotante */
+.kai-floating-audio-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #0b0e17;
+    border: 1px solid #2563eb;
+    border-radius: 10px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.3);
+}
+
+/* Acordeón de Ajustes Finos */
+.kai-accordion-content {
+    background: #0b0e17;
+    border: 1px solid var(--prism-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    animation: fadeIn 0.2s ease;
+}
+
+.kai-accordion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.kai-setting-box {
+    background: #0f131f;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.kai-setting-heading {
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.kai-radio-pill-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #cbd5e1;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--prism-border);
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.kai-radio-pill-mini:has(input:checked) {
+    border-color: #2563eb;
+    color: #fff;
+    background: #1e2433;
+}
+
+.kai-toggles-row-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.kai-check-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.kai-check-mini:has(input:checked) {
+    color: #38bdf8;
+}
+
+/* Pastillas de Tono Narrativo (Multi-selección) */
+.kai-pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.kai-pill-btn {
+    background: #090c13;
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+}
+
+.kai-pill-btn:hover {
+    background: #141a29;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.kai-pill-btn.active {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(30, 64, 175, 0.35));
+    border-color: #3b82f6;
+    color: #60a5fa;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.kai-pill-btn.active:hover {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(30, 64, 175, 0.45));
+    border-color: #60a5fa;
+    color: #93c5fd;
+}
+
+/* Selectores de voz e inline audio */
+.kai-voice-selector-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kai-select-clean {
+    flex: 1;
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 12px;
+    padding: 8px 10px;
+    outline: none;
+}
+
+.kai-btn-listen {
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(37, 99, 235, 0.4);
+    color: #38bdf8;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.kai-btn-listen:hover {
+    background: rgba(37, 99, 235, 0.28);
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.35);
+}
+
+.kai-btn-icon-subtle {
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    color: #cbd5e1;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.kai-inline-audio-box {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+}
+
+/* Opciones visuales */
+.kai-visual-options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kai-visual-choice-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.kai-radio-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #cbd5e1;
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.kai-radio-pill:has(input:checked) {
+    border-color: #2563eb;
+    background: #141c2e;
+    color: #fff;
+}
+
+.kai-toggles-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.kai-checkbox-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--prism-border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.kai-checkbox-pill:has(input:checked) {
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+/* Tarjetas de Estilo de Subtítulos */
+.kai-sub-styles-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.kai-sub-card {
+    background: #0f131f;
+    border: 1px solid var(--prism-border);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.kai-sub-card span {
+    font-size: 10px;
+    color: var(--prism-text-muted);
+}
+
+.kai-sub-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.kai-sub-card.active {
+    border-color: #2563eb;
+    background: #141c2e;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+}
+
+.kai-sub-card.active span {
+    color: #38bdf8;
+}
+
+.kai-sub-preview {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.kai-sub-preview.classic {
+    color: #fff;
+    font-weight: 700;
+}
+
+.kai-sub-preview.viral {
+    color: #ffe600;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+}
+
+.kai-sub-preview.neon {
+    color: #00e0ff;
+    font-weight: 800;
+    text-shadow: 0 0 4px #00e0ff;
+}
+
+.kai-sub-preview.outline {
+    color: #fff;
+    font-weight: 800;
+    border: 1px solid #fff;
+}
+
+.kai-sub-preview.minimal {
+    color: #e2e8f0;
+    font-weight: 400;
+}
+
+.kai-sub-preview.cinema {
+    font-family: Georgia, serif;
+    font-style: italic;
+    color: #f1f5f9;
+}
+
+.kai-btn-subtle {
+    background: transparent;
+    border: 1px solid var(--prism-border);
+    color: #94a3b8;
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.kai-btn-subtle:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* ==============================================================================
+   AGENTE COPILOT MULTI-MODELO (CHATGPT CLONE FLOTANTE & CONTROL DE APP)
+   ============================================================================== */
+
+/* Trigger Flotante (FAB) */
+.agent-fab-launcher {
+    position: fixed;
+    bottom: 24px;
+    right: 28px;
+    z-index: 9998;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(14, 16, 24, 0.92);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    border-radius: 9999px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.25);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.agent-fab-launcher:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: rgba(168, 85, 247, 0.7);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 28px rgba(168, 85, 247, 0.4);
+}
+
+.agent-fab-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.3), transparent 70%);
+    pointer-events: none;
+}
+
+.agent-fab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c084fc;
+}
+
+.agent-fab-label {
+    letter-spacing: 0.2px;
+}
+
+.agent-fab-model-pill {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 12px;
+    background: rgba(168, 85, 247, 0.2);
+    color: #e9d5ff;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+/* Modal Flotante / Deck Principal */
+.agent-chat-deck {
+    position: fixed;
+    bottom: 84px;
+    right: 28px;
+    width: 880px;
+    max-width: calc(100vw - 48px);
+    height: 680px;
+    max-height: calc(100vh - 110px);
+    z-index: 9999;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease, height 0.3s ease;
+}
+
+.agent-chat-deck.agent-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(24px) scale(0.96);
+}
+
+.agent-chat-deck.agent-expanded {
+    width: calc(100vw - 80px);
+    height: calc(100vh - 100px);
+    max-width: 1360px;
+    max-height: calc(100vh - 80px);
+    bottom: 24px;
+    right: 40px;
+}
+
+.agent-deck-glass {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(12, 14, 20, 0.95);
+    backdrop-filter: blur(32px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+/* Columna Lateral (Lista Pequeña de Modelos & Atajos al lado del Chat) */
+.agent-models-sidebar {
+    width: 260px;
+    min-width: 250px;
+    background: rgba(8, 9, 14, 0.75);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    gap: 14px;
+}
+
+.agent-btn-new-chat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.agent-btn-new-chat:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.agent-sb-heading {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #64748b;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.agent-models-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.agent-model-card {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 9px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+}
+
+.agent-model-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.agent-model-card.active {
+    background: rgba(148, 163, 184, 0.12);
+    border-color: rgba(148, 163, 184, 0.45);
+    box-shadow: inset 0 0 12px rgba(148, 163, 184, 0.08);
+}
+
+.agent-model-card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-model-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #64748b;
+}
+
+.agent-model-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.agent-model-badge {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(148, 163, 184, 0.14);
+    color: #94a3b8;
+}
+
+.agent-model-desc {
+    font-size: 10.5px;
+    color: #94a3b8;
+    line-height: 1.3;
+}
+
+.agent-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ── CHATS GUARDADOS DEL ASISTENTE (persistencia: últimos 20) ── */
+.agent-sb-chats {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+}
+
+.agent-saved-chats {
+    flex: 1;
+    min-height: 60px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #343943 transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-right: 2px;
+}
+
+/* Desvanecimiento animado de los chats recientes al scrollear (solo si hay muchos) */
+.agent-saved-chats.is-scrollable.fade-top {
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 100%);
+}
+
+.agent-saved-chats.is-scrollable.fade-bottom {
+    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 16px), transparent 100%);
+}
+
+.agent-saved-chats.is-scrollable.fade-top.fade-bottom {
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+}
+
+.agent-chats-empty {
+    padding: 8px 4px;
+    color: #475569;
+    font-size: 10.5px;
+    line-height: 1.4;
+}
+
+.agent-chat-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 2px;
+    border-radius: 8px;
+    transition: background 0.14s ease;
+}
+
+.agent-chat-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.agent-chat-item.is-active {
+    background: rgba(168, 85, 247, 0.1);
+}
+
+.agent-chat-item-open {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 4px 6px 8px;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.agent-chat-item-title {
+    overflow: hidden;
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.agent-chat-item.is-active .agent-chat-item-title {
+    color: #c084fc;
+}
+
+.agent-chat-item-time {
+    color: #475569;
+    font-size: 9px;
+    font-family: 'Geist Mono', monospace;
+}
+
+.agent-chat-item-delete {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 18px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.14s ease;
+}
+
+.agent-chat-item:hover .agent-chat-item-delete {
+    opacity: 1;
+}
+
+.agent-chat-item-delete:hover {
+    background: rgba(255, 133, 133, 0.14);
+    color: #ff8585;
+}
+
+.agent-quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 9px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-quick-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Área Principal del Chat (Estilo ChatGPT) */
+.agent-chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+}
+
+.agent-chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(12, 14, 20, 0.6);
+}
+
+.agent-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.agent-header-model-select {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.agent-model-indicator-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 12px;
+    font-weight: 700;
+    color: #f1f5f9;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.18s ease;
+}
+
+.agent-model-indicator-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.agent-header-model-select.open .agent-model-indicator-pill {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(148, 163, 184, 0.5);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.06);
+}
+
+.agent-header-model-select.open .agent-model-caret {
+    transform: rotate(180deg);
+}
+
+.agent-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.agent-header-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.agent-live-beacon {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.agent-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-head-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-head-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+}
+
+.agent-head-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Feed de Mensajes */
+.agent-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    scroll-behavior: smooth;
+}
+
+.agent-message {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.agent-msg-user {
+    justify-content: flex-end;
+}
+
+.agent-msg-user .agent-msg-body {
+    background: rgba(168, 85, 247, 0.18);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 16px 16px 4px 16px;
+    padding: 12px 16px;
+    max-width: 80%;
+    color: #fdf4ff;
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+.agent-msg-bot {
+    justify-content: flex-start;
+}
+
+.agent-msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+}
+
+.agent-msg-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 86%;
+}
+
+.agent-msg-author {
+    font-size: 11px;
+    font-weight: 700;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-msg-author span {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #c084fc;
+    background: rgba(168, 85, 247, 0.15);
+    padding: 1px 6px;
+    border-radius: 6px;
+}
+
+.agent-msg-content {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px 16px 16px 16px;
+    padding: 14px 18px;
+    color: #f1f5f9;
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+
+.agent-msg-content p {
+    margin: 0 0 8px 0;
+}
+
+.agent-msg-content p:last-child {
+    margin-bottom: 0;
+}
+
+.agent-msg-content ul {
+    margin: 6px 0 8px 18px;
+    padding: 0;
+}
+
+.agent-msg-content li {
+    margin-bottom: 4px;
+}
+
+.agent-msg-content a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.agent-msg-content a:hover {
+    text-decoration: underline;
+}
+
+/* Tarjetas de Acción Ejecutada dentro del Chat */
+.agent-action-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 4px 6px 0;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+}
+
+.agent-action-badge.success {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+}
+
+/* Tarjeta Miniatura YouTube Generada */
+.agent-thumb-preview-card {
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+    max-width: 440px;
+}
+
+.agent-thumb-preview-card img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+}
+
+.agent-thumb-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(15, 18, 25, 0.8);
+}
+
+/* Chips de Sugerencia */
+.agent-suggestions-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 24px;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.agent-suggestions-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.agent-sugg-chip {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    color: #cbd5e1;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-sugg-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Entrada de Texto (ChatGPT Input Box) */
+.agent-input-wrapper {
+    padding: 12px 24px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.agent-prompt-box {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 10px 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agent-prompt-box:focus-within {
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.15);
+}
+
+.agent-prompt-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f8fafc;
+    font-size: 13.5px;
+    line-height: 1.5;
+    resize: none;
+    max-height: 140px;
+    font-family: inherit;
+}
+
+.agent-prompt-textarea::placeholder {
+    color: #64748b;
+}
+
+.agent-prompt-tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding-top: 4px;
+}
+
+.agent-prompt-model-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 3px 9px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.agent-prompt-model-tag:hover {
+    background: rgba(148, 163, 184, 0.16);
+    border-color: rgba(148, 163, 184, 0.4);
+    color: #f1f5f9;
+}
+
+.agent-model-select {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.agent-model-select-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #94a3b8;
+    flex-shrink: 0;
+}
+
+.agent-model-caret {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.agent-model-select.open .agent-prompt-model-tag {
+    background: rgba(148, 163, 184, 0.18);
+    border-color: rgba(148, 163, 184, 0.45);
+    color: #f1f5f9;
+}
+
+.agent-model-select.open .agent-model-caret {
+    transform: rotate(180deg);
+}
+
+/* Dropdown de modelos (se abre hacia arriba desde el prompt o hacia abajo desde el header) */
+.agent-model-dropdown {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    min-width: 260px;
+    background: rgba(13, 16, 23, 0.98);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 6px;
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    transform-origin: bottom left;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1200;
+}
+
+.agent-model-select.open .agent-model-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Dropdown anclado en el Header (se abre hacia abajo) */
+.agent-header-model-dropdown {
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: 0;
+    min-width: 285px;
+    transform: translateY(-8px) scale(0.97);
+    transform-origin: top left;
+}
+
+.agent-header-model-select.open .agent-header-model-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.agent-model-dropdown .agent-model-badge {
+    background: rgba(148, 163, 184, 0.14);
+    color: #cbd5e1;
+}
+
+.agent-model-dropdown .agent-model-card[data-model="gemini"],
+.agent-model-dropdown .agent-model-card[data-model="gemini"].active {
+    background: rgba(148, 163, 184, 0.12) !important;
+    border-color: rgba(148, 163, 184, 0.45) !important;
+    box-shadow: none !important;
+}
+
+/* ── SUBIDA DE ARCHIVOS / MULTIMEDIA (clip junto al nombre del modelo) ── */
+
+.agent-prompt-tools-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.agent-btn-attach {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.agent-btn-attach:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.45);
+    color: #d8b4fe;
+    transform: scale(1.08);
+}
+
+.agent-prompt-box.agent-dragover {
+    border-color: rgba(168, 85, 247, 0.6);
+    background: rgba(168, 85, 247, 0.06);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+.agent-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.agent-attach-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    color: #cbd5e1;
+    border-radius: 9px;
+    padding: 3px 6px 3px 8px;
+    font-size: 11px;
+    max-width: 100%;
+}
+
+.agent-attach-icon {
+    font-size: 12px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.agent-attach-name {
+    font-weight: 600;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.agent-attach-size {
+    color: #64748b;
+    font-size: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.agent-attach-remove {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.agent-attach-remove:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.agent-btn-send {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #a855f7;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-btn-send:hover {
+    background: #9333ea;
+    transform: scale(1.05);
+}
+
+.agent-btn-send:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.agent-input-footer {
+    text-align: center;
+    font-size: 10.5px;
+    color: #475569;
+}
+
+/* Bloque Desplegable de Razonamiento / Pensamiento (Estilo Antigravity / DeepSeek) */
+.agent-thinking-dropdown {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.agent-thinking-dropdown[open] {
+    border-color: rgba(168, 85, 247, 0.3);
+    background: rgba(14, 16, 26, 0.6);
+}
+
+.agent-thinking-dropdown summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: color 0.15s ease;
+}
+
+.agent-thinking-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.agent-thinking-dropdown summary:hover {
+    color: #f1f5f9;
+}
+
+.agent-thinking-icon {
+    font-size: 13px;
+}
+
+.agent-thinking-badge {
+    margin-left: auto;
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.agent-thinking-body {
+    padding: 10px 14px 12px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 11.5px;
+    color: rgba(226, 232, 240, 0.65); /* Texto poco opaco estilo Antigravity */
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.25);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    max-height: 260px;
+    overflow-y: auto;
+    letter-spacing: 0.15px;
+}
+
+/* Efecto Escritura Typewriter para el Razonamiento (Estilo Antigravity / DeepSeek) */
+.agent-typewriter-container {
+    display: inline;
+}
+
+.agent-typewriter-text {
+    display: inline;
+    color: rgba(226, 232, 240, 0.68);
+    opacity: 0.9;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.agent-typewriter-cursor {
+    display: inline-block;
+    color: #38bdf8;
+    font-weight: 800;
+    margin-left: 2px;
+    animation: typewriterBlink 0.8s infinite ease-in-out;
+}
+
+@keyframes typewriterBlink {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0; transform: scaleY(0.7); }
+}
+
+/* ==========================================================================
+   MODO REN (RENDER / EDIT NETWORK): MODIFICADOR DE LA PLATAFORMA EN TIEMPO REAL
+   ========================================================================== */
+
+.agent-chat-deck.ren-mode-active {
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(6, 182, 212, 0.35), 0 0 32px rgba(6, 182, 212, 0.2);
+}
+
+.agent-ren-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.agent-ren-toggle-btn:hover {
+    background: rgba(6, 182, 212, 0.12);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: #67e8f9;
+}
+
+.agent-ren-toggle-btn.active {
+    background: rgba(6, 182, 212, 0.2);
+    border-color: #06b6d4;
+    color: #e0f2fe;
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+}
+
+.agent-ren-toggle-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #64748b;
+    transition: all 0.2s ease;
+}
+
+.agent-ren-toggle-btn.active .agent-ren-toggle-dot {
+    background: #06b6d4;
+    box-shadow: 0 0 8px #06b6d4;
+}
+
+/* Barra de Herramientas del Modo REN */
+.agent-ren-toolbar {
+    background: rgba(6, 18, 28, 0.85);
+    border-bottom: 1px solid rgba(6, 182, 212, 0.25);
+    padding: 10px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: renFadeIn 0.2s ease;
+}
+
+@keyframes renFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.agent-ren-toolbar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.agent-ren-badge-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    color: #67e8f9;
+    text-transform: uppercase;
+}
+
+.agent-ren-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #06b6d4;
+    box-shadow: 0 0 8px #06b6d4;
+    animation: renPulseAnim 1.4s infinite;
+}
+
+@keyframes renPulseAnim {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+.agent-ren-target-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.agent-btn-pick-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #e0f2fe;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-btn-pick-element:hover {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.35), rgba(59, 130, 246, 0.35));
+    border-color: #38bdf8;
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+}
+
+.agent-btn-pick-element.picking {
+    background: #ef4444 !important;
+    border-color: #f87171 !important;
+    color: #fff !important;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
+    animation: pulse 1s infinite;
+}
+
+.agent-ren-target-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    font-size: 11px;
+}
+
+.agent-ren-target-badge {
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.agent-ren-target-sel {
+    color: #38bdf8;
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.agent-ren-target-clear {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 0 2px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.agent-ren-target-clear:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.agent-ren-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.agent-ren-actions-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 2px;
+}
+
+.agent-ren-chip {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-ren-chip:hover {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: rgba(6, 182, 212, 0.35);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.agent-ren-chip-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+.agent-ren-chip-reset {
+    margin-left: auto;
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #fbbf24;
+}
+
+.agent-ren-chip-reset:hover {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: #f59e0b;
+    color: #fff;
+}
+
+/* Overlay Visual del Selector de Elementos (Inspector HUD) */
+.agent-ren-inspector-overlay {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999999;
+    border: 2px solid #06b6d4;
+    border-radius: 4px;
+    background: rgba(6, 182, 212, 0.15);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5), inset 0 0 10px rgba(6, 182, 212, 0.2);
+    transition: all 0.06s ease-out;
+}
+
+.agent-ren-inspector-badge {
+    position: absolute;
+    top: -26px;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(8, 14, 24, 0.95);
+    border: 1px solid #06b6d4;
+    color: #e0f2fe;
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.agent-ren-tag-name {
+    color: #a855f7;
+}
+
+.agent-ren-tag-id {
+    color: #38bdf8;
+}
+
+body.ren-inspector-active {
+    cursor: crosshair !important;
+}
+
+body.ren-inspector-active * {
+    cursor: crosshair !important;
+}
+
+/* ─── TOAST NOTIFICATIONS (Sistema de notificaciones del agente) ─── */
+@keyframes slideInRight {
+    from { transform: translateX(40px); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ─── BADGE RECOMENDADO ─── */
+.agent-model-badge {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    white-space: nowrap;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   ESTILOS TIMELINE PLAYHEAD & CLIPS SINCRONIZADOS (PRISM PRO MAX)
+   ═════════════════════════════════════════════════════════════════════════ */
+.prism-tracks-scrollable {
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+}
+
+.prism-playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #38bdf8;
+    z-index: 50;
+    pointer-events: none;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.9), 0 0 20px rgba(56, 189, 248, 0.4);
+    transition: left 0.04s linear;
+}
+
+.prism-playhead-cap {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: #38bdf8;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.prism-playhead-line {
+    position: absolute;
+    top: 12px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.6) 100%);
+}
+
+/* Tipos de Clips en Pistas */
+.clip.clip-scene {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.45), rgba(79, 70, 229, 0.55));
+    border: 1px solid rgba(165, 180, 252, 0.7);
+    color: #e0e7ff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.clip.clip-scene.is-active,
+.clip.clip-scene:hover {
+    filter: brightness(1.25);
+    border-color: #818cf8;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+}
+
+.clip.clip-speech {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(5, 150, 105, 0.45));
+    border: 1px solid rgba(110, 231, 183, 0.6);
+    color: #d1fae5;
+}
+
+.clip.clip-card {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.4), rgba(217, 119, 6, 0.5));
+    border: 1px solid rgba(252, 211, 77, 0.7);
+    color: #fef3c7;
+}
+
+.clip.clip-broll {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.4), rgba(2, 132, 199, 0.5));
+    border: 1px solid rgba(125, 211, 252, 0.7);
+    color: #e0f2fe;
+}
+
+/* Miniaturas y badges embebidos en clips de la línea de tiempo */
+.clip {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0 8px !important;
+    gap: 6px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    cursor: pointer !important;
+    border-radius: 6px !important;
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.clip:hover {
+    transform: translateY(-1px) !important;
+    filter: brightness(1.15) !important;
+    z-index: 60 !important;
+}
+
+.clip.is-selected {
+    outline: 2px solid #38bdf8 !important;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+    z-index: 61 !important;
+}
+
+.clip-mini-thumb {
+    width: 22px;
+    height: 16px;
+    border-radius: 3px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: #000;
+}
+
+.clip-icon-tag {
+    font-size: 11px;
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+.clip-text-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Tooltip popover flotante de vista previa rica en la línea de tiempo */
+#prismTimelineTooltip {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+    background: rgba(10, 15, 26, 0.96);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 12px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 20px rgba(37, 99, 235, 0.28);
+    padding: 10px 12px;
+    width: 280px;
+    color: #f1f5f9;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    opacity: 0;
+    transform: translateY(6px);
+    display: none;
+}
+
+#prismTimelineTooltip.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pt-tip-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+.pt-tip-badge.card { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.pt-tip-badge.scene { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.4); }
+.pt-tip-badge.broll { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+.pt-tip-badge.speech { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+.pt-tip-thumb {
+    width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin: 6px 0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+}
+
+.pt-tip-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 2px 0 4px;
+    line-height: 1.3;
+}
+
+.pt-tip-stat {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin: 4px 0;
+}
+
+.pt-tip-desc {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.45;
+    margin-top: 4px;
+    max-height: 65px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pt-tip-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    font-family: 'Geist Mono', monospace;
+    color: #64748b;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 6px;
+    margin-top: 8px;
+}
+
+/* Filas de pistas más espaciosas y nítidas */
+.track {
+    min-height: 38px;
+    margin-bottom: 4px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.track-name {
+    width: 82px;
+    min-width: 82px;
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.track-lane {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    min-height: 36px;
+}
+
+.prism-sb-scene-row.active {
+    border-color: #38bdf8 !important;
+    background: rgba(56, 189, 248, 0.12) !important;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.25) !important;
+}
+
+
+
+
+/* ━━━ AetherCopilot Live Edit [2026-10-09 21:37:53]: Sidebar lateral ━━━ */
+.prism-sidebar {
+    background: linear-gradient(180deg, #0b0d12 0%, #08090d 100%) !important;
+border-right: 1px solid rgba(37, 99, 235, 0.15) !important;
+box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6), inset -1px 0 0 rgba(59, 130, 246, 0.08) !important;
+}
+
+
+
+/* ── MEJORA AUTÓNOMA ANTIGRAVITY: SIDEBAR PROFESIONAL MATTE DARK & SHADOWS ── */
+.prism-sidebar {
+    background: linear-gradient(180deg, #040609 0%, #020305 100%) !important;
+    border-right: 1px solid rgba(59, 130, 246, 0.18) !important;
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.85), inset -1px 0 0 rgba(59, 130, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.prism-sidebar-brand {
+    background: rgba(10, 15, 30, 0.65) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.prism-brand-icon {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8 50%, #60a5fa) !important;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+.prism-nav-item {
+    color: #94a3b8 !important;
+    border: 1px solid transparent !important;
+}
+
+.prism-nav-item:hover {
+    background: rgba(30, 58, 138, 0.15) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+.prism-nav-item:hover svg {
+    color: #60a5fa !important;
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+    transform: scale(1.08);
+}
+
+.prism-nav-item.active {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.22), rgba(30, 58, 138, 0.08)) !important;
+    border-color: rgba(59, 130, 246, 0.45) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* --- MEJORAS AUTÓNOMAS SIDEBAR PRISM STUDIO (ESTILO PROFESIONAL NEGRO MATE & AZUL) --- */
+.prism-sidebar {
+    background: linear-gradient(180deg, #040609 0%, #020305 100%) !important;
+    border-right: 1px solid rgba(59, 130, 246, 0.28) !important;
+    box-shadow: 8px 0 35px rgba(0, 0, 0, 0.85), inset -1px 0 0 rgba(59, 130, 246, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+/* DISEÑO PREMIUM ULTRA-PULIDO: CARD DE MARCA DEL SIDEBAR (.prism-sidebar-brand) */
+.prism-sidebar-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(8, 12, 22, 0.95) 100%) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+    margin-bottom: 14px !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: default !important;
+}
+
+.prism-sidebar-brand:hover {
+    border-color: rgba(56, 189, 248, 0.5) !important;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.65), 0 0 18px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+    transform: translateY(-1px) !important;
+}
+
+.prism-brand-icon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 11px !important;
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #38bdf8 100%) !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+    transition: transform 0.25s ease !important;
+    flex-shrink: 0 !important;
+}
+
+.prism-sidebar-brand:hover .prism-brand-icon {
+    transform: scale(1.06) rotate(-2deg) !important;
+}
+
+.prism-brand-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+}
+
+.prism-brand-text h2 {
+    margin: 0 !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    background: linear-gradient(135deg, #ffffff 40%, #bae6fd 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.15 !important;
+}
+
+.prism-brand-text span {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    color: #38bdf8 !important;
+    background: rgba(56, 189, 248, 0.12) !important;
+    border: 1px solid rgba(56, 189, 248, 0.28) !important;
+    border-radius: 4px !important;
+    padding: 1px 6px !important;
+    letter-spacing: 0.08em !important;
+    display: inline-block !important;
+    width: fit-content !important;
+}
+
+.prism-nav-item {
+    color: #cbd5e1 !important;
+}
+.prism-nav-item:hover {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.14), rgba(59, 130, 246, 0.04)) !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+.prism-nav-item.active {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.26), rgba(37, 99, 235, 0.08)) !important;
+    border-color: rgba(59, 130, 246, 0.55) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ━━━ AetherCopilot Live Edit: Botón Play Circular con Degradado Cian y Glow ━━━ */
+.prism-play-btn-circle {
+    background: linear-gradient(135deg, #06b6d4, #0284c7) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(56, 189, 248, 0.5) !important;
+    box-shadow: 0 0 18px rgba(6, 182, 212, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+
+.prism-play-btn-circle:hover {
+    filter: brightness(1.15);
+    transform: scale(1.06);
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.85), 0 0 42px rgba(0, 200, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+.prism-play-btn-circle:active {
+    transform: scale(0.97);
+}
+
+/* ━━━ AetherCopilot Live Edit: Tarjetas de Escenas con Borde Azul y Elevación Hover ━━━ */
+.prism-sb-scene-row {
+    border: 1px solid rgba(59, 130, 246, 0.45) !important;
+    border-left: 3px solid #3b82f6 !important;
+    transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .22s ease, border-color .22s ease, background-color .22s ease !important;
+}
+
+.prism-sb-scene-row:hover {
+    border-color: rgba(96, 165, 250, 0.9) !important;
+    border-left-color: #60a5fa !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 14px rgba(59, 130, 246, 0.35) !important;
+    background-color: rgba(59, 130, 246, 0.12) !important;
+    z-index: 2;
+}
+
+
+/* ━━━ AetherCopilot Live Edit [2026-10-09 22:49:23]: Elemento (.css) ━━━ */
+2. `.prism-sb-scene-row` with blue border and elevated hover:
+
+
+/* ━━━ AetherCopilot Live Edit [2026-10-10 11:50:33]: Elemento (.mp4) ━━━ */
+css
+.prism-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+}
+
+css
+.prism-brand-text h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+}
+
+.prism-brand-text span {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+css
+.prism-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    margin-bottom: 8px;
+}
+
+
+/* AetherCopilot Live UI Apply */
+css
+.prism-brand-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);
+}
+
+css
+.prism-brand-text h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+}
+
+.prism-brand-text span {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+css
+.prism-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    background: rgba(15, 23, 42, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    margin-bottom: 8px;
+}
+
+
+/* REN Mode Styling: Cyan Glow for #agentBtnSend */
+#agentBtnSend {
+  background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
+  color: #ffffff !important;
+  border: 1px solid #22d3ee !important;
+  box-shadow: 0 0 18px rgba(6, 182, 212, 0.85), 0 0 32px rgba(34, 211, 238, 0.55) !important;
+}
+
+
+/* Custom Styling: Botón Send Cian Neón */
+#agentBtnSend {
+  background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
+  color: #ffffff !important;
+  border: 1px solid #22d3ee !important;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.75), 0 0 30px rgba(6, 182, 212, 0.4) !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  transition: all 0.25s ease-in-out;
+}
+
+#agentBtnSend:hover {
+  box-shadow: 0 0 22px rgba(6, 182, 212, 0.95), 0 0 45px rgba(6, 182, 212, 0.6) !important;
+  transform: scale(1.04);
+}
+
+
+/* ━━━ AetherCopilot Live Edit [2026-10-10 12:15:03]: Elemento (.prism-sidebar-brand) ━━━ */
+.prism-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.prism-brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb 60%, #38bdf8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.prism-brand-text h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.prism-brand-text span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+}
+
+
+/* AetherCopilot Live UI Apply */
+.prism-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.prism-brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb 60%, #38bdf8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.prism-brand-text h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.prism-brand-text span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+}
+
+
+/* ━━━ AetherCopilot Live Edit [2026-10-10 12:16:44]: Elemento (.prism-sidebar-brand) ━━━ */
+.prism-sidebar-brand::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12%;
+    bottom: 12%;
+    width: 3px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #38bdf8, #2563eb);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.55);
+}
+
+.prism-sidebar-brand::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 90% at 0% 0%, rgba(37, 99, 235, 0.10) 0%, transparent 55%);
+    pointer-events: none;
+}
+
+.prism-brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 55%, #38bdf8 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.prism-brand-text h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.prism-brand-text h2::after {
+    content: "";
+    display: block;
+    width: 26px;
+    height: 2px;
+    margin-top: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #38bdf8, transparent);
+}
+
+.prism-brand-text span {
+    font-size: 9px;
+    font-weight: 700;
+    color: #7dd3fc;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+
+/* ━━━ AetherCopilot Live Edit [2026-10-10 12:29:40]: Elemento (#mainSidebarDock) ━━━ */
+.prism-sidebar .prism-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 18px;
+    border-radius: 0 3px 3px 0;
+    background: #3b82f6;
+    opacity: 0.85;
+    box-shadow: none;
+}
+
+.prism-sidebar .prism-nav-item.active svg {
+    color: #60a5fa;
+    filter: none !important;
+    transform: none !important;
+    drop-shadow: none;
+}
+
+.prism-sidebar .prism-nav-item.active .prism-nav-label {
+    color: #f1f5f9 !important;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.prism-sidebar .prism-nav-item.active .prism-active-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+    opacity: 0.7;
+    box-shadow: none !important;
+    animation: none !important;
+}
+
+.prism-sidebar .prism-nav-item:hover {
+    background: rgba(148, 163, 184, 0.05) !important;
+    border-color: rgba(148, 163, 184, 0.08) !important;
+    color: #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+.prism-sidebar .prism-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 18px;
+    border-radius: 0 3px 3px 0;
+    background: #3b82f6;
+    opacity: 0.85;
+    box-shadow: none;
+}
+
+.prism-sidebar .prism-nav-item.active svg {
+    color: #60a5fa;
+    filter: none !important;
+    transform: none !important;
+    drop-shadow: none;
+}
+
+.prism-sidebar .prism-nav-item.active .prism-nav-label {
+    color: #f1f5f9 !important;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.prism-sidebar .prism-nav-item.active .prism-active-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+    opacity: 0.7;
+    box-shadow: none !important;
+    animation: none !important;
+}
+
+.prism-sidebar .prism-nav-item:hover {
+    background: rgba(148, 163, 184, 0.05) !important;
+    border-color: rgba(148, 163, 184, 0.08) !important;
+    color: #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+/* AetherCopilot Live Edit: Elemento (#mainSidebarDock) */
+#mainSidebarDock {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Indicador de actividad del Agente */
+.copilot-status-indicator { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; display: inline-block; margin-right: 8px; box-shadow: 0 0 8px #22c55e; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); } }
+
+/* AetherCopilot - Estilo Profesional Matte Dark Sidebar */
+.prism-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--prism-sidebar-w);
+    background: linear-gradient(180deg, #07090e 0%, #05070a 100%) !important;
+    border-right: 1px solid rgba(37, 99, 235, 0.22) !important;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 14px;
+    z-index: 1000;
+    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.75), inset -1px 0 0 rgba(37, 99, 235, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    overflow-y: auto;
+}
+.prism-brand-icon {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #38bdf8 100%) !important;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+.prism-nav-item:hover {
+    background: rgba(30, 41, 59, 0.55) !important;
+    border-color: rgba(37, 99, 235, 0.3) !important;
+    color: #f8fafc !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+.prism-nav-item.active {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.22) 0%, rgba(15, 23, 42, 0.7) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.45) !important;
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   SIDEBAR REFINED — "Calm Premium" (refs: Pinterest / Dribbble sidebars)
+   Superficies: misma familia tonal que el canvas, sin gradientes duros.
+   Profundidad: borders-only — sin glows, sin sombras dramáticas.
+   Acento: azul único (#3b82f6), reservado al ítem activo.
+   ══════════════════════════════════════════════════════════════════════ */
+
+.prism-sidebar {
+    background: #090b11 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow: none !important;
+    padding: 22px 12px !important;
+}
+
+/* ── Marca: sin tarjeta, sin bordes, sin decoración ── */
+.prism-sidebar-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 6px 8px !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    margin-bottom: 20px !important;
+    backdrop-filter: none !important;
+    transition: none !important;
+}
+
+.prism-sidebar-brand::before,
+.prism-sidebar-brand::after {
+    display: none !important;
+}
+
+.prism-sidebar-brand:hover {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.prism-sidebar-brand:hover .prism-brand-icon {
+    transform: none !important;
+}
+
+.prism-brand-icon {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #3b82f6 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+    transition: none !important;
+}
+
+.prism-brand-text h2 {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+    color: #f1f5f9 !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.2 !important;
+    text-shadow: none !important;
+}
+
+.prism-brand-text h2::after {
+    display: none !important;
+}
+
+.prism-brand-text span {
+    font-size: 9px !important;
+    font-weight: 600 !important;
+    color: #5b6575 !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    letter-spacing: 0.16em !important;
+}
+
+/* ── Encabezados de sección: susurro ── */
+.prism-section-heading {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: #5b6575 !important;
+    letter-spacing: 0.14em !important;
+    padding: 12px 10px 6px !important;
+}
+
+/* ── Ítems: transparentes, hover susurrado, sin escala ni glow ── */
+.prism-nav-item {
+    height: 38px !important;
+    border-radius: 9px !important;
+    color: #8b95a7 !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+.prism-nav-item:hover {
+    background: rgba(255, 255, 255, 0.045) !important;
+    border-color: transparent !important;
+    color: #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+.prism-nav-item:hover svg {
+    color: #aab4c5 !important;
+    filter: none !important;
+    transform: none !important;
+}
+
+.prism-nav-item.active {
+    background: rgba(59, 130, 246, 0.10) !important;
+    border-color: transparent !important;
+    color: #f1f5f9 !important;
+    box-shadow: none !important;
+}
+
+.prism-sidebar .prism-nav-item.active::before {
+    width: 2px !important;
+    height: 16px !important;
+    border-radius: 0 2px 2px 0 !important;
+    background: #3b82f6 !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+}
+
+.prism-sidebar .prism-nav-item.active svg {
+    color: #60a5fa !important;
+    filter: none !important;
+    transform: none !important;
+}
+
+.prism-sidebar .prism-nav-item.active .prism-nav-label {
+    color: #f1f5f9 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em !important;
+}
+
+.prism-active-dot {
+    background: #60a5fa !important;
+    box-shadow: none !important;
+    opacity: 0.75 !important;
+    animation: none !important;
+}
+
+/* ── Tonos suaves para Radar y Agente (antes inline agresivos) ── */
+#dockRadar { background: rgba(239, 68, 68, 0.06) !important; }
+#dockRadar svg { color: #f87171 !important; }
+#dockRadar .prism-nav-label { color: #eba7a7 !important; font-weight: 600 !important; }
+#dockAgentLauncher { background: rgba(168, 85, 247, 0.06) !important; }
+#dockAgentLauncher svg { color: #c084fc !important; }
+#dockAgentLauncher .prism-nav-label { color: #d9c2f0 !important; font-weight: 600 !important; }
+
+/* ── Pie: separación susurrada ── */
+.prism-nav-footer {
+    margin-top: auto !important;
+    padding-top: 12px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+
+/* Indicador flotante de trabajo y botón de parada de AetherCopilot */
+#copilotWorkingIndicator {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(239, 68, 68, 0.2);
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 99999;
+  backdrop-filter: blur(12px);
+  font-family: inherit;
+  color: #f8fafc;
+  animation: copilotPulse 2s infinite ease-in-out;
+}
+#copilotWorkingIndicator .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(239, 68, 68, 0.2);
+  border-top-color: #ef4444;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+#copilotWorkingIndicator button {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#copilotWorkingIndicator button:hover {
+  background: #ef4444;
+  color: #fff;
+}
+@keyframes copilotPulse {
+  0%, 100% { border-color: rgba(239, 68, 68, 0.4); }
+  50% { border-color: rgba(239, 68, 68, 0.9); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* Optimizacion del panel de modelos y chats recientes en el Agente Copilot */
+.agent-model-selector-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.agent-model-selector-compact:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+.agent-recent-chats-list {
+    max-height: 280px;
+    overflow-y: auto;
+    mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.agent-recent-chats-list::-webkit-scrollbar {
+    width: 4px;
+}
+.agent-recent-chats-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}

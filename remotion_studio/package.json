@@ -1,0 +1,23 @@
+{
+  "name": "aethercut-remotion-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Capa de composición profesional de AetherCut: subtítulos palabra-por-palabra con énfasis, renderizados con Remotion con canal alpha para superponer con FFmpeg.",
+  "type": "module",
+  "scripts": {
+    "bundle": "node bundle.mjs",
+    "studio": "remotion studio src/index.ts"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.534",
+    "@remotion/cli": "4.0.534",
+    "@remotion/renderer": "4.0.534",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.534"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,1316 @@
+   AGENTE COPILOT MULTI-MODELO (CHATGPT CLONE FLOTANTE & CONTROL DE APP)
+   ============================================================================== */
+
+/* Trigger Flotante (FAB) */
+.agent-fab-launcher {
+    position: fixed;
+    bottom: 24px;
+    right: 28px;
+    z-index: 9998;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(14, 16, 24, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 9999px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.04);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.agent-fab-launcher:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+.agent-fab-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 9999px;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06), transparent 70%);
+    pointer-events: none;
+}
+
+.agent-fab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f1f5f9;
+}
+
+.agent-fab-label {
+    letter-spacing: 0.2px;
+}
+
+.agent-fab-model-pill {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Modal Flotante / Deck Principal */
+.agent-chat-deck {
+    position: fixed;
+    bottom: 84px;
+    right: 28px;
+    width: 880px;
+    max-width: calc(100vw - 48px);
+    height: 680px;
+    max-height: calc(100vh - 110px);
+    z-index: 9999;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease, height 0.3s ease;
+}
+
+.agent-chat-deck.agent-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(24px) scale(0.96);
+}
+
+.agent-chat-deck.agent-expanded {
+    width: calc(100vw - 80px);
+    height: calc(100vh - 100px);
+    max-width: 1360px;
+    max-height: calc(100vh - 80px);
+    bottom: 24px;
+    right: 40px;
+}
+
+.agent-deck-glass {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(12, 14, 20, 0.95);
+    backdrop-filter: blur(32px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+/* Columna Lateral (Lista Pequeña de Modelos & Atajos al lado del Chat) */
+.agent-models-sidebar {
+    width: 260px;
+    min-width: 250px;
+    background: rgba(8, 9, 14, 0.75);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    gap: 14px;
+}
+
+.agent-btn-new-chat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #f1f5f9;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.agent-btn-new-chat:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.agent-sb-heading {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #64748b;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.agent-models-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.agent-model-card {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 9px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+}
+
+.agent-model-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.agent-model-card.active {
+    background: rgba(148, 163, 184, 0.12);
+    border-color: rgba(148, 163, 184, 0.45);
+    box-shadow: inset 0 0 12px rgba(148, 163, 184, 0.08);
+}
+
+.agent-model-card-top {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-model-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #64748b;
+}
+
+.agent-model-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.agent-model-badge {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(148, 163, 184, 0.14);
+    color: #94a3b8;
+}
+
+.agent-model-desc {
+    font-size: 10.5px;
+    color: #94a3b8;
+    line-height: 1.3;
+}
+
+.agent-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ── CHATS GUARDADOS DEL ASISTENTE (persistencia: últimos 20) ── */
+.agent-sb-chats {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+}
+
+.agent-saved-chats {
+    flex: 1;
+    min-height: 60px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #343943 transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-right: 2px;
+}
+
+/* Desvanecimiento animado de los chats recientes al scrollear (solo si hay muchos) */
+.agent-saved-chats.is-scrollable.fade-top {
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 100%);
+}
+
+.agent-saved-chats.is-scrollable.fade-bottom {
+    mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 16px), transparent 100%);
+}
+
+.agent-saved-chats.is-scrollable.fade-top.fade-bottom {
+    mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+}
+
+.agent-chats-empty {
+    padding: 8px 4px;
+    color: #475569;
+    font-size: 10.5px;
+    line-height: 1.4;
+}
+
+.agent-chat-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20px;
+    align-items: center;
+    gap: 2px;
+    border-radius: 8px;
+    transition: background 0.14s ease;
+}
+
+.agent-chat-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.agent-chat-item.is-active {
+    background: rgba(168, 85, 247, 0.1);
+}
+
+.agent-chat-item-open {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    padding: 6px 4px 6px 8px;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+.agent-chat-item-title {
+    overflow: hidden;
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.agent-chat-item.is-active .agent-chat-item-title {
+    color: #c084fc;
+}
+
+.agent-chat-item-time {
+    color: #475569;
+    font-size: 9px;
+    font-family: 'Geist Mono', monospace;
+}
+
+.agent-chat-item-delete {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 6px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 18px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.14s ease;
+}
+
+.agent-chat-item:hover .agent-chat-item-delete {
+    opacity: 1;
+}
+
+.agent-chat-item-delete:hover {
+    background: rgba(255, 133, 133, 0.14);
+    color: #ff8585;
+}
+
+.agent-quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 7px 9px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-quick-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+/* Área Principal del Chat (Estilo ChatGPT) */
+.agent-chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+}
+
+.agent-chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(12, 14, 20, 0.6);
+}
+
+.agent-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.agent-header-model-select {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.agent-model-indicator-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 12px;
+    font-weight: 700;
+    color: #f1f5f9;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.18s ease;
+}
+
+.agent-model-indicator-pill:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.agent-header-model-select.open .agent-model-indicator-pill {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(148, 163, 184, 0.5);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.06);
+}
+
+.agent-header-model-select.open .agent-model-caret {
+    transform: rotate(180deg);
+}
+
+.agent-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.agent-header-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.agent-live-beacon {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.agent-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-head-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-head-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+}
+
+.agent-head-close:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Feed de Mensajes */
+.agent-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    scroll-behavior: smooth;
+}
+
+.agent-message {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.agent-msg-user {
+    justify-content: flex-end;
+}
+
+.agent-msg-user .agent-msg-body {
+    background: rgba(168, 85, 247, 0.18);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 16px 16px 4px 16px;
+    padding: 12px 16px;
+    max-width: 80%;
+    color: #fdf4ff;
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+.agent-msg-bot {
+    justify-content: flex-start;
+}
+
+.agent-msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #6366f1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+}
+
+.agent-msg-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 86%;
+}
+
+.agent-msg-author {
+    font-size: 11px;
+    font-weight: 700;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.agent-msg-author span {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #c084fc;
+    background: rgba(168, 85, 247, 0.15);
+    padding: 1px 6px;
+    border-radius: 6px;
+}
+
+.agent-msg-content {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px 16px 16px 16px;
+    padding: 14px 18px;
+    color: #f1f5f9;
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+
+.agent-msg-content p {
+    margin: 0 0 8px 0;
+}
+
+.agent-msg-content p:last-child {
+    margin-bottom: 0;
+}
+
+.agent-msg-content ul {
+    margin: 6px 0 8px 18px;
+    padding: 0;
+}
+
+.agent-msg-content li {
+    margin-bottom: 4px;
+}
+
+.agent-msg-content a {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.agent-msg-content a:hover {
+    text-decoration: underline;
+}
+
+/* Tarjetas de Acción Ejecutada dentro del Chat */
+.agent-action-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 4px 6px 0;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+}
+
+.agent-action-badge.success {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+}
+
+/* Tarjeta Miniatura YouTube Generada */
+.agent-thumb-preview-card {
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.5);
+    max-width: 440px;
+}
+
+.agent-thumb-preview-card img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+}
+
+.agent-thumb-preview-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(15, 18, 25, 0.8);
+}
+
+/* Chips de Sugerencia */
+.agent-suggestions-bar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 6px 24px;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.agent-suggestions-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.agent-sugg-chip {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 9999px;
+    color: #cbd5e1;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-sugg-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Entrada de Texto (ChatGPT Input Box) */
+.agent-input-wrapper {
+    padding: 12px 24px 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.agent-prompt-box {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 10px 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agent-prompt-box:focus-within {
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.15);
+}
+
+.agent-prompt-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f8fafc;
+    font-size: 13.5px;
+    line-height: 1.5;
+    resize: none;
+    max-height: 140px;
+    font-family: inherit;
+}
+
+.agent-prompt-textarea::placeholder {
+    color: #64748b;
+}
+
+.agent-prompt-tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+    padding-top: 4px;
+}
+
+.agent-prompt-model-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #cbd5e1;
+    background: rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 3px 9px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.agent-prompt-model-tag:hover {
+    background: rgba(148, 163, 184, 0.16);
+    border-color: rgba(148, 163, 184, 0.4);
+    color: #f1f5f9;
+}
+
+.agent-model-select {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.agent-model-select-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #94a3b8;
+    flex-shrink: 0;
+}
+
+.agent-model-caret {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.agent-model-select.open .agent-prompt-model-tag {
+    background: rgba(148, 163, 184, 0.18);
+    border-color: rgba(148, 163, 184, 0.45);
+    color: #f1f5f9;
+}
+
+.agent-model-select.open .agent-model-caret {
+    transform: rotate(180deg);
+}
+
+/* Dropdown de modelos (se abre hacia arriba desde el prompt o hacia abajo desde el header) */
+.agent-model-dropdown {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    min-width: 260px;
+    background: rgba(13, 16, 23, 0.98);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 6px;
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    transform-origin: bottom left;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1200;
+}
+
+.agent-model-select.open .agent-model-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+/* Dropdown anclado en el Header (se abre hacia abajo) */
+.agent-header-model-dropdown {
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: 0;
+    min-width: 285px;
+    transform: translateY(-8px) scale(0.97);
+    transform-origin: top left;
+}
+
+.agent-header-model-select.open .agent-header-model-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.agent-model-dropdown .agent-model-badge {
+    background: rgba(148, 163, 184, 0.14);
+    color: #cbd5e1;
+}
+
+.agent-model-dropdown .agent-model-card[data-model="gemini"],
+.agent-model-dropdown .agent-model-card[data-model="gemini"].active {
+    background: rgba(148, 163, 184, 0.12) !important;
+    border-color: rgba(148, 163, 184, 0.45) !important;
+    box-shadow: none !important;
+}
+
+/* ── SUBIDA DE ARCHIVOS / MULTIMEDIA (clip junto al nombre del modelo) ── */
+
+.agent-prompt-tools-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.agent-btn-attach {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: rgba(148, 163, 184, 0.08);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.agent-btn-attach:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.45);
+    color: #d8b4fe;
+    transform: scale(1.08);
+}
+
+.agent-prompt-box.agent-dragover {
+    border-color: rgba(168, 85, 247, 0.6);
+    background: rgba(168, 85, 247, 0.06);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+.agent-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.agent-attach-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.28);
+    color: #cbd5e1;
+    border-radius: 9px;
+    padding: 3px 6px 3px 8px;
+    font-size: 11px;
+    max-width: 100%;
+}
+
+.agent-attach-icon {
+    font-size: 12px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.agent-attach-name {
+    font-weight: 600;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.agent-attach-size {
+    color: #64748b;
+    font-size: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.agent-attach-remove {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(148, 163, 184, 0.15);
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+}
+
+.agent-attach-remove:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.agent-btn-send {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #a855f7;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-btn-send:hover {
+    background: #9333ea;
+    transform: scale(1.05);
+}
+
+.agent-btn-send:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.agent-input-footer {
+    text-align: center;
+    font-size: 10.5px;
+    color: #475569;
+}
+
+/* Bloque Desplegable de Razonamiento / Pensamiento (Estilo Antigravity / DeepSeek) */
+.agent-thinking-dropdown {
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.agent-thinking-dropdown[open] {
+    border-color: rgba(168, 85, 247, 0.3);
+    background: rgba(14, 16, 26, 0.6);
+}
+
+.agent-thinking-dropdown summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #94a3b8;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: color 0.15s ease;
+}
+
+.agent-thinking-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.agent-thinking-dropdown summary:hover {
+    color: #f1f5f9;
+}
+
+.agent-thinking-icon {
+    font-size: 13px;
+}
+
+.agent-thinking-badge {
+    margin-left: auto;
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.agent-thinking-body {
+    padding: 10px 14px 12px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 11.5px;
+    color: rgba(226, 232, 240, 0.65); /* Texto poco opaco estilo Antigravity */
+    line-height: 1.6;
+    background: rgba(0, 0, 0, 0.25);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    max-height: 260px;
+    overflow-y: auto;
+    letter-spacing: 0.15px;
+}
+
+/* Efecto Escritura Typewriter para el Razonamiento (Estilo Antigravity / DeepSeek) */
+.agent-typewriter-container {
+    display: inline;
+}
+
+.agent-typewriter-text {
+    display: inline;
+    color: rgba(226, 232, 240, 0.68);
+    opacity: 0.9;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.agent-typewriter-cursor {
+    display: inline-block;
+    color: #38bdf8;
+    font-weight: 800;
+    margin-left: 2px;
+    animation: typewriterBlink 0.8s infinite ease-in-out;
+}
+
+@keyframes typewriterBlink {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0; transform: scaleY(0.7); }
+}
+
+/* ==========================================================================
+   MODO REN (RENDER / EDIT NETWORK): MODIFICADOR DE LA PLATAFORMA EN TIEMPO REAL
+   ========================================================================== */
+
+.agent-chat-deck.ren-mode-active {
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(6, 182, 212, 0.35), 0 0 32px rgba(6, 182, 212, 0.2);
+}
+
+.agent-ren-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.agent-ren-toggle-btn:hover {
+    background: rgba(6, 182, 212, 0.12);
+    border-color: rgba(6, 182, 212, 0.4);
+    color: #67e8f9;
+}
+
+.agent-ren-toggle-btn.active {
+    background: rgba(6, 182, 212, 0.2);
+    border-color: #06b6d4;
+    color: #e0f2fe;
+    box-shadow: 0 0 14px rgba(6, 182, 212, 0.4);
+}
+
+.agent-ren-toggle-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #64748b;
+    transition: all 0.2s ease;
+}
+
+.agent-ren-toggle-btn.active .agent-ren-toggle-dot {
+    background: #06b6d4;
+    box-shadow: 0 0 8px #06b6d4;
+}
+
+/* Barra de Herramientas del Modo REN */
+.agent-ren-toolbar {
+    background: rgba(6, 18, 28, 0.85);
+    border-bottom: 1px solid rgba(6, 182, 212, 0.25);
+    padding: 10px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: renFadeIn 0.2s ease;
+}
+
+@keyframes renFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.agent-ren-toolbar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.agent-ren-badge-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    color: #67e8f9;
+    text-transform: uppercase;
+}
+
+.agent-ren-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #06b6d4;
+    box-shadow: 0 0 8px #06b6d4;
+    animation: renPulseAnim 1.4s infinite;
+}
+
+@keyframes renPulseAnim {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+.agent-ren-target-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.agent-btn-pick-element {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    color: #e0f2fe;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-btn-pick-element:hover {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.35), rgba(59, 130, 246, 0.35));
+    border-color: #38bdf8;
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+}
+
+.agent-btn-pick-element.picking {
+    background: #ef4444 !important;
+    border-color: #f87171 !important;
+    color: #fff !important;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
+    animation: pulse 1s infinite;
+}
+
+.agent-ren-target-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    font-size: 11px;
+}
+
+.agent-ren-target-badge {
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.agent-ren-target-sel {
+    color: #38bdf8;
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.agent-ren-target-clear {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 0 2px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.agent-ren-target-clear:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.agent-ren-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.agent-ren-actions-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #64748b;
+    margin-right: 2px;
+}
+
+.agent-ren-chip {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.agent-ren-chip:hover {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: rgba(6, 182, 212, 0.35);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.agent-ren-chip-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+.agent-ren-chip-reset {
+    margin-left: auto;
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #fbbf24;
+}
+
+.agent-ren-chip-reset:hover {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: #f59e0b;
+    color: #fff;
+}
+
+/* Overlay Visual del Selector de Elementos (Inspector HUD) */
+.agent-ren-inspector-overlay {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999999;
+    border: 2px solid #06b6d4;
+    border-radius: 4px;
+    background: rgba(6, 182, 212, 0.15);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5), inset 0 0 10px rgba(6, 182, 212, 0.2);
+    transition: all 0.06s ease-out;
+}
+
+.agent-ren-inspector-badge {
+    position: absolute;
+    top: -26px;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(8, 14, 24, 0.95);
+    border: 1px solid #06b6d4;
+    color: #e0f2fe;
+    font-size: 10px;
+    font-family: monospace;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.agent-ren-tag-name {
+    color: #a855f7;
+}
+
+.agent-ren-tag-id {
+    color: #38bdf8;
+}
+
+body.ren-inspector-active {
+    cursor: crosshair !important;
+}
+
+body.ren-inspector-active * {
+    cursor: crosshair !important;
+}
+
+/* ─── TOAST NOTIFICATIONS (Sistema de notificaciones del agente) ─── */
+@keyframes slideInRight {
+    from { transform: translateX(40px); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
