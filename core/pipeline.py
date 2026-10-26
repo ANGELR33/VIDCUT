@@ -15,7 +15,9 @@ from core.gemini_analyzer import GeminiVideoAnalyzer
 from core.llm import LLMClient, safe_log
 from core.models import ActionType, VideoEditingPlan
 from core.project_store import ProjectStore, editor_snapshot
+from core.editorial_qa import audit_plan
 from core.quality_gate import PlanQualityGate
+from core.short_snapper import snap_highlights
 from core.orchestrator import AssetOrchestrator
 from core.broll_sync import resync_broll_to_captions
 from core.render_engine import VideoRenderEngine
@@ -446,6 +448,34 @@ class VideoPipeline:
             quality_message = f"Control técnico corrigió {len(report.fixes)} elemento(s) fuera de rango."
         if report.warnings:
             quality_message += f" Avisos: {len(report.warnings)}."
+        # Auditoría editorial: choques entre overlays, ritmo y gancho (antes el render los descartaba en silencio).
+        try:
+            qa = audit_plan(plan, duration)
+            quality_message += f" Auditoría editorial: {qa.score}/100"
+            if qa.dropped:
+                quality_message += f", {len(qa.dropped)} B-Roll retirados por choques o saturación"
+            quality_message += "."
+            if self.runlog:
+                self.runlog.count("qa_broll_retirados", len(qa.dropped))
+                self.runlog.event("quality", f"Auditoría editorial {qa.score}/100", metrics=qa.metrics,
+                                  dropped=qa.dropped, warnings=qa.warnings)
+                for warning in qa.warnings:
+                    if "retirado" not in warning:
+                        self.runlog.warn("quality", warning)
+        except Exception as exc:
+            safe_log(f"[QA] No se pudo auditar el montaje: {exc}")
+
+        # Shorts: empezar y terminar en límites de frase y quitar duplicados.
+        try:
+            if plan.highlights:
+                changes = snap_highlights(plan.highlights, plan.captions, duration)
+                if changes and self.runlog:
+                    self.runlog.count("shorts_ajustados", sum(1 for c in changes if c["action"] == "snapped"))
+                    self.runlog.count("shorts_duplicados", sum(1 for c in changes if c["action"] == "dropped"))
+                    self.runlog.event("quality", f"{len(changes)} ajustes en Shorts", changes=changes)
+        except Exception as exc:
+            safe_log(f"[QA] No se pudieron ajustar los Shorts: {exc}")
+
         self._publish_plan(plan, "quality", 49.5, quality_message)
 
         # ---- 5. Render (Smart Cut + overlays + subtítulos opcionales) ----

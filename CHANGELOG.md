@@ -19,7 +19,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 - `scripts/check_secrets.py`: escáner de claves en los archivos versionados (sale con código 1 si encuentra alguna).
 - `scripts/doctor.py`: diagnóstico previo (Python, FFmpeg, dependencias, claves configuradas, almacenamiento, tarifas).
 - CI en GitHub Actions (`.github/workflows/ci.yml`): escaneo de secretos y pruebas en Python 3.10 y 3.12.
-- Pruebas: `tests/test_relevance.py`, `tests/test_run_log.py` y `tests/test_tooling.py`.
+- **Auditoría editorial del montaje** (`core/editorial_qa.py`): antes de renderizar resuelve choques entre B-Roll,
+  evita que un video a pantalla completa tape una tarjeta verificada, limita la densidad (10 por minuto) y avisa de
+  gancho sin apoyo en los primeros 3 s o tramos de más de 15 s sin cambio visual. Antes el render descartaba en
+  silencio; ahora cada retiro queda registrado con su motivo y hay un puntaje de 0 a 100.
+- **Shorts en límites de frase** (`core/short_snapper.py`): inicio y final se alinean con las frases de Whisper, se
+  respeta 15-70 s y se eliminan Shorts duplicados (gana el de mayor puntaje de viralidad).
+- **Confianza de fuentes** (`core/source_trust.py`): un dato (cifra, fecha, ley) o una corrección solo se muestra con
+  una fuente oficial/científica o dos fuentes independientes; las redes sociales y foros no cuentan. Las entidades
+  aceptan una fuente de referencia. Se desactiva con `SOURCE_TRUST_STRICT=0`.
+- Pruebas: `tests/test_relevance.py`, `tests/test_run_log.py` y `tests/test_tooling.py`, `tests/test_broll_sync.py` y `tests/test_editorial.py`.
 
 - **Sincronización del B-Roll con la voz** (`core/broll_sync.py`): cada apoyo se alinea con la frase de Whisper que lo respalda (los tiempos de Gemini solían errar 1-2 s). Los ajustes quedan en el log de la ejecución.
 

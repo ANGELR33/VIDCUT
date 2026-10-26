@@ -7,7 +7,8 @@ from urllib.parse import urlparse
 from PIL import Image
 
 from core.llm import LLMClient, safe_log
-from core.run_log import log_llm, log_service
+from core.run_log import log_count, log_llm, log_service
+from core.source_trust import assess_sources
 from core.models import InfoCard, SourceRef, VideoEditingPlan
 from core.web_media import WikiMediaClient
 from utils.json_validator import JSONValidator
@@ -279,9 +280,19 @@ class FactChecker:
                 for i in idxs[:3]
             ]
 
+            if card.verdict in ("supported", "contradicted"):
+                trusted, why = assess_sources(card.kind, card.verdict, [s.domain for s in card.sources])
+                if not trusted:
+                    safe_log(f"[FactChecker] «{card.headline}» descartada por fuentes débiles: {why}")
+                    log_count("tarjeta_fuentes_debiles")
+                    card.verdict = "insufficient"
+                    card.note = f"Fuentes insuficientes: {why}."
+                    card.sources = []
+
             if card.verdict == "insufficient":
                 card.body = "No se encontraron fuentes confiables en la web que puedan demostrar o refutar esta afirmación."
-                card.note = "Información no verificable."
+                if not card.note.startswith("Fuentes insuficientes"):
+                    card.note = "Información no verificable."
                 return card
 
             # Si es supported

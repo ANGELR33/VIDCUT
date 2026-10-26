@@ -48,3 +48,14 @@ ejecución activa; `asyncio.to_thread` ya lo hace.
 Nada de lo que pasa por el log conserva claves: `redact` oculta formatos de NVIDIA, Gemini, DeepSeek, Google OAuth,
 Speechify, `Bearer ...` y pares `api_key=...`. Aun así, **no pegues claves en prompts, issues ni chats**; si ya lo
 hiciste, rótalas.
+
+## Calidad editorial en el reporte
+
+Además de tiempos y costos, `run_events.jsonl` registra en la etapa `quality`:
+
+- `Auditoría editorial N/100`: métricas (`broll_per_minute`, `longest_static_gap_sec`), B-Roll retirados y avisos.
+- Ajustes de Shorts: qué clip se movió a límites de frase y cuáles se descartaron por duplicados.
+- Contadores: `qa_broll_retirados`, `shorts_ajustados`, `shorts_duplicados`, `tarjeta_fuentes_debiles`,
+  `broll_resincronizados`.
+
+Un puntaje bajo repetido indica que el plan de Gemini propone demasiados apoyos o deja tramos largos sin cambio visual.
