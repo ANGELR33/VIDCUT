@@ -15,7 +15,7 @@ from typing import Any, Dict
 from PIL import Image, ImageDraw, ImageFont
 
 
-ALLOWED_SCENES = {"automation", "comparison", "cause_effect", "concept"}
+ALLOWED_SCENES = {"automation", "comparison", "cause_effect", "concept", "timeline", "flow", "network", "stat"}
 FPS_DEFAULT = 24
 
 
@@ -126,6 +126,62 @@ class VisualSceneEngine:
                     draw.ellipse((right_x-r2,center_y-r2,right_x+r2,center_y+r2),
                                  fill=(235,125,90,fade),outline=(245,248,242,fade),width=3)
                     left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
+                elif spec["kind"] == "timeline":
+                    # Two-point timeline with a moving progress marker.
+                    y = center_y
+                    x1, x2 = panel_x + int(panel_w * .18), panel_x + int(panel_w * .82)
+                    draw.line((x1, y, x2, y), fill=(235, 235, 230, int(fade * .55)), width=max(3, width // 420))
+                    for px, color in ((x1, (105, 185, 230)), (x2, (235, 125, 90))):
+                        rr = int(height * .035)
+                        draw.ellipse((px-rr, y-rr, px+rr, y+rr), fill=(*color, fade),
+                                     outline=(245, 248, 242, fade), width=max(2, width // 600))
+                    marker_x = int(x1 + (x2-x1) * _clamp(t))
+                    mr = int(height * .018)
+                    draw.ellipse((marker_x-mr, y-mr, marker_x+mr, y+mr),
+                                 fill=(250, 248, 242, fade), outline=(235, 95, 63, fade), width=3)
+                    left_label_x, right_label_x = x1 - int(width * .04), x2 - int(width * .04)
+                elif spec["kind"] == "flow":
+                    # A clear two-step process: input, connector, output.
+                    box_w, box_h = int(width * .20), int(height * .12)
+                    y1 = center_y - box_h // 2
+                    for cx, color in ((left_x, (105, 185, 230)), (right_x, (235, 125, 90))):
+                        draw.rounded_rectangle((cx-box_w//2, y1, cx+box_w//2, y1+box_h),
+                            radius=max(8, width//120), fill=(13, 16, 20, int(fade*.82)),
+                            outline=(*color, fade), width=max(3, width//360))
+                    self._arrow(draw, left_x + box_w//2 + int(width*.015), center_y,
+                                right_x - box_w//2 - int(width*.015), center_y, fade)
+                    left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
+                elif spec["kind"] == "network":
+                    # A small relationship network, with links drawn before nodes.
+                    cx, cy = width // 2, center_y
+                    points = [
+                        (cx, cy),
+                        (cx-int(width*.15), cy-int(height*.09)),
+                        (cx+int(width*.15), cy-int(height*.09)),
+                        (cx-int(width*.15), cy+int(height*.09)),
+                        (cx+int(width*.15), cy+int(height*.09)),
+                    ]
+                    for px, py in points[1:]:
+                        draw.line((cx, cy, px, py), fill=(235, 95, 63, int(fade*.8)), width=max(2, width//420))
+                    for idx, (px, py) in enumerate(points):
+                        rr = int(height * (.032 if idx == 0 else .024))
+                        col = (235, 125, 90) if idx == 0 else (105, 185, 230)
+                        draw.ellipse((px-rr, py-rr, px+rr, py+rr), fill=(*col, fade),
+                                     outline=(245, 248, 242, fade), width=max(2, width//600))
+                    left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
+                elif spec["kind"] == "stat":
+                    # Editorial metric treatment. The scene label is the value/quantity,
+                    # not an invented number: Gemini must supply a literal value from narration.
+                    metric = spec["label_a"][:18]
+                    metric_font = _font(max(28, width // 15))
+                    bbox = draw.textbbox((0, 0), metric, font=metric_font)
+                    draw.text(((width-(bbox[2]-bbox[0]))//2, center_y-int(height*.09)),
+                              metric, font=metric_font, fill=(250, 248, 242, fade),
+                              stroke_width=max(1, width//900), stroke_fill=(13, 16, 20, int(fade*.8)))
+                    accent_y = center_y + int(height*.06)
+                    draw.line((width//2-int(width*.12), accent_y, width//2+int(width*.12), accent_y),
+                              fill=(235, 95, 63, fade), width=max(3, width//360))
+                    left_label_x, right_label_x = -10000, -10000
                 else:
                     # Concept map: central idea with three connected supporting nodes.
                     r = int(height * (.055 + .008 * math.sin(t * math.pi * 2)))
