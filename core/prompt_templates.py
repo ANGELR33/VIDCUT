@@ -39,7 +39,10 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - timeline: representa una secuencia temporal o evolución con dos hitos claros; label_a y label_b son los hitos extremos.
    - flow: representa un proceso de entrada a resultado; label_a y label_b deben ser dos etapas reales de la narración.
    - network: representa relaciones entre actores, conceptos o sistemas; no implica causalidad si la narración no la afirma.
-   - stat: destaca una cifra o magnitud literal ya mencionada; label_a contiene el valor textual exacto y label_b queda como contexto breve. Nunca inventes cifras ni uses este tipo si no hay una cifra explícita.\n   - sequence: explica un proceso de tres pasos; label_a y label_b son el primero y el último. No inventes etapas que no se desprendan de la narración.\n   - route: muestra un recorrido esquemático entre dos puntos mencionados; no lo presentes como mapa geográfico exacto ni inventes ubicaciones.\n   - layers: explica las capas de un sistema (por ejemplo, usuario, aplicación e infraestructura) solo si esas capas están respaldadas por el contexto narrado.
+   - stat: destaca una cifra o magnitud literal ya mencionada; label_a contiene el valor textual exacto y label_b queda como contexto breve. Nunca inventes cifras ni uses este tipo si no hay una cifra explícita.
+   - sequence: explica un proceso de tres pasos; label_a y label_b son el primero y el último. No inventes etapas que no se desprendan de la narración.
+   - route: muestra un recorrido esquemático entre dos puntos mencionados; no lo presentes como mapa geográfico exacto ni inventes ubicaciones.
+   - layers: explica las capas de un sistema (por ejemplo, usuario, aplicación e infraestructura) solo si esas capas están respaldadas por el contexto narrado.
    - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence. Para stat, usa label_a solo con la cifra literal presente en la narración.
    - start_sec y end_sec deben corresponder al fragmento exacto de la narración; duración entre 2 y 8 segundos normalmente, nunca más de 15 segundos. Usa la transcripción para ubicar el fragmento y no inventes tiempos.
    - spoken_phrase debe ser una frase literal de la transcripción. reasoning explica qué entenderá mejor el espectador gracias a esa escena.
