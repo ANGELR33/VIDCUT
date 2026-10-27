@@ -255,10 +255,10 @@ class VideoRenderEngine:
         for i, it in enumerate(overlays, start=1):
             s, d = it["start"], it["dur"]
             fo = max(0.0, d - 0.35)
-            if it["kind"] == "video":
+            if it["kind"] in ("video", "scene"):
                 cmd += ["-t", f"{d:.2f}", "-i", it["path"]]
                 chains.append(
-                    f"[{i}:v]scale={W}:{H}:flags=lanczos:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={self.fps},"
+                    f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1,fps={self.fps},"
                     f"format=yuva420p,fade=t=in:st=0:d=0.3:alpha=1,fade=t=out:st={fo:.2f}:d=0.35:alpha=1,"
                     f"setpts=PTS-STARTPTS+{s:.3f}/TB[o{i}]"
                 )
@@ -410,7 +410,7 @@ class VideoRenderEngine:
                         "label_b": scene.label_b,
                     }, scene_path, width=min(base_w, 1280), height=min(base_h, 720))
                     overlays.append({
-                        "kind": "video",
+                        "kind": "scene",
                         "path": str(scene_path),
                         "start": mapped_start,
                         "dur": mapped_duration,
