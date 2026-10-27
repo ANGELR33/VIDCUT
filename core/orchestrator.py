@@ -8,6 +8,7 @@ from core.models import VideoEditingPlan, BRollCue
 from core.asset_providers import AssetProviderFactory, AssetProvider
 from core import rights
 from core import visual_embeddings as ve
+from core import motion_cards
 from core.relevance_gate import RelevanceJudge, is_relevant
 from core.run_log import log_count, log_event
 
@@ -156,12 +157,43 @@ class AssetOrchestrator:
             except Exception as e:
                 print(f"[AssetOrchestrator] Error en {name} para {cue.cue_id}: {e}")
 
+        generated = await self._motion_fallback(cue)
+        if generated is not None:
+            if progress_callback:
+                progress_callback("broll_completed", {"cue_id": cue.cue_id, "path": str(generated),
+                                                      "provider": "MotionCard", "score": None})
+            return cue
+
         cue.download_status = "FAILED"
         cue.relevance_note = cue.relevance_note or "Ningún proveedor ofreció un recurso relevante."
         self._log(cue, "-", "no_relevant_asset")
         if progress_callback:
             progress_callback("broll_failed", {"cue_id": cue.cue_id, "concept": cue.concept})
         return cue
+
+    async def _motion_fallback(self, cue: BRollCue) -> Optional[Path]:
+        """Sin imagen real relevante: tarjeta animada con el concepto, para que haya ayuda visual."""
+        if not motion_cards.enabled():
+            return None
+        label = (cue.concept or cue.spoken_phrase or "").strip()
+        try:
+            path = await asyncio.to_thread(
+                motion_cards.make_concept_card, label, self.target_dir / f"{cue.cue_id}_card.mp4")
+        except Exception:
+            path = None
+        if not path:
+            return None
+        cue.local_file_path = str(path)
+        cue.download_status = "COMPLETED"
+        cue.relevance_score = None
+        cue.relevance_note = "Tarjeta animada generada (no hay imagen real relevante)."
+        cue.rights_status, cue.rights_note, cue.attribution = "cleared", "Generada por el sistema.", ""
+        self.rights_items.append({"cue_id": cue.cue_id, "concept": cue.concept, "provider": "MotionCard",
+                                  "status": "cleared", "note": "Generada por el sistema.", "attribution": "",
+                                  "source_url": "", "license": "", "file": path.name})
+        log_count("broll_generated")
+        self._log(cue, "MotionCard", "generated", None, "tarjeta animada del concepto")
+        return path
 
     def _write_rights_report(self) -> None:
         if not self.rights_items:

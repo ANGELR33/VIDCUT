@@ -128,6 +128,9 @@ def make_plan():
 class OrchestratorRightsTest(unittest.TestCase):
     def setUp(self):
         self.temp = Path(tempfile.mkdtemp(prefix="rights-test-"))
+        patcher = mock.patch.dict(os.environ, {"MOTION_FALLBACK": "0"})  # estas pruebas miden la regla de omitir
+        patcher.start()
+        self.addCleanup(patcher.stop)
 
     def tearDown(self):
         shutil.rmtree(self.temp, ignore_errors=True)

@@ -1153,7 +1153,9 @@ class AssetProviderFactory:
     """Fábrica que prioriza fotos reales web de prensa/noticias sin marcas de agua y clips de video reales antes de stock."""
 
     @staticmethod
-    def get_providers(allow_stock: bool = False):
+    def get_providers(allow_stock: Optional[bool] = None):
+        if allow_stock is None:
+            allow_stock = os.getenv("ALLOW_STOCK", "1").strip().lower() not in ("0", "false", "no", "off")
         providers = []
         # 0. Material ORIGINAL del canal (assets/broll): máxima prioridad.
         providers.append(LocalOriginalAssetProvider())

@@ -1,3 +1,4 @@
+import os
 """Pruebas del filtro de relevancia del B-Roll. No usan red ni modelos reales."""
 
 import asyncio
@@ -5,6 +6,7 @@ import json
 import shutil
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 from core.asset_providers import AssetProvider, content_tokens, has_word, required_token_matches
@@ -111,6 +113,9 @@ class EnrichQueryTest(unittest.TestCase):
 class OrchestratorGateTest(unittest.TestCase):
     def setUp(self):
         self.temp = Path(tempfile.mkdtemp(prefix="relevance-test-"))
+        patcher = mock.patch.dict(os.environ, {"MOTION_FALLBACK": "0"})  # estas pruebas miden la regla de omitir
+        patcher.start()
+        self.addCleanup(patcher.stop)
 
     def tearDown(self):
         shutil.rmtree(self.temp, ignore_errors=True)
