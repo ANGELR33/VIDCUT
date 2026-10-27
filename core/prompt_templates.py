@@ -28,7 +28,7 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - Extrae todos los fragmentos autónomos que realmente tengan potencial. No inventes una cuota: pueden ser 2 o 15.
    - La duración depende del contenido: desde 15 hasta 70 segundos si el segmento mantiene contexto, gancho y cierre.
 
-6. ESCENAS EXPLICATIVAS ANIMADAS (PRIORIDAD: QUE EL ESPECTADOR ENTIENDA):
+5. ESCENAS EXPLICATIVAS ANIMADAS (PRIORIDAD: QUE EL ESPECTADOR ENTIENDA):
    - Además de B-roll y tarjetas, devuelve el campo visual_scenes cuando una idea necesite una representación visual para entenderse.
    - No conviertas cada frase en una animación. Selecciona solo momentos con una acción, proceso, comparación, causa-efecto o concepto que pueda representarse claramente.
    - Usa únicamente estos tipos: automation, comparison, cause_effect, concept.
@@ -44,7 +44,7 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - Si no hay una escena que realmente aporte claridad, devuelve visual_scenes como lista vacía. Calidad y precisión antes que cantidad.
    - Devuelve como máximo 8 escenas por cada 5 minutos de narración; no repitas la misma composición varias veces seguidas.
 
-5. TARJETAS DE REFERENCIA (ESTILO PLATZI / NATE GENTILE):
+6. TARJETAS DE REFERENCIA (ESTILO PLATZI / NATE GENTILE):
    - La tarjeta aparece en el segundo EXACTO en que se pronuncia la entidad o el dato. PRECISIÓN ABSOLUTA: usa la transcripción del audio mentalmente para fijar `start_sec` en el instante exacto en que la persona pronuncia la palabra.
    - SÉ SELECTIVO. El máximo es {max_cards}, pero no es una meta: crea una tarjeta solo si el dato es concreto, verificable y le sirve al espectador en ESE momento. Prioriza cifras, fechas, leyes, nombres propios y afirmaciones discutibles; descarta lo obvio, lo trivial y lo que el hablante ya explicó bien. Si el video tiene pocas, devuelve pocas.
    - ¿QUÉ TARJETAS CREAR?
