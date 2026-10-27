@@ -116,6 +116,40 @@ class VisualAnalyzer:
             capture.release()
         return placed
 
+    def face_track(self, video_path: Path, start_sec: float, end_sec: float, step: float = 0.75):
+        """[(segundo relativo, centro x 0-1 o None)] del rostro más grande. [] si no hay OpenCV."""
+        try:
+            import cv2
+        except Exception:
+            return []
+        if not hasattr(cv2, "CascadeClassifier") or not hasattr(cv2, "data"):
+            return []
+        clf = cv2.CascadeClassifier(str(Path(cv2.data.haarcascades) / "haarcascade_frontalface_alt2.xml"))
+        capture = cv2.VideoCapture(str(video_path))
+        if clf.empty() or not capture.isOpened():
+            return []
+        samples = []
+        try:
+            t = 0.0
+            span = max(0.15, float(end_sec) - float(start_sec))
+            while t <= span:
+                if self.cancel_event and self.cancel_event.is_set():
+                    raise CancellationRequested()
+                capture.set(cv2.CAP_PROP_POS_MSEC, (float(start_sec) + t) * 1000)
+                ok, frame = capture.read()
+                center = None
+                if ok and frame is not None:
+                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                    faces = clf.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(32, 32))
+                    if len(faces):
+                        x, _y, w, _h = max(faces, key=lambda f: int(f[2]) * int(f[3]))
+                        center = (float(x) + float(w) / 2) / max(1, frame.shape[1])
+                samples.append((round(t, 3), center))
+                t += step
+        finally:
+            capture.release()
+        return samples
+
     def dominant_face_focus(self, video_path: Path, start_sec: float, end_sec: float,
                             samples: int = 8) -> float:
         """Devuelve el centro horizontal del rostro dominante de un clip.

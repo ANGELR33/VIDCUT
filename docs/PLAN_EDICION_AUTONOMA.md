@@ -10,8 +10,8 @@ Basado en lo que hacen creadores conocidos y en lo que se ha medido. Se separa l
 | Propuesta de valor en ~15 s, gancho en los primeros 3 s | Benchmarks de vidIQ: buenos ganchos retienen >65 % en el arranque, ≥60 % pasados 30 s | `hook_scorer` puntúa y recorta aperturas vacías; `editorial_qa` revisa el gancho |
 | Subtítulos grandes, palabra resaltada, sincronizados (estilo Hormozi) | Cualitativo, ampliamente copiado; sin cifras públicas | Ya existe `highlight_words`; el director las usa como señal de énfasis |
 | Zooms, SFX y B-Roll como énfasis | Cualitativo | `edit_director`: puntaje de énfasis, sin zoom sobre overlays, alternancia punch/slow, SFX con tope |
-| Recorte vertical siguiendo a la persona (método AutoFlip) | Método publicado: detección de escenas, rostro/persona, estabilizado | Pendiente (Fase 2) con MediaPipe/OpenCV |
-| Música que baja con la voz (ducking) y audio limpio | Práctica estándar de mezcla | `duck_windows` listo (datos); mezcla en Fase 2 |
+| Recorte vertical siguiendo a la persona (método AutoFlip) | Método publicado: detección de escenas, rostro/persona, estabilizado | Hecho con OpenCV (Haar), MediaPipe queda como mejora |
+| Música que baja con la voz (ducking) y audio limpio | Práctica estándar de mezcla | `duck_windows` listo (datos); mezcla hecha (`audio_mixer`) |
 
 Lo **no** respaldado y por tanto no se hardcodea: "un corte cada 1,3 s" (cifra de una fuente, ya matizada por el propio MrBeast) y "info nueva cada 10-15 s" (sin fuente). Quedan como parámetros ajustables.
 

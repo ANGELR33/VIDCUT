@@ -36,7 +36,7 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
       - name: Pruebas unitarias (bloqueantes)
-        run: python -m unittest tests.test_relevance tests.test_run_log tests.test_tooling tests.test_broll_sync tests.test_editorial tests.test_filler_hook tests.test_rights tests.test_refiner_embeddings tests.test_edit_director tests.test_audio_mixer -v
+        run: python -m unittest tests.test_relevance tests.test_run_log tests.test_tooling tests.test_broll_sync tests.test_editorial tests.test_filler_hook tests.test_rights tests.test_refiner_embeddings tests.test_edit_director tests.test_audio_mixer tests.test_reframe -v
       - name: Prueba local de render (informativa)
         continue-on-error: true
         run: python -m unittest tests.test_local_pipeline -v

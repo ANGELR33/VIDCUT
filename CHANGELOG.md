@@ -5,6 +5,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 ## [Sin publicar]
 
 ### Añadido
+- **Reencuadre vertical dinámico** (`core/reframe.py`, `DYNAMIC_REFRAME=1`): el Short sigue al rostro con zona muerta, límite de velocidad y trayectoria suave en lugar de un recorte fijo. Sin OpenCV o con pocas detecciones, usa el recorte fijo anterior.
+- **Limpieza de voz opcional en Shorts** (`VOICE_CLEAN=1`): rumble, ruido, EQ, de-esser y compresor antes de normalizar.
 - **Mezcla de audio** (`core/audio_mixer.py`, `AUDIO_MIX=1`): añade los efectos planificados por el director desde `assets/audio/<nombre>.wav` y una música opcional (`BACKGROUND_MUSIC`) que baja cuando hay voz. No hace nada si faltan los archivos; si FFmpeg falla, deja el video intacto.
 - **Director de edición** (`core/edit_director.py`, `EDIT_DIRECTOR=1`): decide cuándo aplicar zoom según un puntaje de énfasis (antes cada subtítulo resaltado disparaba uno), evita zooms sobre B-Roll/tarjetas, limita densidad, alterna estilos, marca tramos estáticos y planifica SFX y ducking. Plan y evidencia en `docs/PLAN_EDICION_AUTONOMA.md`.
 - **Filtro de relevancia visual del B-Roll** (`core/relevance_gate.py`): un modelo con visión puntúa

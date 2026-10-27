@@ -54,6 +54,18 @@ def _ff_path(p: Path) -> str:
     return str(p.resolve()).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
 
 
+def short_audio_filter() -> str:
+    """Normalización de loudness; con VOICE_CLEAN=1 antepone la cadena de voz (rumble, ruido, EQ, compresor)."""
+    base = "loudnorm=I=-16:LRA=11:TP=-1.5"
+    if os.getenv("VOICE_CLEAN", "0").strip().lower() in ("1", "true", "yes", "on"):
+        try:
+            from core.audio_chain import voice_chain
+            return voice_chain(denoise=True) + "," + base
+        except Exception:
+            return base
+    return base
+
+
 class VideoRenderEngine:
     """
     Motor de render 100% FFmpeg (sin MoviePy):
@@ -424,10 +436,21 @@ class VideoRenderEngine:
         )
         crop_x = min(max(0, int(focus_x * scaled_w - 540)), scaled_w - 1080)
         crop_y = max(0, (scaled_h - 1920) // 2)
+        crop_x_arg = str(crop_x)
+        try:
+            from core import reframe
+            if reframe.enabled():
+                analyzer = VisualAnalyzer(cancel_event=self.cancel_event)
+                samples = analyzer.face_track(video_path, highlight.start_sec, highlight.end_sec)
+                track = reframe.smooth_track(samples)  # cortes de escena: pasar cuts=[...] si se calculan una vez
+                if track:
+                    crop_x_arg = "'" + reframe.crop_x_expression(track, scaled_w) + "'"
+        except Exception:
+            crop_x_arg = str(crop_x)  # fail-open: recorte fijo anterior
         # Recorte vertical con prioridad a la persona principal. Es un enfoque
         # local inspirado en AutoFlip: si no hay rostro, conserva el centro.
-        fc = f"[0:v]scale={scaled_w}:{scaled_h},crop=1080:1920:{crop_x}:{crop_y},setsar=1[v]"
+        fc = f"[0:v]scale={scaled_w}:{scaled_h},crop=1080:1920:{crop_x_arg}:{crop_y},setsar=1[v]"
         cmd = ["ffmpeg", "-y", "-ss", f"{highlight.start_sec:.2f}", "-i", str(video_path), "-t", f"{duration:.2f}",
-               "-filter_complex", fc, "-map", "[v]", "-map", "0:a?", "-af", "loudnorm=I=-16:LRA=11:TP=-1.5", *ENC_FINAL, "-c:a", "aac",
+               "-filter_complex", fc, "-map", "[v]", "-map", "0:a?", "-af", short_audio_filter(), *ENC_FINAL, "-c:a", "aac",
                "-movflags", "+faststart", str(out_path)]
         return out_path if self._run(cmd, f"Short 9:16 '{highlight.title}'") and out_path.exists() else None
