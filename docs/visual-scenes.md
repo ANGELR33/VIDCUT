@@ -7,7 +7,14 @@ Este cambio introduce una primera ruta para representar visualmente procesos y c
 - `automation`: persona/tarea frente a un sistema o robot.
 - `comparison`: comparación gráfica animada.
 - `cause_effect`: una causa conectada visualmente con una consecuencia.
-- `concept`: mapa conceptual con nodos conectados.\n- `timeline`: hitos sobre una línea temporal con marcador animado.\n- `flow`: diagrama de proceso entre entrada y resultado.\n- `network`: red compacta de relaciones entre elementos.\n- `stat`: tratamiento editorial de una cifra textual extraída de la narración; no calcula ni inventa valores.\n- `sequence`: tres etapas con indicador de paso activo.\n- `route`: recorrido esquemático animado, no un mapa geográfico exacto.\n- `layers`: tres capas apiladas para explicar la composición de un sistema.
+- `concept`: mapa conceptual con nodos conectados.
+- `timeline`: hitos sobre una línea temporal con marcador animado.
+- `flow`: diagrama de proceso entre entrada y resultado.
+- `network`: red compacta de relaciones entre elementos.
+- `stat`: tratamiento editorial de una cifra textual extraída de la narración; no calcula ni inventa valores.
+- `sequence`: tres etapas con indicador de paso activo.
+- `route`: recorrido esquemático animado, no un mapa geográfico exacto.
+- `layers`: tres capas apiladas para explicar la composición de un sistema.
 
 Cada tipo usa una composición diferente: persona + robot para automatización, barras para comparación, nodos conectados para causa-efecto y mapa conceptual para ideas abstractas. El overlay es transparente para conservar el material original de fondo y se compone después del B-roll cuando coinciden en el tiempo.
 
@@ -40,6 +47,15 @@ Cada tipo usa una composición diferente: persona + robot para automatización, 
 ## Límites actuales
 
 Esta es una biblioteca procedural ampliada, no un sistema de animación avanzado. Las escenas tienen ilustraciones procedurales sencillas y composición editorial contenida; todavía no hay un catálogo amplio de personajes/objetos, editor visual para retocar cada escena, ni previsualización de escena dentro de la interfaz. Los fallos al generar una escena se registran como aviso y no deben bloquear el render completo.
+
+## Límites y validación defensiva
+
+- Duración admitida por escena: de 1 a 15 segundos; los valores no finitos o no numéricos se rechazan.
+- Frecuencia admitida por el motor: de 12 a 30 FPS.
+- Resolución del overlay: de 320×240 a 3840×2160; los tamaños fuera de rango se rechazan antes de crear los fotogramas.
+- La salida transparente debe ser MOV con códec compatible con alfa.
+- Las etiquetas se recortan para respetar el ancho disponible; los datos inválidos de una escena se omiten y no deben interrumpir el render principal.
+- La prueba de render cubre los 11 tipos de escena, no solo una selección parcial.
 
 ## Verificación
 
