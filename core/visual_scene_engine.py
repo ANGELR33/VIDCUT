@@ -91,6 +91,10 @@ class VisualSceneEngine:
                     "comparison": "COMPARACIÓN VISUAL",
                     "cause_effect": "CAUSA  →  CONSECUENCIA",
                     "concept": "IDEA CLAVE",
+                    "timeline": "EVOLUCIÓN EN EL TIEMPO",
+                    "flow": "CÓMO FUNCIONA",
+                    "network": "RED DE RELACIONES",
+                    "stat": "LA CIFRA CLAVE",
                 }[spec["kind"]]
                 title_font = _font(max(14, width // 52))
                 title = title[:48]
