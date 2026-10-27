@@ -5,6 +5,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 ## [Sin publicar]
 
 ### Añadido
+- **Proyecto Remotion opcional** (`remotion/`, `core/remotion_renderer.py`, `REMOTION=1`): composiciones `counter`, `compare` y `steps` para animaciones más ricas. Apagado por defecto y con vuelta automática al renderizador interno. El código de Remotion no se pudo compilar ni ejecutar donde se escribió: pruébalo con `npm install` antes de confiar en él.
+- **Animaciones de representación** (`core/animations.py`, `core/animation_renderer.py`, `ANIMATE_DATA=1`): si la frase trae datos reales se anima lo que dice: cifra que cuenta hacia arriba, comparación con barras ("A contra B") o pasos numerados. Solo usa datos presentes en el texto; sin datos cae a la tarjeta de concepto. Se dibuja con Pillow y FFmpeg, sin red.
 - **Tarjetas animadas de concepto** (`core/motion_cards.py`, `MOTION_FALLBACK=1`): cuando ningún proveedor entrega una imagen o clip relevante, se genera con FFmpeg un clip con el concepto (degradado en movimiento, barra y texto animados) para que siempre haya ayuda visual. Queda registrado como `generated` en `broll_decisions.json`.
 - **Stock gratuito reactivado** (`ALLOW_STOCK=1`): Pexels y Pixabay se usan como respaldo cuando hay clave (antes estaban desactivados por política).
 - **Reencuadre vertical dinámico** (`core/reframe.py`, `DYNAMIC_REFRAME=1`): el Short sigue al rostro con zona muerta, límite de velocidad y trayectoria suave en lugar de un recorte fijo. Sin OpenCV o con pocas detecciones, usa el recorte fijo anterior.

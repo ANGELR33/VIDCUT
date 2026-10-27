@@ -30,3 +30,32 @@ El código de WhisperX y CLIP se probó con modelos simulados, no con los reales
 1. Activa **una** opción a la vez en un video corto.
 2. Revisa `run_events.jsonl`: el afinado indica `adoptado` o `descartado` y por qué.
 3. Calibra `SEMANTIC_MIN_SCORE` y `DEDUPE_THRESHOLD` con tu propia biblioteca; los valores por defecto son orientativos.
+
+## Animaciones de representación
+
+Las frases con datos reciben una animación generada: cifra que cuenta (`counter`), barras comparativas
+(`compare`) o pasos numerados (`steps`). Sin datos en la frase se genera una tarjeta del concepto.
+Solo se anima lo que está escrito en la frase; nunca se inventan cifras.
+
+| Variable | Valor por defecto | Efecto |
+|---|---|---|
+| `ANIMATE_DATA` | 1 | Anima las frases con datos antes de buscar imagen real |
+| `MOTION_FALLBACK` | 1 | Genera tarjeta de concepto si no hay imagen relevante |
+| `REMOTION` | 0 | Usa Remotion en lugar del dibujo interno |
+
+### Remotion (opcional, sin verificar)
+
+El proyecto está en `remotion/` (composiciones `counter`, `compare` y `steps`). **No se pudo instalar ni
+renderizar en el entorno donde se escribió**, por lo que su código no está probado. Para usarlo:
+
+```bash
+cd remotion && npm install
+export REMOTION=1
+# Si Remotion no descarga su propio Chrome: export REMOTION_BROWSER=/ruta/a/chromium
+node render.mjs --spec ejemplo.json --out prueba.mp4   # prueba aislada
+```
+
+Ejemplo de `ejemplo.json`: `{"composition":"counter","props":{"title":"Inflación","durationSec":4,"palette":{"c1":"#141a3a","c2":"#2b3a8f","accent":"#ffc857"},"value":300,"prefix":"","suffix":"%","decimals":0}}`
+
+Si falla, el sistema usa el renderizador interno automáticamente. Licencia: gratis para individuos y
+equipos de hasta 3 personas; con 4 o más hay que pagar la licencia de empresa.
