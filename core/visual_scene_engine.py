@@ -71,17 +71,21 @@ class VisualSceneEngine:
                 t = index / max(1, frames - 1)
                 img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
                 draw = ImageDraw.Draw(img, "RGBA")
-                # Editorial panel: high contrast, quiet palette, no neon/glass effects.
+                # Editorial overlay: no giant card. Keep the illustration dominant and
+                # use only a restrained title strip so the underlying footage remains visible.
                 margin = int(width * 0.055)
-                panel_w, panel_h = int(width * 0.89), int(height * 0.58)
-                panel_x, panel_y = (width - panel_w) // 2, int(height * 0.21)
+                panel_w, panel_h = int(width * 0.89), int(height * 0.48)
+                panel_x, panel_y = (width - panel_w) // 2, int(height * 0.27)
                 fade = int(235 * _clamp(min(t * 8 + 0.05, (1 - t) * 8 + 0.05)))
                 draw.rounded_rectangle(
-                    (panel_x, panel_y, panel_x + panel_w, panel_y + panel_h),
-                    radius=max(12, width // 70), fill=(13, 16, 20, int(fade * 0.94)),
-                    outline=(245, 245, 240, int(fade * 0.45)), width=max(1, width // 700))
-                draw.rectangle((panel_x, panel_y, panel_x + max(5, width // 180), panel_y + panel_h),
-                               fill=(235, 95, 63, fade))
+                    (panel_x + int(width * .18), int(height * .10),
+                     panel_x + int(panel_w * .82), int(height * .19)),
+                    radius=max(8, width // 100), fill=(13, 16, 20, int(fade * .82)),
+                    outline=(245, 245, 240, int(fade * .32)), width=max(1, width // 900))
+                draw.rounded_rectangle(
+                    (panel_x + int(width * .18), int(height * .10),
+                     panel_x + int(width * .18) + max(4, width // 240), int(height * .19)),
+                    radius=max(3, width // 300), fill=(235, 95, 63, fade))
                 title = spec["title"] or {
                     "automation": "DE LA TAREA MANUAL A LA AUTOMATIZACIÓN",
                     "comparison": "COMPARACIÓN VISUAL",
@@ -89,10 +93,10 @@ class VisualSceneEngine:
                     "concept": "IDEA CLAVE",
                 }[spec["kind"]]
                 draw.text((panel_x + margin, panel_y + int(height * .035)), title,
-                          font=_font(max(16, width // 38)), fill=(250, 248, 242, fade))
-                center_y = panel_y + int(panel_h * .58)
-                left_x = panel_x + int(panel_w * .27)
-                right_x = panel_x + int(panel_w * .73)
+                          font=_font(max(14, width // 52)), fill=(250, 248, 242, fade))
+                center_y = panel_y + int(panel_h * .52)
+                left_x = panel_x + int(panel_w * .25)
+                right_x = panel_x + int(panel_w * .75)
                 travel = int(width * 0.035 * math.sin(t * math.pi * 2))
                 self._stick_figure(draw, left_x + travel, center_y, height, fade)
                 if spec["kind"] == "automation":
