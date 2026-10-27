@@ -36,7 +36,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 - **Gancho de los Shorts** (`core/hook_scorer.py`): puntaje 0-100 de los primeros 4 s (pregunta, cifra, curiosidad,
   apelación directa; penaliza "hola", "bueno", "en este video"). Se salta el arranque vacío del Short y se ordenan los
   Shorts por viralidad + gancho (40%).
-- Pruebas: `tests/test_relevance.py`, `tests/test_run_log.py` y `tests/test_tooling.py`, `tests/test_broll_sync.py` y `tests/test_editorial.py` y `tests/test_filler_hook.py`.
+- **Control de derechos del B-Roll** (`core/rights.py`): cada recurso se clasifica (`cleared`, `attribution_required`,
+  `review`, `risky`) según el proveedor y su procedencia. Genera `rights_report.md/json` y `credits.txt` con los créditos
+  para la descripción. `LICENSE_POLICY=balanced|strict` rechaza los riesgosos (por defecto solo registra y avisa).
+- **Afinado opcional de palabras** (`core/word_refiner.py`, `ALIGNER=whisperx`): alineación forzada con validación; solo
+  se adopta si es fiable, y si no, se conservan los tiempos de Whisper.
+- **Embeddings visuales opcionales** (`core/visual_embeddings.py`): búsqueda semántica en `assets/broll`
+  (`SEMANTIC_LIBRARY=1`) y anti-repetición de imágenes (`VISUAL_DEDUPE=1`), con caché. Apagado por defecto.
+- `requirements-optional.txt` y `docs/TECNOLOGIAS_OPCIONALES.md`.
+- Pruebas: `tests/test_relevance.py`, `tests/test_run_log.py` y `tests/test_tooling.py`, `tests/test_broll_sync.py` y `tests/test_editorial.py` y `tests/test_filler_hook.py`, `tests/test_rights.py` y `tests/test_refiner_embeddings.py`.
 
 - **Sincronización del B-Roll con la voz** (`core/broll_sync.py`): cada apoyo se alinea con la frase de Whisper que lo respalda (los tiempos de Gemini solían errar 1-2 s). Los ajustes quedan en el log de la ejecución.
 

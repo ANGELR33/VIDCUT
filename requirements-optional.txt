@@ -1,0 +1,8 @@
+# Dependencias OPCIONALES (pesadas). El proyecto funciona sin ellas; cada una activa una mejora concreta.
+# Instalar solo lo que vayas a usar:  pip install -r requirements-optional.txt
+
+# ALIGNER=whisperx  -> tiempos de palabra más precisos (mejora el corte de muletillas). Mejor con GPU (Colab).
+whisperx
+
+# SEMANTIC_LIBRARY=1 / VISUAL_DEDUPE=1  -> búsqueda por significado en assets/broll y anti-repetición de imágenes.
+sentence-transformers

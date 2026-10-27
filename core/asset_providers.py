@@ -57,8 +57,27 @@ class LocalOriginalAssetProvider(AssetProvider):
 
     MEDIA_SUFFIXES = (".mp4", ".mov", ".webm", ".mkv", ".m4v", ".jpg", ".jpeg", ".png", ".webp")
 
-    def __init__(self):
+    def __init__(self, encoder=None):
         self.root = settings.BASE_DIR / "assets" / "broll"
+        self._encoder = encoder
+        self._index = None
+
+    async def _semantic_pick(self, query: str):
+        """Mejor archivo por significado (opcional, SEMANTIC_LIBRARY=1); None si no aplica o falla."""
+        from core import visual_embeddings as ve
+        encoder = self._encoder or (ve.get_encoder() if ve.semantic_library_enabled() else None)
+        if encoder is None:
+            return None
+        try:
+            if self._index is None:
+                index = ve.LibraryIndex(self.root, encoder)
+                await asyncio.to_thread(index.build)
+                self._index = index
+            hits = await asyncio.to_thread(self._index.search, query, 1)
+            return hits[0][0] if hits else None
+        except Exception as exc:
+            safe_log(f"[LocalOriginal] Búsqueda semántica falló ({type(exc).__name__}); se usan las palabras del nombre.")
+            return None
 
     async def search_and_download(self, cue: BRollCue, target_dir: Path) -> Optional[Path]:
         if not self.root.exists():
@@ -71,7 +90,10 @@ class LocalOriginalAssetProvider(AssetProvider):
 
         best_path = None
         best_score = 0
-        for path in self.root.rglob("*"):
+        semantic_hit = await self._semantic_pick(query)
+        if semantic_hit is not None:
+            best_path, best_score, needed = semantic_hit, 1, 1
+        for path in ([] if semantic_hit is not None else self.root.rglob("*")):
             if not path.is_file() or path.suffix.lower() not in self.MEDIA_SUFFIXES:
                 continue
             rel = str(path.relative_to(self.root)).lower()

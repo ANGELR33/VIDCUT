@@ -25,6 +25,9 @@ class BRollCue(BaseModel):
     confidence: float = Field(default=0.7, ge=0.0, le=1.0, description="Seguridad (0-1) de que este apoyo visual aporta algo concreto y mostrable")
     relevance_score: Optional[float] = Field(default=None, description="Interno: puntaje 0-10 del filtro de relevancia visual")
     relevance_note: str = Field(default="", description="Interno: motivo de aceptación o rechazo del filtro de relevancia")
+    rights_status: str = Field(default="unknown", description="Interno: cleared, attribution_required, review o risky")
+    rights_note: str = Field(default="", description="Interno: motivo del estado de derechos")
+    attribution: str = Field(default="", description="Interno: línea de crédito para la descripción, si la licencia lo exige")
 
 class SourceRef(BaseModel):
     """Fuente web real que respalda una tarjeta informativa."""

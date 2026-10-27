@@ -21,6 +21,8 @@ from core.hook_scorer import rank_highlights, trim_leading_filler
 from core.quality_gate import PlanQualityGate
 from core.short_snapper import snap_highlights
 from core.orchestrator import AssetOrchestrator
+from core import rights as rights_mod
+from core import word_refiner
 from core.broll_sync import resync_broll_to_captions
 from core.render_engine import VideoRenderEngine
 from core.run_log import RunLog
@@ -191,6 +193,15 @@ class VideoPipeline:
                 "transcribe", 2.0, "Whisper está transcribiendo el audio localmente",
             )
             whisper_words = list(transcriber.last_words)
+            if whisper_words and word_refiner.enabled():
+                words_in = whisper_words
+                whisper_words, refine_report = await self._run_with_heartbeat(
+                    loop, lambda: word_refiner.refine_words(self.input_file, words_in),
+                    "transcribe", 4.0, "WhisperX está afinando el tiempo de cada palabra",
+                )
+                if self.runlog:
+                    self.runlog.event("transcribe", "Afinado de palabras: " + (
+                        "adoptado" if refine_report["adopted"] else "descartado"), **refine_report)
             if whisper_caps:
                 transcript_text = "\n".join(f"[{c.start_sec:.1f}-{c.end_sec:.1f}] {c.text}" for c in whisper_caps)
                 self._state("transcribe", 5.0, f"Transcripción local lista ({len(whisper_caps)} frases).")
@@ -566,6 +577,11 @@ class VideoPipeline:
             "silences_cut_count": len(cut),
             "brolls_count": sum(1 for o in render_info["overlays"] if o["kind"] != "card"),
             "time_saved_sec": round(sum(s.end_sec - s.start_sec for s in cut), 2),
+            "rights": {
+                **rights_mod.summarize({"status": c.rights_status} for c in plan.b_rolls
+                                       if c.enabled and c.download_status == "COMPLETED"),
+                "policy": rights_mod.policy(), "report": "assets/rights_report.md",
+            },
             "fillers_cut_count": sum(1 for s in plan.timeline if s.action == ActionType.CUT_FILLER),
             "filler_time_saved_sec": round(sum(s.end_sec - s.start_sec for s in plan.timeline
                                                if s.action == ActionType.CUT_FILLER), 2),

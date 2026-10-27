@@ -6,6 +6,8 @@ from typing import List, Callable, Optional, Dict, Any
 from config.settings import settings
 from core.models import VideoEditingPlan, BRollCue
 from core.asset_providers import AssetProviderFactory, AssetProvider
+from core import rights
+from core import visual_embeddings as ve
 from core.relevance_gate import RelevanceJudge, is_relevant
 from core.run_log import log_count, log_event
 
@@ -43,13 +45,23 @@ class AssetOrchestrator:
 
     def __init__(self, target_dir: Optional[Path] = None,
                  relevance_judge: Optional[RelevanceJudge] = None,
-                 llm: Any = None):
+                 llm: Any = None, encoder: Any = None):
         self.target_dir = target_dir or settings.ASSETS_DIR
         self.target_dir.mkdir(parents=True, exist_ok=True)
         self.providers: List[AssetProvider] = AssetProviderFactory.get_providers()
         self.judge = relevance_judge or RelevanceJudge(llm=llm)
         self.topic = ""
         self.decisions: List[Dict[str, Any]] = []
+        self.rights_items: List[Dict[str, Any]] = []
+        self.license_policy = rights.policy()
+        self.encoder = encoder if encoder is not None else (ve.get_encoder() if ve.dedupe_enabled() else None)
+        self._used_vectors: List[List[float]] = []
+
+    def _read_provenance(self, cue: BRollCue) -> Dict[str, Any]:
+        try:
+            return json.loads((self.target_dir / f"{cue.cue_id}_provenance.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return {}
 
     def _log(self, cue: BRollCue, provider: str, outcome: str, score=None, reason: str = "") -> None:
         self.decisions.append({
@@ -79,6 +91,31 @@ class AssetOrchestrator:
                 if not (local_path and local_path.exists()):
                     continue
 
+                # Derechos primero: es gratis y evita gastar llamadas de visión en lo que se va a rechazar.
+                prov = self._read_provenance(cue)
+                verdict = rights.classify_rights(name, prov)
+                if not rights.policy_allows(verdict["status"], self.license_policy):
+                    local_path.unlink(missing_ok=True)
+                    (self.target_dir / f"{cue.cue_id}_provenance.json").unlink(missing_ok=True)
+                    self._log(cue, name, "rejected_rights", None,
+                              f"{verdict['status']} (política {self.license_policy}): {verdict['note']}")
+                    continue
+
+                vec = None
+                if self.encoder is not None:
+                    try:
+                        vec = await asyncio.to_thread(self.encoder.encode_image, local_path)
+                    except Exception:
+                        vec = None
+                    if vec:
+                        duplicated, similarity = ve.is_duplicate(vec, self._used_vectors)
+                        if duplicated:
+                            local_path.unlink(missing_ok=True)
+                            (self.target_dir / f"{cue.cue_id}_provenance.json").unlink(missing_ok=True)
+                            self._log(cue, name, "rejected_duplicate", None,
+                                      f"casi idéntica a una imagen ya usada (similitud {similarity:.2f})")
+                            continue
+
                 score, reason = await self.judge.score(
                     local_path, cue.concept, phrase=cue.spoken_phrase, topic=self.topic
                 )
@@ -94,6 +131,17 @@ class AssetOrchestrator:
 
                 cue.local_file_path = str(local_path)
                 cue.download_status = "COMPLETED"
+                if vec:
+                    self._used_vectors.append(vec)
+                cue.rights_status, cue.rights_note, cue.attribution = (
+                    verdict["status"], verdict["note"], verdict["attribution"])
+                self.rights_items.append({
+                    "cue_id": cue.cue_id, "concept": cue.concept, "provider": name, "status": verdict["status"],
+                    "note": verdict["note"], "attribution": verdict["attribution"],
+                    "source_url": prov.get("source_url", ""), "license": prov.get("license", ""),
+                    "file": local_path.name,
+                })
+                log_count(f"derechos_{verdict['status']}")
                 cue.relevance_score = score
                 cue.relevance_note = reason or ("Sin evaluación visual" if score is None else "")
                 self._log(cue, name, "accepted", score, reason)
@@ -114,6 +162,26 @@ class AssetOrchestrator:
         if progress_callback:
             progress_callback("broll_failed", {"cue_id": cue.cue_id, "concept": cue.concept})
         return cue
+
+    def _write_rights_report(self) -> None:
+        if not self.rights_items:
+            return
+        try:
+            report = {"policy": self.license_policy, "summary": rights.summarize(self.rights_items),
+                      "items": self.rights_items}
+            (self.target_dir / "rights_report.json").write_text(
+                json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+            (self.target_dir / "rights_report.md").write_text(
+                rights.render_markdown(self.rights_items, self.license_policy), encoding="utf-8")
+            credits = list(dict.fromkeys(i["attribution"] for i in self.rights_items if i["attribution"]))
+            if credits:
+                (self.target_dir / "credits.txt").write_text("\n".join(credits) + "\n", encoding="utf-8")
+            flagged = sum(1 for i in self.rights_items if i["status"] in ("review", "risky"))
+            if flagged:
+                log_event("rights", f"{flagged} recurso(s) requieren revisión de derechos antes de monetizar",
+                          level="warning", summary=report["summary"])
+        except OSError:
+            pass
 
     def _write_decisions(self) -> None:
         try:
@@ -158,6 +226,7 @@ class AssetOrchestrator:
         completed_count = sum(1 for c in plan.b_rolls if c.download_status == "COMPLETED")
         print(f"[AssetOrchestrator] Proceso completado: {completed_count}/{len(plan.b_rolls)} assets listos.")
         self._write_decisions()
+        self._write_rights_report()
         return plan
 
     def run_sync(
