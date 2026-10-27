@@ -108,7 +108,7 @@ class VisualSceneEngine:
                     "layers": "CÓMO SE COMPONE",
                 }[spec["kind"]]
                 title_font = _font(max(14, width // 52))
-                title = title[:48]
+                title = _fit_label(draw, title[:48], title_font, int(width * .60))
                 title_box = draw.textbbox((0, 0), title, font=title_font)
                 title_width = title_box[2] - title_box[0]
                 draw.text(((width - title_width) // 2, int(height * .12)), title,
@@ -261,10 +261,17 @@ class VisualSceneEngine:
                     draw.ellipse((node_x-r,node_y-r,node_x+r,node_y+r),
                                  fill=(13,16,20,int(fade*.92)),outline=(235,95,63,fade),width=max(3,width//300))
                     left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
-                draw.text((left_label_x, center_y + int(height * .14)), label_a,
-                          font=label_font, fill=(235, 235, 230, fade))
-                draw.text((right_label_x, center_y + int(height * .14)), label_b,
-                          font=label_font, fill=(235, 235, 230, fade))
+                if spec["kind"] == "stat":
+                    context_font = _font(max(12, width // 80))
+                    context = _fit_label(draw, label_b, context_font, int(width * .50))
+                    context_width = draw.textlength(context, font=context_font)
+                    draw.text(((width-context_width)//2, center_y + int(height*.09)), context,
+                              font=context_font, fill=(235, 235, 230, fade))
+                else:
+                    draw.text((left_label_x, center_y + int(height * .14)), label_a,
+                              font=label_font, fill=(235, 235, 230, fade))
+                    draw.text((right_label_x, center_y + int(height * .14)), label_b,
+                              font=label_font, fill=(235, 235, 230, fade))
                 img.save(tmpdir / f"frame_{index:06d}.png")
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-framerate", str(self.fps), "-i", str(tmpdir / "frame_%06d.png"),
