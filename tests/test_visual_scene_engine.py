@@ -23,17 +23,22 @@ class VisualSceneEngineTests(unittest.TestCase):
             VisualSceneEngine.validate({"kind": "concept", "duration": 60})
 
     @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg is required for render smoke test")
-    def test_render_produces_transparent_mov(self):
+    def test_all_scene_types_render_transparent_mov(self):
+        kinds = ("automation", "comparison", "cause_effect", "concept",
+                 "timeline", "flow", "network", "stat")
         with tempfile.TemporaryDirectory(prefix="vidcut-visual-test-") as tmp:
-            output = Path(tmp) / "automation.mov"
-            result = VisualSceneEngine(fps=12).render(
-                {"kind": "automation", "duration": 1, "title": "Manual a automático",
-                 "label_a": "PERSONA", "label_b": "SISTEMA"},
-                output, width=640, height=360
-            )
-            self.assertEqual(result, output)
-            self.assertTrue(output.exists())
-            self.assertGreater(output.stat().st_size, 1000)
+            engine = VisualSceneEngine(fps=12)
+            for kind in kinds:
+                with self.subTest(kind=kind):
+                    output = Path(tmp) / f"{kind}.mov"
+                    result = engine.render(
+                        {"kind": kind, "duration": 1, "title": f"Demo {kind}",
+                         "label_a": "VALOR / ORIGEN", "label_b": "RESULTADO"},
+                        output, width=640, height=360
+                    )
+                    self.assertEqual(result, output)
+                    self.assertTrue(output.exists())
+                    self.assertGreater(output.stat().st_size, 1000)
 
 
     def test_visual_scene_model_is_part_of_editing_plan(self):
