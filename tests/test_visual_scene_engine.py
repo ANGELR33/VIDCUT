@@ -22,10 +22,36 @@ class VisualSceneEngineTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             VisualSceneEngine.validate({"kind": "concept", "duration": 60})
 
+    def test_rejects_non_finite_or_non_numeric_duration(self):
+        for duration in (float("nan"), float("inf"), float("-inf"), "not-a-number", None):
+            with self.subTest(duration=duration):
+                with self.assertRaises(ValueError):
+                    VisualSceneEngine.validate({"kind": "concept", "duration": duration})
+
+    def test_fps_must_be_with_supported_range(self):
+        for fps in (0, 11, 31, "bad", None):
+            with self.subTest(fps=fps):
+                with self.assertRaises(ValueError):
+                    VisualSceneEngine(fps=fps)
+
+    def test_render_rejects_oversized_resolution_before_allocating_frames(self):
+        engine = VisualSceneEngine(fps=12)
+        with tempfile.TemporaryDirectory(prefix="vidcut-visual-test-") as tmp:
+            with self.assertRaisesRegex(ValueError, "máxima"):
+                engine.render({"kind": "concept", "duration": 1},
+                              Path(tmp) / "oversized.mov", width=7680, height=4320)
+
+    def test_render_requires_mov_for_alpha_output(self):
+        engine = VisualSceneEngine(fps=12)
+        with tempfile.TemporaryDirectory(prefix="vidcut-visual-test-") as tmp:
+            with self.assertRaisesRegex(ValueError, r"\.mov"):
+                engine.render({"kind": "concept", "duration": 1},
+                              Path(tmp) / "scene.mp4", width=320, height=240)
+
     @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg is required for render smoke test")
     def test_all_scene_types_render_transparent_mov(self):
         kinds = ("automation", "comparison", "cause_effect", "concept",
-                 "timeline", "flow", "network", "stat")
+                 "timeline", "flow", "network", "stat", "sequence", "route", "layers")
         with tempfile.TemporaryDirectory(prefix="vidcut-visual-test-") as tmp:
             engine = VisualSceneEngine(fps=12)
             for kind in kinds:
