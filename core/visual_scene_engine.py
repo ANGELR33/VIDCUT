@@ -103,7 +103,7 @@ class VisualSceneEngine:
                     self._bar(draw, right_x, center_y + int(height * .10), int(height * (.07 + .19 * (1 - t))), fade, (235, 125, 90))
                 elif spec["kind"] == "cause_effect":
                     self._arrow(draw, left_x + int(width * .08), center_y, right_x - int(width * .08), center_y, fade)
-                    r = max(5, int(height * (.025 + .015 * abs(math.sin(t * math.pi * 2))))
+                    r = max(5, int(height * (.025 + .015 * abs(math.sin(t * math.pi * 2)))))
                     draw.ellipse((right_x-r, center_y-r, right_x+r, center_y+r), fill=(235, 125, 90, fade))
                 else:
                     r = int(height * (.055 + .012 * math.sin(t * math.pi * 2)))
