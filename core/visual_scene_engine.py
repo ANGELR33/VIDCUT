@@ -97,29 +97,47 @@ class VisualSceneEngine:
                 center_y = panel_y + int(panel_h * .52)
                 left_x = panel_x + int(panel_w * .25)
                 right_x = panel_x + int(panel_w * .75)
-                travel = int(width * 0.035 * math.sin(t * math.pi * 2))
-                self._stick_figure(draw, left_x + travel, center_y, height, fade)
+                travel = int(width * 0.018 * math.sin(t * math.pi * 2))
+                label_font = _font(max(12, width // 90))
                 if spec["kind"] == "automation":
+                    self._stick_figure(draw, left_x + travel, center_y, height, fade)
                     self._robot(draw, right_x - travel, center_y, height, fade)
                     self._arrow(draw, left_x + int(width * .09), center_y, right_x - int(width * .09), center_y, fade)
+                    left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
                 elif spec["kind"] == "comparison":
-                    self._bar(draw, left_x, center_y + int(height * .10), int(height * (.07 + .10 * t)), fade, (105, 185, 230))
-                    self._bar(draw, right_x, center_y + int(height * .10), int(height * (.07 + .19 * (1 - t))), fade, (235, 125, 90))
+                    baseline = center_y + int(height * .10)
+                    draw.line((left_x-int(width*.07), baseline, right_x+int(width*.07), baseline),
+                              fill=(235, 235, 230, int(fade*.65)), width=max(2, width//500))
+                    self._bar(draw, left_x, baseline, int(height * (.08 + .13 * (0.5 + 0.5*math.sin(t*math.pi*2)))), fade, (105, 185, 230))
+                    self._bar(draw, right_x, baseline, int(height * (.08 + .20 * (0.5 + 0.5*math.sin(t*math.pi*2+1.5))), fade, (235, 125, 90))
+                    left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
                 elif spec["kind"] == "cause_effect":
+                    r1 = int(height * .055)
+                    r2 = int(height * (.055 + .012 * (0.5 + 0.5*math.sin(t*math.pi*2)))
+                    draw.ellipse((left_x-r1,center_y-r1,left_x+r1,center_y+r1),
+                                 fill=(105,185,230,int(fade*.85)),outline=(245,248,242,fade),width=3)
                     self._arrow(draw, left_x + int(width * .08), center_y, right_x - int(width * .08), center_y, fade)
-                    r = max(5, int(height * (.025 + .015 * abs(math.sin(t * math.pi * 2)))))
-                    draw.ellipse((right_x-r, center_y-r, right_x+r, center_y+r), fill=(235, 125, 90, fade))
+                    draw.ellipse((right_x-r2,center_y-r2,right_x+r2,center_y+r2),
+                                 fill=(235,125,90,fade),outline=(245,248,242,fade),width=3)
+                    left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
                 else:
-                    r = int(height * (.055 + .012 * math.sin(t * math.pi * 2)))
-                    draw.ellipse((right_x-r, center_y-r, right_x+r, center_y+r),
-                                 fill=(105, 185, 230, fade), outline=(245, 248, 242, fade), width=3)
-                    self._arrow(draw, left_x + int(width * .08), center_y, right_x - int(width * .08), center_y, fade)
-                draw.text((left_x - int(width * .07), center_y + int(height * .14)),
-                          spec["label_a"], font=_font(max(12, width // 90)),
-                          fill=(235, 235, 230, fade))
-                draw.text((right_x - int(width * .07), center_y + int(height * .14)),
-                          spec["label_b"], font=_font(max(12, width // 90)),
-                          fill=(235, 235, 230, fade))
+                    # Concept map: central idea with three connected supporting nodes.
+                    r = int(height * (.055 + .008 * math.sin(t * math.pi * 2)))
+                    node_x, node_y = width // 2, center_y
+                    for angle in (-math.pi/2, math.pi/6, 5*math.pi/6):
+                        nx = int(node_x + width*.13*math.cos(angle))
+                        ny = int(node_y + height*.12*math.sin(angle))
+                        draw.line((node_x,node_y,nx,ny),fill=(235,95,63,int(fade*.85)),width=max(2,width//420))
+                        nr = int(height*.025)
+                        draw.ellipse((nx-nr,ny-nr,nx+nr,ny+nr),fill=(105,185,230,fade),
+                                     outline=(245,248,242,fade),width=2)
+                    draw.ellipse((node_x-r,node_y-r,node_x+r,node_y+r),
+                                 fill=(13,16,20,int(fade*.92)),outline=(235,95,63,fade),width=max(3,width//300))
+                    left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
+                draw.text((left_label_x, center_y + int(height * .14)), spec["label_a"],
+                          font=label_font, fill=(235, 235, 230, fade))
+                draw.text((right_label_x, center_y + int(height * .14)), spec["label_b"],
+                          font=label_font, fill=(235, 235, 230, fade))
                 img.save(tmpdir / f"frame_{index:06d}.png")
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-framerate", str(self.fps), "-i", str(tmpdir / "frame_%06d.png"),
