@@ -391,7 +391,7 @@ class VideoRenderEngine:
         scenes = getattr(plan, "visual_scenes", []) or []
         if scenes:
             say(f"Preparando {min(len(scenes), 20)} escenas explicativas...", 0.42)
-            scene_engine = VisualSceneEngine(fps=min(self.fps, 24))
+            scene_engine = VisualSceneEngine(fps=max(12, min(int(self.fps), 24)))
             scene_dir = workdir / "visual_scenes"
             scene_dir.mkdir(parents=True, exist_ok=True)
             base_w, base_h = probe_size(cut)
