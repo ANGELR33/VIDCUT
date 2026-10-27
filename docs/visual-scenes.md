@@ -7,7 +7,7 @@ Este cambio introduce una primera ruta para representar visualmente procesos y c
 - `automation`: persona/tarea frente a un sistema o robot.
 - `comparison`: comparación gráfica animada.
 - `cause_effect`: una causa conectada visualmente con una consecuencia.
-- `concept`: mapa conceptual con nodos conectados.\n- `timeline`: hitos sobre una línea temporal con marcador animado.\n- `flow`: diagrama de proceso entre entrada y resultado.\n- `network`: red compacta de relaciones entre elementos.\n- `stat`: tratamiento editorial de una cifra textual extraída de la narración; no calcula ni inventa valores.
+- `concept`: mapa conceptual con nodos conectados.\n- `timeline`: hitos sobre una línea temporal con marcador animado.\n- `flow`: diagrama de proceso entre entrada y resultado.\n- `network`: red compacta de relaciones entre elementos.\n- `stat`: tratamiento editorial de una cifra textual extraída de la narración; no calcula ni inventa valores.\n- `sequence`: tres etapas con indicador de paso activo.\n- `route`: recorrido esquemático animado, no un mapa geográfico exacto.\n- `layers`: tres capas apiladas para explicar la composición de un sistema.
 
 Cada tipo usa una composición diferente: persona + robot para automatización, barras para comparación, nodos conectados para causa-efecto y mapa conceptual para ideas abstractas. El overlay es transparente para conservar el material original de fondo y se compone después del B-roll cuando coinciden en el tiempo.
 
