@@ -365,9 +365,20 @@ class VideoRenderEngine:
         # Extraer segmentos de zoom y de censura basados en captions importantes
         zoom_segments = []
         censor_segments = []
+        directed = False
+        try:
+            from core import edit_director
+            if edit_director.enabled() and captions:
+                total = max((c.end_sec for c in captions), default=0.0)
+                decision = edit_director.direct_edit(captions, overlays, total)
+                zoom_segments = [{"start": z["start"], "dur": z["dur"]} for z in decision["zooms"]]
+                say(f"Director de edición: {decision['report']}", 0.5)
+                directed = True
+        except Exception as exc:  # fail-open: si falla, vuelve a la regla anterior
+            say(f"Director de edición no disponible ({exc}); se usa la regla simple.", 0.5)
         for cap in captions:
             dur = cap.end_sec - cap.start_sec
-            if cap.highlight_words and dur >= 0.4:
+            if not directed and cap.highlight_words and dur >= 0.4:
                 zoom_segments.append({"start": cap.start_sec, "dur": min(dur, 2.5)})
             if getattr(cap, "censor_words", None):
                 censor_segments.append({"start": cap.start_sec, "dur": dur})
