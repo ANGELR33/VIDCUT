@@ -92,8 +92,12 @@ class VisualSceneEngine:
                     "cause_effect": "CAUSA  →  CONSECUENCIA",
                     "concept": "IDEA CLAVE",
                 }[spec["kind"]]
-                draw.text((panel_x + margin, panel_y + int(height * .035)), title,
-                          font=_font(max(14, width // 52)), fill=(250, 248, 242, fade))
+                title_font = _font(max(14, width // 52))
+                title = title[:48]
+                title_box = draw.textbbox((0, 0), title, font=title_font)
+                title_width = title_box[2] - title_box[0]
+                draw.text(((width - title_width) // 2, int(height * .12)), title,
+                          font=title_font, fill=(250, 248, 242, fade))
                 center_y = panel_y + int(panel_h * .52)
                 left_x = panel_x + int(panel_w * .25)
                 right_x = panel_x + int(panel_w * .75)
