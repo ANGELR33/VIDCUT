@@ -102,7 +102,7 @@ class VisualScene(BaseModel):
     scene_id: str = Field(description="ID único, por ejemplo visual_1")
     start_sec: float = Field(ge=0.0, description="Inicio sobre el video original")
     end_sec: float = Field(gt=0.0, description="Fin sobre el video original; entre 1 y 15 segundos de duración")
-    kind: str = Field(default="concept", description="automation, comparison, cause_effect o concept")
+    kind: str = Field(default="concept", description="automation, comparison, cause_effect, concept, timeline, flow, network o stat")
     title: str = Field(default="", max_length=100, description="Titular breve y claro, no una frase larga")
     label_a: str = Field(default="PERSONA", max_length=48, description="Etiqueta del elemento de origen")
     label_b: str = Field(default="SISTEMA", max_length=48, description="Etiqueta del resultado o segundo elemento")
