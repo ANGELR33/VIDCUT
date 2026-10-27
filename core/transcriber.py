@@ -37,6 +37,7 @@ class WhisperTranscriber:
         self.language = language
         self.max_words = max_words
         self.max_dur = max_dur
+        self.last_words: List[dict] = []  # [{word, start, end}] de la última transcripción
 
     def _extract_audio(self, video: Path, cancel_event=None) -> Path:
         wav = video.with_suffix(".16k.wav")
@@ -59,6 +60,7 @@ class WhisperTranscriber:
         finally:
             wav.unlink(missing_ok=True)
 
+        self.last_words = [{"word": w.word.strip(), "start": float(w.start), "end": float(w.end)} for w in words]
         terms = {t.lower() for t in highlight_terms if t and len(t) > 3}
         captions: List[CaptionItem] = []
         chunk: list = []

@@ -28,7 +28,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 - **Confianza de fuentes** (`core/source_trust.py`): un dato (cifra, fecha, ley) o una corrección solo se muestra con
   una fuente oficial/científica o dos fuentes independientes; las redes sociales y foros no cuentan. Las entidades
   aceptan una fuente de referencia. Se desactiva con `SOURCE_TRUST_STRICT=0`.
-- Pruebas: `tests/test_relevance.py`, `tests/test_run_log.py` y `tests/test_tooling.py`, `tests/test_broll_sync.py` y `tests/test_editorial.py`.
+- **Corte de muletillas y tartamudeos** (`core/filler_cutter.py`): con los tiempos por palabra de Whisper se cortan
+  vacilaciones puras ("eh", "mmm", "um") y palabras funcionales repetidas ("el el"). Es conservador: no toca "o sea",
+  "este" ni repeticiones enfáticas; acorta cada corte 50 ms por lado, omite los que dejarían un fragmento menor a
+  0.25 s y limita el total al 6% de la duración. Los subtítulos también se limpian. Se desactiva con `FILLER_CUT=0`.
+  `CUT_FILLER` existía en el modelo pero nunca se usaba.
+- **Gancho de los Shorts** (`core/hook_scorer.py`): puntaje 0-100 de los primeros 4 s (pregunta, cifra, curiosidad,
+  apelación directa; penaliza "hola", "bueno", "en este video"). Se salta el arranque vacío del Short y se ordenan los
+  Shorts por viralidad + gancho (40%).
+- Pruebas: `tests/test_relevance.py`, `tests/test_run_log.py` y `tests/test_tooling.py`, `tests/test_broll_sync.py` y `tests/test_editorial.py` y `tests/test_filler_hook.py`.
 
 - **Sincronización del B-Roll con la voz** (`core/broll_sync.py`): cada apoyo se alinea con la frase de Whisper que lo respalda (los tiempos de Gemini solían errar 1-2 s). Los ajustes quedan en el log de la ejecución.
 

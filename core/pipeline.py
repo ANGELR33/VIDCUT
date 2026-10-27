@@ -16,6 +16,8 @@ from core.llm import LLMClient, safe_log
 from core.models import ActionType, VideoEditingPlan
 from core.project_store import ProjectStore, editor_snapshot
 from core.editorial_qa import audit_plan
+from core.filler_cutter import apply_filler_cuts, clean_captions, enabled as filler_cut_enabled, find_fillers
+from core.hook_scorer import rank_highlights, trim_leading_filler
 from core.quality_gate import PlanQualityGate
 from core.short_snapper import snap_highlights
 from core.orchestrator import AssetOrchestrator
@@ -181,11 +183,14 @@ class VideoPipeline:
         self._state("transcribe", 2.0, "Preparando transcripción local para apoyar el análisis.")
         transcript_text = None
         whisper_caps = None
+        whisper_words: list = []
+        transcriber = WhisperTranscriber()
         try:
             whisper_caps = await self._run_with_heartbeat(
-                loop, lambda: WhisperTranscriber().transcribe(self.input_file, [], cancel_event=self.cancel_event),
+                loop, lambda: transcriber.transcribe(self.input_file, [], cancel_event=self.cancel_event),
                 "transcribe", 2.0, "Whisper está transcribiendo el audio localmente",
             )
+            whisper_words = list(transcriber.last_words)
             if whisper_caps:
                 transcript_text = "\n".join(f"[{c.start_sec:.1f}-{c.end_sec:.1f}] {c.text}" for c in whisper_caps)
                 self._state("transcribe", 5.0, f"Transcripción local lista ({len(whisper_caps)} frases).")
@@ -248,6 +253,22 @@ class VideoPipeline:
         else:
             safe_log("[Pipeline] No se pudo analizar el audio; se usa la línea de tiempo de Gemini.")
             self._state("silence", 30.0, "No se detectaron pausas con FFmpeg; se conserva la propuesta de Gemini.")
+        # ---- 2.1 Muletillas y tartamudeos (usa los tiempos por palabra de Whisper) ----
+        filler_report = None
+        if whisper_words and filler_cut_enabled():
+            try:
+                fillers = find_fillers(whisper_words)
+                plan.timeline, filler_report = apply_filler_cuts(plan.timeline, fillers, duration)
+                if filler_report["applied"]:
+                    self._state("silence", 30.5,
+                                f"Se cortaron {filler_report['applied']} muletillas o tartamudeos "
+                                f"({filler_report['seconds_cut']:.1f} s).")
+                if self.runlog:
+                    self.runlog.count("muletillas_cortadas", filler_report["applied"])
+                    self.runlog.event("silence", f"Muletillas: {filler_report['applied']} de {filler_report['detected']} detectadas",
+                                      **{k: v for k, v in filler_report.items() if k != "detected"})
+            except Exception as exc:
+                safe_log(f"[Filler] No se pudieron cortar muletillas: {exc}")
         plan.total_original_duration_sec = duration
         self._publish_plan(plan, "silence", 30.0, "La línea de tiempo se actualizó con las pausas detectadas.")
 
@@ -289,6 +310,8 @@ class VideoPipeline:
             except Exception as exc:
                 safe_log(f"[Sync] No se pudo realinear el B-Roll: {exc}")
 
+            if filler_cut_enabled():
+                clean_captions(whisper_caps)  # los subtítulos no muestran lo que ya no se oye
             plan.captions = whisper_caps
 
         # ---- 2.6 Lectura visual local (cortes de plano + lado del hablante) ----
@@ -468,7 +491,13 @@ class VideoPipeline:
         # Shorts: empezar y terminar en límites de frase y quitar duplicados.
         try:
             if plan.highlights:
+                trimmed = {c.clip_id: round(trim_leading_filler(c, plan.captions), 2) for c in plan.highlights}
+                trimmed = {k: v for k, v in trimmed.items() if v}
                 changes = snap_highlights(plan.highlights, plan.captions, duration)
+                ranking = rank_highlights(plan.highlights, plan.captions)
+                if self.runlog:
+                    self.runlog.event("quality", "Ranking de Shorts por gancho + viralidad",
+                                      ranking=ranking, arranques_recortados=trimmed)
                 if changes and self.runlog:
                     self.runlog.count("shorts_ajustados", sum(1 for c in changes if c["action"] == "snapped"))
                     self.runlog.count("shorts_duplicados", sum(1 for c in changes if c["action"] == "dropped"))
@@ -537,6 +566,9 @@ class VideoPipeline:
             "silences_cut_count": len(cut),
             "brolls_count": sum(1 for o in render_info["overlays"] if o["kind"] != "card"),
             "time_saved_sec": round(sum(s.end_sec - s.start_sec for s in cut), 2),
+            "fillers_cut_count": sum(1 for s in plan.timeline if s.action == ActionType.CUT_FILLER),
+            "filler_time_saved_sec": round(sum(s.end_sec - s.start_sec for s in plan.timeline
+                                               if s.action == ActionType.CUT_FILLER), 2),
             "cards_shown": len(placed_cards),
             "captions_count": render_info["captions"],
             "cards": [

@@ -59,3 +59,13 @@ Además de tiempos y costos, `run_events.jsonl` registra en la etapa `quality`:
   `broll_resincronizados`.
 
 Un puntaje bajo repetido indica que el plan de Gemini propone demasiados apoyos o deja tramos largos sin cambio visual.
+
+## Muletillas y ganchos
+
+- `muletillas_cortadas` y el evento de la etapa `silence` detallan cada corte (inicio, fin, tipo, texto) y qué se omitió
+  y por qué (`limite_6_por_ciento`, `fragmento_muy_corto`, `fuera_de_tramo`).
+- El resultado final incluye `fillers_cut_count` y `filler_time_saved_sec`.
+- El evento "Ranking de Shorts" muestra, por clip, viralidad, puntaje de gancho, combinado y señales detectadas.
+
+Nota: Whisper a veces no transcribe las muletillas; si el reporte dice 0 detectadas en un video con muchas vacilaciones,
+es una limitación del modelo, no un fallo del montaje.
