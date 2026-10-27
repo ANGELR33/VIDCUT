@@ -32,6 +32,14 @@ def _clamp(value: float, lo: float = 0.0, hi: float = 1.0) -> float:
     return max(lo, min(hi, value))
 
 
+def _fit_label(draw: ImageDraw.ImageDraw, text: str, font: Any, max_width: int) -> str:
+    """Recorta etiquetas para que sigan legibles y nunca desborden el encuadre."""
+    text = str(text)
+    while text and draw.textlength(text, font=font) > max_width:
+        text = text[:-2].rstrip() + "…"
+    return text
+
+
 class VisualSceneEngine:
     """Renderiza escenas explicativas transparentes para superponer sobre el video."""
 
@@ -107,6 +115,8 @@ class VisualSceneEngine:
                 right_x = panel_x + int(panel_w * .75)
                 travel = int(width * 0.018 * math.sin(t * math.pi * 2))
                 label_font = _font(max(12, width // 90))
+                label_a = _fit_label(draw, spec["label_a"], label_font, int(width * .28))
+                label_b = _fit_label(draw, spec["label_b"], label_font, int(width * .28))
                 if spec["kind"] == "automation":
                     self._stick_figure(draw, left_x + travel, center_y, height, fade)
                     self._robot(draw, right_x - travel, center_y, height, fade)
@@ -200,9 +210,9 @@ class VisualSceneEngine:
                     draw.ellipse((node_x-r,node_y-r,node_x+r,node_y+r),
                                  fill=(13,16,20,int(fade*.92)),outline=(235,95,63,fade),width=max(3,width//300))
                     left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
-                draw.text((left_label_x, center_y + int(height * .14)), spec["label_a"],
+                draw.text((left_label_x, center_y + int(height * .14)), label_a,
                           font=label_font, fill=(235, 235, 230, fade))
-                draw.text((right_label_x, center_y + int(height * .14)), spec["label_b"],
+                draw.text((right_label_x, center_y + int(height * .14)), label_b,
                           font=label_font, fill=(235, 235, 230, fade))
                 img.save(tmpdir / f"frame_{index:06d}.png")
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
