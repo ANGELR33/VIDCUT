@@ -15,7 +15,7 @@ from typing import Any, Dict
 from PIL import Image, ImageDraw, ImageFont
 
 
-ALLOWED_SCENES = {"automation", "comparison", "cause_effect", "concept", "timeline", "flow", "network", "stat"}
+ALLOWED_SCENES = {"automation", "comparison", "cause_effect", "concept", "timeline", "flow", "network", "stat", "sequence", "route", "layers"}
 FPS_DEFAULT = 24
 
 
@@ -103,6 +103,9 @@ class VisualSceneEngine:
                     "flow": "CÓMO FUNCIONA",
                     "network": "RED DE RELACIONES",
                     "stat": "LA CIFRA CLAVE",
+                    "sequence": "PASO A PASO",
+                    "route": "RECORRIDO ESQUEMÁTICO",
+                    "layers": "CÓMO SE COMPONE",
                 }[spec["kind"]]
                 title_font = _font(max(14, width // 52))
                 title = title[:48]
@@ -183,6 +186,54 @@ class VisualSceneEngine:
                         draw.ellipse((px-rr, py-rr, px+rr, py+rr), fill=(*col, fade),
                                      outline=(245, 248, 242, fade), width=max(2, width//600))
                     left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
+                elif spec["kind"] == "sequence":
+                    # Three sequential stages; animate the active stage across the timeline.
+                    xs = [panel_x + int(panel_w * f) for f in (.20, .50, .80)]
+                    y = center_y
+                    for idx in range(2):
+                        self._arrow(draw, xs[idx] + int(width*.045), y, xs[idx+1] - int(width*.045), y,
+                                    int(fade * (.75 if t < (idx+1)/2 else 1)))
+                    active = min(2, int(t * 3))
+                    for idx, px in enumerate(xs):
+                        rr = int(height * (.034 if idx == active else .026))
+                        col = (235, 125, 90) if idx == active else (105, 185, 230)
+                        draw.ellipse((px-rr, y-rr, px+rr, y+rr), fill=(*col, fade),
+                                     outline=(245, 248, 242, fade), width=max(2, width//600))
+                    left_label_x, right_label_x = xs[0] - int(width*.04), xs[2] - int(width*.04)
+                elif spec["kind"] == "route":
+                    # Schematic route, deliberately not a geographic map.
+                    pts = [
+                        (panel_x + int(panel_w*.18), center_y + int(height*.04)),
+                        (panel_x + int(panel_w*.37), center_y - int(height*.07)),
+                        (panel_x + int(panel_w*.55), center_y + int(height*.035)),
+                        (panel_x + int(panel_w*.80), center_y - int(height*.06)),
+                    ]
+                    draw.line(pts, fill=(105, 185, 230, int(fade*.8)), width=max(4, width//300))
+                    progress = _clamp(t) * (len(pts)-1)
+                    segment = min(len(pts)-2, int(progress))
+                    local_t = progress-segment
+                    mx = int(pts[segment][0] + (pts[segment+1][0]-pts[segment][0])*local_t)
+                    my = int(pts[segment][1] + (pts[segment+1][1]-pts[segment][1])*local_t)
+                    for idx, (px, py) in enumerate((pts[0], pts[-1])):
+                        rr = int(height*.025)
+                        col = (105, 185, 230) if idx == 0 else (235, 125, 90)
+                        draw.ellipse((px-rr, py-rr, px+rr, py+rr), fill=(*col, fade),
+                                     outline=(245, 248, 242, fade), width=max(2, width//600))
+                    rr = int(height*.014)
+                    draw.ellipse((mx-rr, my-rr, mx+rr, my+rr), fill=(250, 248, 242, fade),
+                                 outline=(235, 95, 63, fade), width=3)
+                    left_label_x, right_label_x = pts[0][0]-int(width*.04), pts[-1][0]-int(width*.04)
+                elif spec["kind"] == "layers":
+                    # Three stacked layers make system architecture easier to explain.
+                    layer_w, layer_h = int(width*.30), int(height*.055)
+                    cx = width // 2
+                    for idx, color in enumerate(((105, 185, 230), (180, 190, 200), (235, 125, 90))):
+                        y1 = center_y - layer_h//2 + (idx-1)*int(height*.075)
+                        offset = int(width*.012*math.sin(t*math.pi*2 + idx))
+                        draw.rounded_rectangle((cx-layer_w//2+offset, y1, cx+layer_w//2+offset, y1+layer_h),
+                            radius=max(5, width//180), fill=(13, 16, 20, int(fade*.82)),
+                            outline=(*color, fade), width=max(2, width//500))
+                    left_label_x, right_label_x = left_x-int(width*.07), right_x-int(width*.07)
                 elif spec["kind"] == "stat":
                     # Editorial metric treatment. The scene label is the value/quantity,
                     # not an invented number: Gemini must supply a literal value from narration.
