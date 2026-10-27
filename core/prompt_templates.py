@@ -31,12 +31,12 @@ REGLAS CRÍTICAS DE EDICIÓN:
 5. ESCENAS EXPLICATIVAS ANIMADAS (PRIORIDAD: QUE EL ESPECTADOR ENTIENDA):
    - Además de B-roll y tarjetas, devuelve el campo visual_scenes cuando una idea necesite una representación visual para entenderse.
    - No conviertas cada frase en una animación. Selecciona solo momentos con una acción, proceso, comparación, causa-efecto o concepto que pueda representarse claramente.
-   - Usa únicamente estos tipos: automation, comparison, cause_effect, concept.
+   - Usa únicamente estos tipos: automation, comparison, cause_effect, concept, timeline, flow, network, stat.
    - automation: una tarea humana pasa a ser realizada por una herramienta/sistema; label_a suele ser una persona/tarea y label_b el sistema.
    - comparison: contrasta dos opciones, magnitudes o resultados; usa etiquetas cortas y no inventes cifras.
    - cause_effect: representa una causa y una consecuencia explícitas en la narración.
-   - concept: representa una idea abstracta con una relación visual simple.
-   - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence.
+   - concept: representa una idea abstracta con una relación visual simple.\n   - timeline: representa una secuencia temporal o evolución con dos hitos claros; label_a y label_b son los hitos extremos.\n   - flow: representa un proceso de entrada a resultado; label_a y label_b deben ser dos etapas reales de la narración.\n   - network: representa relaciones entre actores, conceptos o sistemas; no implica causalidad si la narración no la afirma.\n   - stat: destaca una cifra o magnitud literal ya mencionada; label_a contiene el valor textual exacto y label_b queda como contexto breve. Nunca inventes cifras ni uses este tipo si no hay una cifra explícita.
+   - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence. Para stat, usa label_a solo con la cifra literal presente en la narración.
    - start_sec y end_sec deben corresponder al fragmento exacto de la narración; duración entre 2 y 8 segundos normalmente, nunca más de 15 segundos. Usa la transcripción para ubicar el fragmento y no inventes tiempos.
    - spoken_phrase debe ser una frase literal de la transcripción. reasoning explica qué entenderá mejor el espectador gracias a esa escena.
    - No uses escenas para sustituir material real de un acontecimiento, persona o lugar específico. Para hechos reales concretos, prioriza B-roll auténtico y verificable; usa animación para explicar procesos o ideas.
