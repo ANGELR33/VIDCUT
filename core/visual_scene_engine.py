@@ -33,32 +33,55 @@ def _clamp(value: float, lo: float = 0.0, hi: float = 1.0) -> float:
 
 
 def _fit_label(draw: ImageDraw.ImageDraw, text: str, font: Any, max_width: int) -> str:
-    """Recorta etiquetas para que sigan legibles y nunca desborden el encuadre."""
-    text = str(text)
-    while text and draw.textlength(text, font=font) > max_width:
-        text = text[:-2].rstrip() + "…"
-    return text
+    """Recorta etiquetas por búsqueda binaria; termina incluso con anchos mínimos."""
+    text = str(text).strip()
+    max_width = max(0, int(max_width))
+    if not text or max_width == 0:
+        return ""
+    if draw.textlength(text, font=font) <= max_width:
+        return text
+    ellipsis = "…"
+    if draw.textlength(ellipsis, font=font) > max_width:
+        return ""
+    lo, hi = 0, len(text)
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        candidate = text[:mid].rstrip() + ellipsis
+        if draw.textlength(candidate, font=font) <= max_width:
+            lo = mid
+        else:
+            hi = mid - 1
+    return text[:lo].rstrip() + ellipsis
 
 
 class VisualSceneEngine:
     """Renderiza escenas explicativas transparentes para superponer sobre el video."""
 
     def __init__(self, fps: int = FPS_DEFAULT):
-        self.fps = max(12, min(int(fps), 30))
+        try:
+            requested_fps = int(fps)
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise ValueError("Los FPS deben ser un número entero entre 12 y 30.") from exc
+        if not 12 <= requested_fps <= 30:
+            raise ValueError("Los FPS deben estar entre 12 y 30.")
+        self.fps = requested_fps
 
     @staticmethod
     def validate(scene: Dict[str, Any]) -> Dict[str, Any]:
         if not isinstance(scene, dict):
             raise ValueError("La escena debe ser un objeto.")
-        kind = str(scene.get("kind", "concept")).lower()
+        kind = str(scene.get("kind", "concept")).strip().lower()
         if kind not in ALLOWED_SCENES:
             raise ValueError(f"Tipo de escena no permitido: {kind}")
-        duration = float(scene.get("duration", 4.0))
-        if not 1.0 <= duration <= 15.0:
+        try:
+            duration = float(scene.get("duration", 4.0))
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise ValueError("La duración debe ser un número entre 1 y 15 segundos.") from exc
+        if not math.isfinite(duration) or not 1.0 <= duration <= 15.0:
             raise ValueError("La duración de una escena debe estar entre 1 y 15 segundos.")
-        title = str(scene.get("title", ""))[:100]
-        label_a = str(scene.get("label_a", "PERSONA"))[:48]
-        label_b = str(scene.get("label_b", "SISTEMA"))[:48]
+        title = str(scene.get("title") or "")[:100]
+        label_a = str(scene.get("label_a") or "PERSONA")[:48]
+        label_b = str(scene.get("label_b") or "SISTEMA")[:48]
         return {"kind": kind, "duration": duration, "title": title,
                 "label_a": label_a, "label_b": label_b}
 
@@ -68,8 +91,17 @@ class VisualSceneEngine:
         spec = self.validate(scene)
         if shutil.which("ffmpeg") is None:
             raise RuntimeError("No se encontró FFmpeg en PATH.")
-        width, height = max(320, int(width)), max(240, int(height))
+        try:
+            width, height = int(width), int(height)
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise ValueError("El ancho y el alto deben ser enteros válidos.") from exc
+        if width < 320 or height < 240:
+            raise ValueError("La resolución mínima de escena es 320x240.")
+        if width > 3840 or height > 2160:
+            raise ValueError("La resolución máxima de escena es 3840x2160 para limitar el uso de recursos.")
         output_path = Path(output_path)
+        if output_path.suffix.lower() != ".mov":
+            raise ValueError("Las escenas con transparencia deben exportarse a .mov.")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         frames = max(1, round(spec["duration"] * self.fps))
 
@@ -277,9 +309,15 @@ class VisualSceneEngine:
                    "-framerate", str(self.fps), "-i", str(tmpdir / "frame_%06d.png"),
                    "-frames:v", str(frames), "-an", "-c:v", "qtrle", "-pix_fmt", "argb",
                    str(output_path)]
-            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-            if proc.returncode != 0 or not output_path.exists():
-                raise RuntimeError("No se pudo renderizar la escena animada: " + proc.stderr[-1000:])
+            try:
+                proc = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+            except subprocess.TimeoutExpired as exc:
+                output_path.unlink(missing_ok=True)
+                raise RuntimeError("El render de la escena superó el límite de 180 segundos.") from exc
+            if proc.returncode != 0 or not output_path.exists() or output_path.stat().st_size == 0:
+                output_path.unlink(missing_ok=True)
+                detail = (proc.stderr or "FFmpeg no generó un archivo válido.")[-1000:]
+                raise RuntimeError("No se pudo renderizar la escena animada: " + detail)
         return output_path
 
     @staticmethod
