@@ -10,7 +10,7 @@ from core.timeline import TimelineMapper
 
 class VisualSceneEngineTests(unittest.TestCase):
     def test_accepts_known_scene_types(self):
-        for kind in ("automation", "comparison", "cause_effect", "concept"):
+        for kind in ("automation", "comparison", "cause_effect", "concept", "timeline", "flow", "network", "stat"):
             scene = VisualSceneEngine.validate({"kind": kind, "duration": 4, "title": "Demo"})
             self.assertEqual(scene["kind"], kind)
 
