@@ -108,12 +108,14 @@ class VisualSceneEngine:
                     baseline = center_y + int(height * .10)
                     draw.line((left_x-int(width*.07), baseline, right_x+int(width*.07), baseline),
                               fill=(235, 235, 230, int(fade*.65)), width=max(2, width//500))
-                    self._bar(draw, left_x, baseline, int(height * (.08 + .13 * (0.5 + 0.5*math.sin(t*math.pi*2)))), fade, (105, 185, 230))
-                    self._bar(draw, right_x, baseline, int(height * (.08 + .20 * (0.5 + 0.5*math.sin(t*math.pi*2+1.5))), fade, (235, 125, 90))
+                    height_left = int(height * (0.08 + 0.13 * (0.5 + 0.5 * math.sin(t * math.pi * 2))) )
+                    height_right = int(height * (0.08 + 0.20 * (0.5 + 0.5 * math.sin(t * math.pi * 2 + 1.5))) )
+                    self._bar(draw, left_x, baseline, height_left, fade, (105, 185, 230))
+                    self._bar(draw, right_x, baseline, height_right, fade, (235, 125, 90))
                     left_label_x, right_label_x = left_x - int(width * .07), right_x - int(width * .07)
                 elif spec["kind"] == "cause_effect":
                     r1 = int(height * .055)
-                    r2 = int(height * (.055 + .012 * (0.5 + 0.5*math.sin(t*math.pi*2)))
+                    r2 = int(height * (0.055 + 0.012 * (0.5 + 0.5 * math.sin(t * math.pi * 2))))
                     draw.ellipse((left_x-r1,center_y-r1,left_x+r1,center_y+r1),
                                  fill=(105,185,230,int(fade*.85)),outline=(245,248,242,fade),width=3)
                     self._arrow(draw, left_x + int(width * .08), center_y, right_x - int(width * .08), center_y, fade)
