@@ -255,7 +255,15 @@ class VideoRenderEngine:
         for i, it in enumerate(overlays, start=1):
             s, d = it["start"], it["dur"]
             fo = max(0.0, d - 0.35)
-            if it["kind"] in ("video", "scene"):
+            if it["kind"] == "video":
+                cmd += ["-t", f"{d:.2f}", "-i", it["path"]]
+                chains.append(
+                    f"[{i}:v]scale={W}:{H}:flags=lanczos:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,fps={self.fps},"
+                    f"format=yuva420p,fade=t=in:st=0:d=0.3:alpha=1,fade=t=out:st={fo:.2f}:d=0.35:alpha=1,"
+                    f"setpts=PTS-STARTPTS+{s:.3f}/TB[o{i}]"
+                )
+                pos_x, pos_y = "0", "0"
+            elif it["kind"] == "scene":
                 cmd += ["-t", f"{d:.2f}", "-i", it["path"]]
                 chains.append(
                     f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1,fps={self.fps},"
