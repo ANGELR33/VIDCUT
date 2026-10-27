@@ -305,19 +305,24 @@ class VisualSceneEngine:
                     draw.text((right_label_x, center_y + int(height * .14)), label_b,
                               font=label_font, fill=(235, 235, 230, fade))
                 img.save(tmpdir / f"frame_{index:06d}.png")
+            # Escribir primero en un archivo temporal evita dejar una salida final corrupta
+            # si FFmpeg falla o vence el tiempo límite; la salida previa queda intacta.
+            temp_output = output_path.with_name(output_path.stem + ".partial" + output_path.suffix)
+            temp_output.unlink(missing_ok=True)
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-framerate", str(self.fps), "-i", str(tmpdir / "frame_%06d.png"),
                    "-frames:v", str(frames), "-an", "-c:v", "qtrle", "-pix_fmt", "argb",
-                   str(output_path)]
+                   str(temp_output)]
             try:
                 proc = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
             except subprocess.TimeoutExpired as exc:
-                output_path.unlink(missing_ok=True)
+                temp_output.unlink(missing_ok=True)
                 raise RuntimeError("El render de la escena superó el límite de 180 segundos.") from exc
-            if proc.returncode != 0 or not output_path.exists() or output_path.stat().st_size == 0:
-                output_path.unlink(missing_ok=True)
+            if proc.returncode != 0 or not temp_output.exists() or temp_output.stat().st_size == 0:
+                temp_output.unlink(missing_ok=True)
                 detail = (proc.stderr or "FFmpeg no generó un archivo válido.")[-1000:]
                 raise RuntimeError("No se pudo renderizar la escena animada: " + detail)
+            temp_output.replace(output_path)
         return output_path
 
     @staticmethod
