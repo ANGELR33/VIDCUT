@@ -1,3 +1,4 @@
+import os
 import json
 import shutil
 import subprocess
@@ -366,6 +367,7 @@ class VideoRenderEngine:
         zoom_segments = []
         censor_segments = []
         directed = False
+        decision = None
         try:
             from core import edit_director
             if edit_director.enabled() and captions:
@@ -393,6 +395,20 @@ class VideoRenderEngine:
             ok = self.compose(cut, [], ass_file, out)
         if not ok:
             raise RuntimeError("FFmpeg no pudo componer el video final después de los reintentos.")
+        try:
+            from core import audio_mixer
+            from core.edit_director import duck_windows
+            sfx_dir = settings.BASE_DIR / "assets" / "audio"
+            music_env = os.getenv("BACKGROUND_MUSIC", "").strip()
+            if audio_mixer.enabled() and decision is not None:
+                mixed = out.with_name(out.stem + "_mix" + out.suffix)
+                if audio_mixer.mix_audio(out, mixed, decision["sfx"], sfx_dir,
+                                         music=Path(music_env) if music_env else None,
+                                         duck=duck_windows(captions)):
+                    mixed.replace(out)
+                    say("Efectos de sonido y música mezclados.", 0.95)
+        except Exception as exc:  # fail-open
+            say(f"Mezcla de audio omitida ({exc}).", 0.95)
         return {"overlays": overlays, "captions": len(captions)}
 
     # ------------------------------------------------------------------ shorts
