@@ -1,5 +1,6 @@
 import os
 import json
+import math
 import shutil
 import subprocess
 from threading import Event
@@ -395,9 +396,14 @@ class VideoRenderEngine:
             scene_dir.mkdir(parents=True, exist_ok=True)
             base_w, base_h = probe_size(cut)
             for scene_index, scene in enumerate(scenes[:20]):
-                if not getattr(scene, "enabled", True) or float(getattr(scene, "confidence", 0.7)) < 0.45:
-                    continue
                 try:
+                    # Los datos de una escena generada/guardada pueden estar incompletos.
+                    # Una escena inválida se omite sin abortar el render del video completo.
+                    if not getattr(scene, "enabled", True):
+                        continue
+                    confidence = float(getattr(scene, "confidence", 0.7))
+                    if not math.isfinite(confidence) or confidence < 0.45:
+                        continue
                     original_start = float(scene.start_sec)
                     original_end = float(scene.end_sec)
                     if original_end <= original_start:
