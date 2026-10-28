@@ -15,6 +15,10 @@ Este cambio introduce una primera ruta para representar visualmente procesos y c
 - `sequence`: tres etapas con indicador de paso activo.
 - `route`: recorrido esquemático animado, no un mapa geográfico exacto.
 - `layers`: tres capas apiladas para explicar la composición de un sistema.
+- `title_card`: titular editorial de apertura/capítulo con jerarquía tipográfica y espacio negativo.
+- `code_terminal`: ventana de código esquemático con una línea activa sincronizada con la animación; no afirma ser código real.
+- `cyber_diagram`: diagrama de arquitectura con límite de confianza, nodos y señal animada.
+- `pixel_team`: doce personajes pixel-art en tarjetas compactas para narraciones sobre equipos o agentes.
 
 Cada tipo usa una composición diferente: persona + robot para automatización, barras para comparación, nodos conectados para causa-efecto y mapa conceptual para ideas abstractas. El overlay es transparente para conservar el material original de fondo y se compone después del B-roll cuando coinciden en el tiempo.
 
@@ -55,7 +59,7 @@ Esta es una biblioteca procedural ampliada, no un sistema de animación avanzado
 - Resolución del overlay: de 320×240 a 3840×2160; los tamaños fuera de rango se rechazan antes de crear los fotogramas.
 - La salida transparente debe ser MOV con códec compatible con alfa.
 - Las etiquetas se recortan para respetar el ancho disponible; los datos inválidos de una escena se omiten y no deben interrumpir el render principal.
-- La prueba de render cubre los 11 tipos de escena, no solo una selección parcial.
+- La prueba de render cubre los 15 tipos de escena, incluidos los cuatro estilos editoriales nuevos.
 
 ## Verificación
 
