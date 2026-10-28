@@ -22,6 +22,7 @@ def available() -> bool:
         shutil.which("node") is not None
         and (STUDIO_DIR / "render.mjs").is_file()
         and (STUDIO_DIR / "node_modules" / "@remotion" / "renderer").is_dir()
+        and (STUDIO_DIR / "node_modules" / "@remotion" / "bundler").is_dir()
         and (STUDIO_DIR / "node_modules" / "remotion").is_dir()
     )
 
@@ -66,7 +67,12 @@ def render_scene(
             "height": int(height),
             "fps": int(fps),
             "vertical": height > width,
-            "theme": {"primary": "#70C8F2", "accent": "#F46B45", "bg": "#0B1017", "textColor": "#F4F2EC"},
+            "theme": {
+                "primary": str((spec.get("theme") or {}).get("primary", "#70C8F2")),
+                "accent": str((spec.get("theme") or {}).get("accent", "#F46B45")),
+                "bg": str((spec.get("theme") or {}).get("bg", "#0B1017")),
+                "textColor": str((spec.get("theme") or {}).get("textColor", "#F4F2EC")),
+            },
         }
         digest = hashlib.sha256(json.dumps(props, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:12]
         out = Path(out)
