@@ -39,7 +39,11 @@ def render_scene(
     timeout: int = 240,
 ) -> Optional[Path]:
     """Render one semantic scene as a transparent ProRes MOV, or return None safely."""
-    if not enabled() or not available():
+    if not enabled():
+        print("[NarrativeMotion] Motor Remotion desactivado por NARRATIVE_MOTION; se usará el motor de respaldo.")
+        return None
+    if not available():
+        print("[NarrativeMotion] Remotion no está disponible (Node, render.mjs o dependencias ausentes); se usará el motor de respaldo.")
         return None
     try:
         duration = float(spec.get("duration", 0))
@@ -74,11 +78,14 @@ def render_scene(
                 encoding="utf-8", errors="replace",
             )
             if proc.returncode != 0 or not tmp.is_file() or tmp.stat().st_size < 20_000:
+                detail = (proc.stderr or proc.stdout or "salida ausente o demasiado pequeña").strip()[-1200:]
+                print(f"[NarrativeMotion] Render Remotion falló (código {proc.returncode}): {detail}")
                 return None
             tmp.replace(final)
             return final
         finally:
             tmp.unlink(missing_ok=True)
             props_path.unlink(missing_ok=True)
-    except (OSError, ValueError, TypeError, subprocess.TimeoutExpired):
+    except (OSError, ValueError, TypeError, subprocess.TimeoutExpired) as exc:
+        print(f"[NarrativeMotion] Error en puente Remotion: {exc}")
         return None
