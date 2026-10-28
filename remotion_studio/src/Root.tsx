@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { KaiCaptions, KaiCaptionsProps } from "./KaiCaptions";
 import { MetricCounter, MetricCounterProps } from "./MetricCounter";
 import { VersusComparison, VersusComparisonProps } from "./VersusComparison";
+import { NarrativeScene, NarrativeSceneProps } from "./NarrativeScene";
 
 const defaultCaptionsProps: KaiCaptionsProps = {
   words: [
@@ -38,6 +39,20 @@ const defaultMetricProps: MetricCounterProps = {
     primary: "#38BDF8",
     accent: "#FFE14D",
   },
+};
+
+const defaultNarrativeProps: NarrativeSceneProps = {
+  kind: "cyber_diagram",
+  title: "DEL DATO A LA CONEXIÓN",
+  labelA: "ENTRADA",
+  labelB: "RESULTADO",
+  spokenPhrase: "",
+  durationSec: 5,
+  width: 1920,
+  height: 1080,
+  fps: 30,
+  vertical: false,
+  theme: { primary: "#70C8F2", accent: "#F46B45", bg: "#0B1017", textColor: "#F4F2EC" },
 };
 
 const defaultVersusProps: VersusComparisonProps = {
@@ -85,6 +100,23 @@ export const Root: React.FC = () => (
       fps={defaultMetricProps.fps}
       durationInFrames={Math.round(defaultMetricProps.durationSec * defaultMetricProps.fps)}
       defaultProps={defaultMetricProps}
+      calculateMetadata={({ props }) => ({
+        width: props.width,
+        height: props.height,
+        fps: props.fps,
+        durationInFrames: Math.max(1, Math.round(props.durationSec * props.fps)),
+      })}
+    />
+
+    {/* Escena narrativa: composición completa sincronizable con una frase del orador */}
+    <Composition
+      id="NarrativeScene"
+      component={NarrativeScene}
+      width={defaultNarrativeProps.width}
+      height={defaultNarrativeProps.height}
+      fps={defaultNarrativeProps.fps}
+      durationInFrames={Math.round(defaultNarrativeProps.durationSec * defaultNarrativeProps.fps)}
+      defaultProps={defaultNarrativeProps}
       calculateMetadata={({ props }) => ({
         width: props.width,
         height: props.height,
