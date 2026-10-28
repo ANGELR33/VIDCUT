@@ -72,8 +72,8 @@ La composición `NarrativeScene` crea overlays transparentes ProRes 4444 con ani
 
 - Requiere Node.js y dependencias instaladas en `remotion_studio/` (ejecuta `npm install` dentro de esa carpeta).
 - `NARRATIVE_MOTION=1` prefiere Remotion (predeterminado); `NARRATIVE_MOTION=0` usa únicamente Pillow/FFmpeg.
-- Si Remotion falta o falla, VIDCUT usa el motor procedural y continúa el montaje.
-- La duración y posición de la escena vienen del plan de edición y se mapean a la línea de tiempo tras los cortes. El estilo de animación progresa dentro de esa ventana; el campo `spoken_phrase` documenta la frase objetivo para que el director y futuras mejoras puedan refinar la sincronización semántica.
+- En KAI Streamer, Remotion es el motor principal y requerido: si falta o falla, el render se detiene con un error explícito para evitar entregar silenciosamente el plano antiguo. `NARRATIVE_MOTION_REQUIRED=0` habilita el fallback procedural solo para diagnóstico.
+- La duración y posición de la escena vienen del plan de edición y se mapean a la línea de tiempo tras los cortes. El estilo de animación progresa dentro de esa ventana; cuando el alineador de palabras entrega marcas temporales, la progresión del diagrama sigue esos tiempos; si no, usa el progreso temporal proporcional.
 - Los diagramas, terminales y agentes pixel-art son representaciones explicativas, no material real ni pruebas de ejecución.
 
 ## Skill del agente
