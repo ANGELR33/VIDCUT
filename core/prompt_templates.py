@@ -31,7 +31,7 @@ REGLAS CRÍTICAS DE EDICIÓN:
 5. ESCENAS EXPLICATIVAS ANIMADAS (PRIORIDAD: QUE EL ESPECTADOR ENTIENDA):
    - Además de B-roll y tarjetas, devuelve el campo visual_scenes cuando una idea necesite una representación visual para entenderse.
    - No conviertas cada frase en una animación. Selecciona solo momentos con una acción, proceso, comparación, causa-efecto o concepto que pueda representarse claramente.
-   - Usa únicamente estos tipos: automation, comparison, cause_effect, concept, timeline, flow, network, stat, sequence, route, layers.
+   - Usa únicamente estos tipos: automation, comparison, cause_effect, concept, timeline, flow, network, stat, sequence, route, layers, title_card, code_terminal, cyber_diagram, pixel_team.
    - automation: una tarea humana pasa a ser realizada por una herramienta/sistema; label_a suele ser una persona/tarea y label_b el sistema.
    - comparison: contrasta dos opciones, magnitudes o resultados; usa etiquetas cortas y no inventes cifras.
    - cause_effect: representa una causa y una consecuencia explícitas en la narración.
@@ -43,11 +43,15 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - sequence: explica un proceso de tres pasos; label_a y label_b son el primero y el último. No inventes etapas que no se desprendan de la narración.
    - route: muestra un recorrido esquemático entre dos puntos mencionados; no lo presentes como mapa geográfico exacto ni inventes ubicaciones.
    - layers: explica las capas de un sistema (por ejemplo, usuario, aplicación e infraestructura) solo si esas capas están respaldadas por el contexto narrado.
+   - title_card: apertura o transición editorial con titular breve, una línea de contexto y espacio negativo; úsala para una idea o capítulo importante, no para cualquier frase. label_a es una categoría breve y label_b una línea secundaria.
+   - code_terminal: muestra un ejemplo esquemático de código/terminal cuando se narra software, automatización o ejecución. Es una ilustración genérica, NO código real del producto ni evidencia de una ejecución real; no atribuyas resultados no mencionados.
+   - cyber_diagram: arquitectura o flujo de seguridad con límite de confianza, nodos y un marcador animado. Usa solo relaciones narradas; no lo presentes como un diagrama técnico real si es conceptual.
+   - pixel_team: composición de 12 agentes/personajes pixel-art para explicar un equipo, roles múltiples o agentes de IA. Úsala solo si la narración habla de equipos, trabajadores o agentes; no implica que existan 12 personas reales.
    - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence. Para stat, usa label_a solo con la cifra literal presente en la narración.
    - start_sec y end_sec deben corresponder al fragmento exacto de la narración; duración entre 2 y 8 segundos normalmente, nunca más de 15 segundos. Usa la transcripción para ubicar el fragmento y no inventes tiempos.
    - spoken_phrase debe ser una frase literal de la transcripción. reasoning explica qué entenderá mejor el espectador gracias a esa escena.
    - No uses escenas para sustituir material real de un acontecimiento, persona o lugar específico. Para hechos reales concretos, prioriza B-roll auténtico y verificable; usa animación para explicar procesos o ideas.
-   - Evita títulos genéricos, textos largos, estética de plantilla, neón excesivo y llenar toda la pantalla de cajas. Debe parecer una pieza editorial profesional, sobria y legible.
+   - Evita títulos genéricos, textos largos, estética de plantilla, neón excesivo y llenar toda la pantalla de cajas. Debe parecer una pieza editorial profesional, sobria y legible. Alterna los estilos según el contenido y no repitas una composición idéntica en escenas consecutivas.
    - Si no hay una escena que realmente aporte claridad, devuelve visual_scenes como lista vacía. Calidad y precisión antes que cantidad.
    - Devuelve como máximo 8 escenas por cada 5 minutos de narración; no repitas la misma composición varias veces seguidas.
 
