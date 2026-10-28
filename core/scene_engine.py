@@ -678,7 +678,7 @@ class SceneEngine:
                     _motion_w, _motion_h, int(self.fps), 240,
                 )
                 if narrative_motion_mov and narrative_motion_mov.exists() and narrative_motion_mov.stat().st_size > 20000:
-                    safe_log(f"[SceneEngine] ESCENA NARRATIVA REMOTION ACTIVA: {scene.scene_id} | tipo={_motion_kind} | duración={min(15.0, duration):.1f}s")
+                    safe_log(f"[SceneEngine] ESCENA NARRATIVA REMOTION ACTIVA: {scene.scene_id} | tipo={_motion_kind} | duración={min(45.0, duration):.1f}s")
                     scene.card = None
                 else:
                     narrative_motion_mov = None
