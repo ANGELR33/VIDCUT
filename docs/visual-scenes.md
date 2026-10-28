@@ -1,6 +1,6 @@
 # VIDCUT — escenas explicativas animadas
 
-Este cambio introduce una primera ruta para representar visualmente procesos y conceptos abstractos sin depender de APIs de generación de video.
+VIDCUT combina dos rutas para representar procesos y conceptos abstractos sin depender de APIs de generación de video: overlays procedurales Pillow/FFmpeg y una composición avanzada React/Remotion para escenas narrativas completas. Remotion se prefiere cuando Node y las dependencias de `remotion_studio` están instaladas; el renderer procedural sigue siendo el fallback.
 
 ## Tipos iniciales
 
@@ -64,3 +64,18 @@ Esta es una biblioteca procedural ampliada, no un sistema de animación avanzado
 ## Verificación
 
 Ejecutar las pruebas del proyecto con el entorno normal de desarrollo. La prueba de render requiere FFmpeg instalado. No marcar el cambio como validado hasta ejecutar las pruebas y comprobar un MP4 real.
+
+
+## Motor narrativo avanzado (Remotion)
+
+La composición `NarrativeScene` crea overlays transparentes ProRes 4444 con animación determinista por frame. Incluye tratamientos editoriales, terminal de código ilustrativa, diagramas progresivos y equipo pixel-art. El puente `core/narrative_motion.py` valida los parámetros, reutiliza renders válidos y solo promociona el archivo temporal si el render finaliza correctamente.
+
+- Requiere Node.js y dependencias instaladas en `remotion_studio/` (ejecuta `npm install` dentro de esa carpeta).
+- `NARRATIVE_MOTION=1` prefiere Remotion (predeterminado); `NARRATIVE_MOTION=0` usa únicamente Pillow/FFmpeg.
+- Si Remotion falta o falla, VIDCUT usa el motor procedural y continúa el montaje.
+- La duración y posición de la escena vienen del plan de edición y se mapean a la línea de tiempo tras los cortes. El estilo de animación progresa dentro de esa ventana; el campo `spoken_phrase` documenta la frase objetivo para que el director y futuras mejoras puedan refinar la sincronización semántica.
+- Los diagramas, terminales y agentes pixel-art son representaciones explicativas, no material real ni pruebas de ejecución.
+
+## Skill del agente
+
+`.opencode/skills/narrative-motion/SKILL.md` documenta cómo seleccionar escenas, mantener coherencia visual, sincronizar revelaciones, preservar el hablante y verificar el render. La skill son instrucciones de trabajo; el motor de render está implementado en código separado.
