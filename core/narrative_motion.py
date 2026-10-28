@@ -55,6 +55,11 @@ def render_scene(
             "labelA": str(spec.get("label_a", ""))[:48],
             "labelB": str(spec.get("label_b", ""))[:48],
             "spokenPhrase": str(spec.get("spoken_phrase", ""))[:400],
+            "words": [
+                {"word": str(w.get("word", ""))[:40], "start": max(0.0, float(w.get("start", 0.0))), "end": max(0.0, float(w.get("end", 0.0)))}
+                for w in (spec.get("words", []) or [])
+                if isinstance(w, dict) and str(w.get("word", "")).strip()
+            ][:240],
             "durationSec": round(duration, 3),
             "width": int(width),
             "height": int(height),
