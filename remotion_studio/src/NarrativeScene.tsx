@@ -13,6 +13,7 @@ export type NarrativeSceneProps = {
   labelA: string;
   labelB: string;
   spokenPhrase?: string;
+  words?: Array<{ word: string; start: number; end: number }>;
   durationSec: number;
   width: number;
   height: number;
@@ -29,6 +30,11 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
   const { fps, width, height } = useVideoConfig();
   const total = Math.max(1, Math.round(p.durationSec * fps));
   const t = Math.max(0, Math.min(1, frame / total));
+  const elapsedSec = frame / fps;
+  const alignedWords = (p.words || []).filter((w) => Number.isFinite(w.start) && Number.isFinite(w.end) && w.end > w.start);
+  const foundWordIndex = alignedWords.findIndex((w) => elapsedSec <= w.end);
+  const activeWordIndex = alignedWords.length ? (foundWordIndex < 0 ? alignedWords.length - 1 : foundWordIndex) : -1;
+  const visualT = alignedWords.length > 1 && activeWordIndex >= 0 ? activeWordIndex / (alignedWords.length - 1) : t;
   const enter = spring({ frame, fps, config: { damping: 20, stiffness: 110, mass: 0.85 }, durationInFrames: 22 });
   const exit = interpolate(frame, [total - Math.min(12, Math.floor(total / 4)), total], [1, 0], clamp);
   const opacity = Math.min(1, enter * 1.2) * exit;
@@ -78,7 +84,7 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
               ["03", "    conexiones = detectar_relaciones(datos)"],
               ["04", "    return explicar(conexiones)"],
             ].map((line, i) => {
-              const active = Math.min(3, Math.floor(t * 4)) === i;
+              const active = Math.min(3, Math.floor(visualT * 4)) === i;
               return <div key={line[0]} style={{ display: "flex", gap: "3%", padding: "1.1% 1.5%", borderRadius: 6, background: active ? "rgba(244,107,69,.17)" : "transparent", borderLeft: active ? `3px solid ${accent}` : "3px solid transparent", color: active ? paper : "#9BA8B6", opacity: interpolate(t, [i * .12, Math.min(.9, i * .12 + .18)], [0.35, 1], clamp) }}>
                 <span style={{ color: cyan }}>{line[0]}</span><span>{line[1]}</span><span style={{ marginLeft: "auto", color: accent }}>{active ? "▌" : ""}</span>
               </div>;
@@ -93,17 +99,17 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
           <svg viewBox="0 0 1000 420" width="100%" height="100%" style={{ overflow: "visible" }}>
             {p.kind === "cyber_diagram" ? <rect x="42" y="62" width="916" height="292" rx="22" fill="rgba(13,21,31,.45)" stroke={cyan} strokeDasharray="9 9" strokeOpacity=".7" /> : null}
             {[150, 325, 500, 675, 850].slice(0, p.kind === "cause_effect" || p.kind === "automation" ? 3 : 5).map((x, i, arr) => {
-              const active = Math.min(arr.length - 1, Math.floor(t * arr.length)) === i;
+              const active = Math.min(arr.length - 1, Math.floor(visualT * arr.length)) === i;
               const labels = [a, "ANÁLISIS", "SEÑAL", "CONEXIÓN", b];
               return <g key={x}>
-                {i < arr.length - 1 ? <line x1={x + 54} y1="210" x2={arr[i + 1] - 54} y2="210" stroke={accent} strokeWidth="3" strokeDasharray="8 7" strokeDashoffset={-t * 80} opacity=".85" /> : null}
+                {i < arr.length - 1 ? <line x1={x + 54} y1="210" x2={arr[i + 1] - 54} y2="210" stroke={accent} strokeWidth="3" strokeDasharray="8 7" strokeDashoffset={-visualT * 80} opacity=".85" /> : null}
                 <rect x={x - 58} y="166" width="116" height="88" rx="13" fill={active ? "rgba(244,107,69,.22)" : "rgba(9,15,23,.94)"} stroke={active ? accent : "#536575"} strokeWidth={active ? 3 : 1.5} />
                 <text x={x} y="205" fill={paper} fontSize="15" fontWeight="700" textAnchor="middle">{(labels[i] || b).slice(0, 14)}</text>
                 <text x={x} y="230" fill={muted} fontSize="10" textAnchor="middle">STEP 0{i + 1}</text>
               </g>;
             })}
-            <circle cx={150 + t * 700} cy="210" r="10" fill={paper} stroke={accent} strokeWidth="4" />
-            <circle cx={150 + t * 700} cy="210" r="23" fill={accent} opacity=".12" />
+            <circle cx={150 + visualT * 700} cy="210" r="10" fill={paper} stroke={accent} strokeWidth="4" />
+            <circle cx={150 + visualT * 700} cy="210" r="23" fill={accent} opacity=".12" />
           </svg>
         </div>
       ) : null}
@@ -112,7 +118,7 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
         <div style={{ position: "absolute", left: "9%", right: "9%", top: "24%", bottom: "13%", display: "grid", gridTemplateColumns: "repeat(6, minmax(0, 1fr))", gridTemplateRows: "repeat(2, 1fr)", gap: "2%", transform: `translateY(${slide}px)` }}>
           {Array.from({ length: 12 }, (_, i) => {
             const hue = [18, 198, 145, 265, 42, 175, 345, 220, 28, 135, 300, 205][i];
-            const active = i <= Math.floor(t * 12);
+            const active = i <= Math.floor(visualT * 12);
             return <div key={i} style={{ background: "rgba(9,14,22,.9)", border: `1px solid hsla(${hue},65%,65%,${active ? .9 : .3})`, borderRadius: 10, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 9, boxShadow: active ? `0 0 24px hsla(${hue},75%,60%,.13)` : "none" }}>
               <svg viewBox="0 0 64 76" width="46%" height="56%">
                 <rect x="22" y="5" width="20" height="20" fill="#EBC9A8" />
