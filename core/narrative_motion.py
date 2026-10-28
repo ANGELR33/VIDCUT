@@ -27,7 +27,7 @@ def available() -> bool:
 
 
 def enabled() -> bool:
-    # Enabled by default for installations that already have Remotion Studio.
+    # Enabled by default. KAI Streamer separately enforces successful rendering unless diagnostic fallback is opted in.
     return os.getenv("NARRATIVE_MOTION", "1").strip().lower() not in {"0", "false", "no", "off"}
 
 
