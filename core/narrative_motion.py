@@ -10,10 +10,12 @@ import json
 import os
 import shutil
 import subprocess
+import threading
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 STUDIO_DIR = Path(__file__).resolve().parent.parent / "remotion_studio"
+_RENDER_LOCK = threading.Lock()
 
 
 def available() -> bool:
@@ -77,11 +79,14 @@ def render_scene(
         tmp = final.with_name(final.stem + ".partial.mov")
         props_path.write_text(json.dumps(props, ensure_ascii=False), encoding="utf-8")
         try:
-            proc = subprocess.run(
-                ["node", "render.mjs", str(props_path.resolve()), str(tmp.resolve()), "NarrativeScene"],
-                cwd=str(STUDIO_DIR), capture_output=True, text=True, timeout=timeout,
-                encoding="utf-8", errors="replace",
-            )
+            # SceneEngine renderiza dos escenas en paralelo. Serializamos el proceso Remotion
+            # para impedir que dos procesos recompilen/promuevan remotion_studio/build a la vez.
+            with _RENDER_LOCK:
+                proc = subprocess.run(
+                    ["node", "render.mjs", str(props_path.resolve()), str(tmp.resolve()), "NarrativeScene"],
+                    cwd=str(STUDIO_DIR), capture_output=True, text=True, timeout=timeout,
+                    encoding="utf-8", errors="replace",
+                )
             if proc.returncode != 0 or not tmp.is_file() or tmp.stat().st_size < 20_000:
                 detail = (proc.stderr or proc.stdout or "salida ausente o demasiado pequeña").strip()[-1200:]
                 print(f"[NarrativeMotion] Render Remotion falló (código {proc.returncode}): {detail}")
