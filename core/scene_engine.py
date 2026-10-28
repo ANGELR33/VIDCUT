@@ -16,6 +16,7 @@ import asyncio
 import hashlib
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -621,6 +622,76 @@ class SceneEngine:
         # La escena se ajusta de forma milimétrica al audio hablado para evitar silencios y mantener sincronía exacta con los fotogramas
         duration = max(3.0, round(tts_duration + 0.15, 2))
         dur_str = f"{duration:.2f}"
+
+        # NUEVO FLUJO PRINCIPAL: Remotion genera una escena narrativa para cada tramo hablado.
+        # Si falla, el modo requerido detiene el render; el fallback legado es solo diagnóstico.
+        narrative_motion_mov: Optional[Path] = None
+        if duration >= 3.0:
+            try:
+                from core.narrative_motion import render_scene as render_narrative_scene
+                _card = scene.card
+                def _card_value(key: str, default: str = "") -> str:
+                    if _card is None:
+                        return default
+                    if isinstance(_card, dict):
+                        return str(_card.get(key, default) or default)
+                    return str(getattr(_card, key, default) or default)
+
+                _scene_type = str(getattr(scene, "type", "")).lower()
+                _speech_lower = speech_text.lower()
+                if any(token in _speech_lower for token in ("comparado", "frente a", "a diferencia", "versus", "mientras que")):
+                    _motion_kind = "cause_effect"
+                elif any(token in _speech_lower for token in ("paso a paso", "primero", "después", "finalmente", "proceso")):
+                    _motion_kind = "sequence"
+                elif _scene_type == "breaking_news":
+                    _motion_kind = "title_card"
+                elif _scene_type == "vector_motion":
+                    _motion_kind = "cyber_diagram"
+                elif _scene_type == "card_focus":
+                    _motion_kind = "title_card"
+                elif _scene_type == "chat_debate":
+                    _motion_kind = "cause_effect"
+                elif _scene_type == "video_reaction":
+                    _motion_kind = "sequence"
+                else:
+                    _motion_kind = "flow"
+
+                _scene_name = str(scene.name or "").strip()
+                _generic_names = ("hook", "intro", "cierre", "escena", "avatar", "directo", "presentador")
+                _use_scene_name = bool(_scene_name) and not any(token in _scene_name.lower() for token in _generic_names)
+                _visual_title = (_card_value("headline") or (_scene_name if _use_scene_name else speech_text)).strip()[:72]
+                _label_a = (_card_value("badge") or (scene.visual_query or "").split(",")[0] or "IDEA CLAVE").strip()[:48]
+                _label_b = (_card_value("stat") or _card_value("subtitle") or "QUÉ SIGNIFICA").strip()[:48]
+                _theme = getattr(self, "style_spec", None) or {}
+                _motion_spec = {
+                    "kind": _motion_kind, "title": _visual_title,
+                    "label_a": _label_a, "label_b": _label_b, "spoken_phrase": speech_text,
+                    "words": word_times,
+                    "duration": min(45.0, max(3.0, duration)),
+                    "theme": {"primary": _theme.get("primary", "#70C8F2"), "accent": _theme.get("accent", "#F46B45"), "bg": _theme.get("bg", "#0B1017")},
+                }
+                _motion_scale = min(1.0, 1280.0 / max(self.W, self.H))
+                _motion_w = max(320, int(self.W * _motion_scale))
+                _motion_h = max(240, int(self.H * _motion_scale))
+                narrative_motion_mov = await asyncio.to_thread(
+                    render_narrative_scene, _motion_spec, scene_dir / ("narrative_scene_" + str(scene.scene_id) + ".mov"),
+                    _motion_w, _motion_h, int(self.fps), 240,
+                )
+                if narrative_motion_mov and narrative_motion_mov.exists() and narrative_motion_mov.stat().st_size > 20000:
+                    safe_log(f"[SceneEngine] ESCENA NARRATIVA REMOTION ACTIVA: {scene.scene_id} | tipo={_motion_kind} | duración={min(45.0, duration):.1f}s")
+                    scene.card = None
+                else:
+                    narrative_motion_mov = None
+                    _required = os.getenv("NARRATIVE_MOTION_REQUIRED", "1").strip().lower() not in {"0", "false", "no", "off"}
+                    _message = f"Remotion no produjo una escena válida para la escena {scene.scene_id}. No se generará silenciosamente el plano antiguo. Revisa Node, remotion_studio/node_modules y los logs [NarrativeMotion]."
+                    safe_log(f"[SceneEngine] ERROR: {_message}")
+                    if _required:
+                        raise RuntimeError(_message)
+            except Exception as _narrative_err:
+                narrative_motion_mov = None
+                safe_log(f"[SceneEngine] Error generando escena narrativa Remotion {scene.scene_id}: {_narrative_err}")
+                if os.getenv("NARRATIVE_MOTION_REQUIRED", "1").strip().lower() not in {"0", "false", "no", "off"}:
+                    raise RuntimeError(f"Motor narrativo Remotion requerido pero falló en escena {scene.scene_id}: {_narrative_err}") from _narrative_err
 
         # 2. Curaduría Inteligente de Contenido y Apoyo Visual
         from core.smart_media_curator import SmartMediaCurator, VisualIntentType, VisualNature
@@ -1353,7 +1424,7 @@ class SceneEngine:
 
         # 3b. Remotion AI: Evaluación prioritaria para animaciones React (MetricCounter / VersusComparison)
         ai_remotion_mov: Optional[Path] = None
-        if getattr(self, "ai_remotion", None) and self.ai_remotion.remotion.available() and duration >= 3.0:
+        if not narrative_motion_mov and getattr(self, "ai_remotion", None) and self.ai_remotion.remotion.available() and duration >= 3.0:
             c_templ_cand = str(getattr(scene.card, "template", "") if hasattr(scene.card, "template") else (scene.card.get("template", "") if isinstance(scene.card, dict) else "")).lower() if scene.card else ""
             c_stat_cand = str(getattr(scene.card, "stat", "") if hasattr(scene.card, "stat") else (scene.card.get("stat", "") if isinstance(scene.card, dict) else "")) if scene.card else ""
             is_stat_candidate = (
@@ -1948,7 +2019,7 @@ class SceneEngine:
             safe_log(f"[SceneEngine] Fallback en palabras clave flotantes: {_kwe}")
 
         # Remotion AI: Si no se renderizó antes, evaluar si la escena se beneficia de uno
-        if not ai_remotion_mov:
+        if not ai_remotion_mov and not narrative_motion_mov:
             has_primary_foreground = bool(
                 (card_img_path and card_img_path.exists())
                 or (free_title_img_path and free_title_img_path.exists())
@@ -2798,6 +2869,15 @@ class SceneEngine:
                     )
                     cur_v = f"v_kwo_{k_i}"
 
+        # Superposición narrativa principal: ocupa toda la frase hablada, no solo 3.8 segundos.
+        if narrative_motion_mov and narrative_motion_mov.exists():
+            inputs.extend(["-t", dur_str, "-r", str(self.fps), "-i", str(narrative_motion_mov)])
+            narrative_idx = num_in
+            num_in += 1
+            filter_parts.append(f"[{narrative_idx}:v]scale={self.W}:{self.H},format=rgba,setpts=PTS-STARTPTS[v_narrative_motion]")
+            filter_parts.append(f"[{cur_v}][v_narrative_motion]overlay=0:0:eof_action=pass:shortest=0[v_with_narrative_motion]")
+            cur_v = "v_with_narrative_motion"
+
         # Superposición de Overlay Cinemático Remotion (React + Alpha ProRes)
         # Exclusión mutua estricta: asegurar que nunca se superponga sobre una tarjeta existente
         if remo_active:
@@ -3253,6 +3333,12 @@ class SceneEngine:
         progress_cb: Optional[Callable[[float, str], None]] = None,
     ) -> Path:
         """Renderiza todas las escenas y las concatena en el master broadcast final."""
+        # Preflight del motor visual antes de gastar tiempo en el ensamblaje.
+        _motion_required = os.getenv("NARRATIVE_MOTION_REQUIRED", "1").strip().lower() not in {"0", "false", "no", "off"}
+        if _motion_required and any(float(getattr(sc, "duration_est", 0) or 0) >= 3.0 for sc in (plan.scenes or [])):
+            from core.narrative_motion import available as _narrative_renderer_available
+            if not _narrative_renderer_available():
+                raise RuntimeError("KAI Streamer requiere Remotion para generar escenas visuales. Instala Node.js y ejecuta npm install dentro de remotion_studio; no se usará silenciosamente el render antiguo.")
         # Selección de track BGM según preferencia de usuario.
         # Rutas absolutas contra BASE_DIR: relativas al CWD, un lanzamiento desde
         # otro directorio mataba el BGM y los SFX en silencio.
@@ -3322,6 +3408,9 @@ class SceneEngine:
                 except asyncio.CancelledError:
                     raise
                 except Exception as scene_err:
+                    if _motion_required and ("Remotion" in str(scene_err) or "motor narrativo" in str(scene_err).lower()):
+                        safe_log(f"[SceneEngine] Fallo del motor narrativo requerido; no se reintentará con el render legado: {scene_err}")
+                        raise
                     safe_log(f"[SceneEngine] Reintentando escena {sc.scene_id} tras fallo transitorio: {str(scene_err)[:120]}")
                     sc_path = await self.render_scene(
                         scene=sc,

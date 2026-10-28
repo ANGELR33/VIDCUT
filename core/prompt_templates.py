@@ -28,7 +28,40 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - Extrae todos los fragmentos autónomos que realmente tengan potencial. No inventes una cuota: pueden ser 2 o 15.
    - La duración depende del contenido: desde 15 hasta 70 segundos si el segmento mantiene contexto, gancho y cierre.
 
-5. TARJETAS DE REFERENCIA (ESTILO PLATZI / NATE GENTILE):
+5. ESCENAS EXPLICATIVAS ANIMADAS (PRIORIDAD: QUE EL ESPECTADOR ENTIENDA):
+   - Además de B-roll y tarjetas, devuelve el campo visual_scenes cuando una idea necesite una representación visual para entenderse.
+   - No conviertas cada frase en una animación. Selecciona solo momentos con una acción, proceso, comparación, causa-efecto o concepto que pueda representarse claramente.
+   - Usa únicamente estos tipos: automation, comparison, cause_effect, concept, timeline, flow, network, stat, sequence, route, layers, title_card, code_terminal, cyber_diagram, pixel_team.
+   - automation: una tarea humana pasa a ser realizada por una herramienta/sistema; label_a suele ser una persona/tarea y label_b el sistema.
+   - comparison: contrasta dos opciones, magnitudes o resultados; usa etiquetas cortas y no inventes cifras.
+   - cause_effect: representa una causa y una consecuencia explícitas en la narración.
+   - concept: representa una idea abstracta con una relación visual simple.
+   - timeline: representa una secuencia temporal o evolución con dos hitos claros; label_a y label_b son los hitos extremos.
+   - flow: representa un proceso de entrada a resultado; label_a y label_b deben ser dos etapas reales de la narración.
+   - network: representa relaciones entre actores, conceptos o sistemas; no implica causalidad si la narración no la afirma.
+   - stat: destaca una cifra o magnitud literal ya mencionada; label_a contiene el valor textual exacto y label_b queda como contexto breve. Nunca inventes cifras ni uses este tipo si no hay una cifra explícita.
+   - sequence: explica un proceso de tres pasos; label_a y label_b son el primero y el último. No inventes etapas que no se desprendan de la narración.
+   - route: muestra un recorrido esquemático entre dos puntos mencionados; no lo presentes como mapa geográfico exacto ni inventes ubicaciones.
+   - layers: explica las capas de un sistema (por ejemplo, usuario, aplicación e infraestructura) solo si esas capas están respaldadas por el contexto narrado.
+   - title_card: apertura o transición editorial con titular breve, una línea de contexto y espacio negativo; úsala para una idea o capítulo importante, no para cualquier frase. label_a es una categoría breve y label_b una línea secundaria.
+   - code_terminal: muestra un ejemplo esquemático de código/terminal cuando se narra software, automatización o ejecución. Es una ilustración genérica, NO código real del producto ni evidencia de una ejecución real; no atribuyas resultados no mencionados.
+   - cyber_diagram: arquitectura o flujo de seguridad con límite de confianza, nodos y un marcador animado. Usa solo relaciones narradas; no lo presentes como un diagrama técnico real si es conceptual.
+   - pixel_team: composición de 12 agentes/personajes pixel-art para explicar un equipo, roles múltiples o agentes de IA. Úsala solo si la narración habla de equipos, trabajadores o agentes; no implica que existan 12 personas reales.
+   - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence.
+   - `spoken_phrase` debe ser una cita literal y corta de la transcripción; no la parafrasees. El intervalo debe cubrir el momento en que se pronuncia esa frase, no un segundo arbitrario ni una pausa sin voz.
+   - Diseña cada escena como una pequeña explicación con progresión visual: establece el contexto, revela el elemento cuando se menciona y resalta la relación/conclusión al final. No generes solo una imagen fija con movimiento decorativo.
+   - Evita solapar escenas explicativas que compitan entre sí. Si una escena nueva continúa la anterior, cambia el estado visual o el foco en lugar de reiniciar todo el diseño.
+   - No inventes tiempos de palabra con falsa precisión: usa la transcripción y los límites temporales disponibles; la renderización anima dentro de ese intervalo y no debe insinuar una alineación fonética que no haya sido medida. Para stat, usa label_a solo con la cifra literal presente en la narración.
+   - start_sec y end_sec deben corresponder al fragmento exacto de la narración; duración entre 2 y 8 segundos normalmente, nunca más de 15 segundos. Usa la transcripción para ubicar el fragmento y no inventes tiempos.
+   - spoken_phrase debe ser una frase literal de la transcripción. reasoning explica qué entenderá mejor el espectador gracias a esa escena.
+   - No uses escenas para sustituir material real de un acontecimiento, persona o lugar específico. Para hechos reales concretos, prioriza B-roll auténtico y verificable; usa animación para explicar procesos o ideas.
+   - Evita títulos genéricos, textos largos, estética de plantilla, neón excesivo y llenar toda la pantalla de cajas. Debe parecer una pieza editorial profesional, sobria y legible. Alterna los estilos según el contenido y no repitas una composición idéntica en escenas consecutivas.
+   - PRIORIDAD VISUAL REAL: en una narración explicativa normal, busca activamente momentos que se beneficien de una escena animada. Como orientación, genera 2–4 escenas por cada minuto cuando haya procesos, relaciones, cambios, comparaciones o conceptos explicables; no conviertas cada frase en una escena ni sacrifiques precisión por cantidad.
+   - No devuelvas visual_scenes vacía solo por ser prudente si el guion contiene ideas explicables. Reserva la lista vacía para clips muy cortos, puramente conversacionales o sin conceptos que puedan representarse honestamente.
+   - Si el contenido explica un proceso a lo largo de varias frases, divide la explicación en escenas sucesivas con focos visuales distintos; evita dejar largos tramos de narración explicativa sin apoyo visual.
+   - Devuelve como máximo 12 escenas por cada 5 minutos de narración; no repitas la misma composición varias veces seguidas. La prioridad es cobertura visual útil, no llenar el video de tarjetas.
+
+6. TARJETAS DE REFERENCIA (ESTILO PLATZI / NATE GENTILE):
    - La tarjeta aparece en el segundo EXACTO en que se pronuncia la entidad o el dato. PRECISIÓN ABSOLUTA: usa la transcripción del audio mentalmente para fijar `start_sec` en el instante exacto en que la persona pronuncia la palabra.
    - SÉ SELECTIVO. El máximo es {max_cards}, pero no es una meta: crea una tarjeta solo si el dato es concreto, verificable y le sirve al espectador en ESE momento. Prioriza cifras, fechas, leyes, nombres propios y afirmaciones discutibles; descarta lo obvio, lo trivial y lo que el hablante ya explicó bien. Si el video tiene pocas, devuelve pocas.
    - ¿QUÉ TARJETAS CREAR?

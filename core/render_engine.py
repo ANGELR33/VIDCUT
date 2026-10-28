@@ -1,5 +1,6 @@
 import os
 import json
+import math
 import shutil
 import subprocess
 from threading import Event
@@ -8,6 +9,7 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 from config.settings import settings
 from core.models import CaptionItem, HighlightClip, VideoEditingPlan
+from core.visual_scene_engine import VisualSceneEngine
 from core.subtitle_generator import SubtitleGenerator
 from core.timeline import TimelineMapper
 from process_runner import run_process
@@ -262,6 +264,14 @@ class VideoRenderEngine:
                     f"setpts=PTS-STARTPTS+{s:.3f}/TB[o{i}]"
                 )
                 pos_x, pos_y = "0", "0"
+            elif it["kind"] == "scene":
+                cmd += ["-t", f"{d:.2f}", "-i", it["path"]]
+                chains.append(
+                    f"[{i}:v]scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color=black@0,setsar=1,fps={self.fps},"
+                    f"format=yuva420p,fade=t=in:st=0:d=0.3:alpha=1,fade=t=out:st={fo:.2f}:d=0.35:alpha=1,"
+                    f"setpts=PTS-STARTPTS+{s:.3f}/TB[o{i}]"
+                )
+                pos_x, pos_y = "0", "0"
             elif it["kind"] == "avatar":
                 cmd += ["-c:v", "libvpx-vp9", "-t", f"{d:.2f}", "-i", it["path"]]
                 av_size = int(min(W, H) * 0.28)
@@ -374,7 +384,80 @@ class VideoRenderEngine:
                 ass_file = SubtitleGenerator.generate_ass(captions, workdir / "subs.ass", W, H)
 
         overlays = self.collect_overlays(plan, mapper)
-        
+
+        # Escenas semánticas: generan animaciones locales sin APIs externas y se incorporan
+        # al mismo render final que las tarjetas y el B-roll. Si una escena falla, el render
+        # principal continúa sin ella.
+        scenes = getattr(plan, "visual_scenes", []) or []
+        if not scenes:
+            say("El plan no contiene escenas narrativas; se revisó la salida del planificador visual.", 0.42)
+        if scenes:
+            say(f"Preparando {min(len(scenes), 20)} escenas explicativas...", 0.42)
+            scene_engine = VisualSceneEngine(fps=max(12, min(int(self.fps), 24)))
+            scene_dir = workdir / "visual_scenes"
+            scene_dir.mkdir(parents=True, exist_ok=True)
+            base_w, base_h = probe_size(cut)
+            for scene_index, scene in enumerate(scenes[:20]):
+                try:
+                    # Los datos de una escena generada/guardada pueden estar incompletos.
+                    # Una escena inválida se omite sin abortar el render del video completo.
+                    if not getattr(scene, "enabled", True):
+                        continue
+                    confidence = float(getattr(scene, "confidence", 0.7))
+                    if not math.isfinite(confidence) or confidence < 0.45:
+                        continue
+                    original_start = float(scene.start_sec)
+                    original_end = float(scene.end_sec)
+                    if original_end <= original_start:
+                        continue
+                    placed = mapper.map_first(original_start, original_end)
+                    if not placed:
+                        continue
+                    mapped_start = max(0.0, float(placed[0]))
+                    mapped_duration = min(15.0, float(placed[1]) - mapped_start)
+                    if mapped_duration < 1.0:
+                        continue
+                    scene_path = scene_dir / f"scene_{scene_index:03d}.mov"
+                    scene_spec = {
+                        "kind": scene.kind,
+                        "duration": mapped_duration,
+                        "title": scene.title,
+                        "label_a": scene.label_a,
+                        "label_b": scene.label_b,
+                        "spoken_phrase": getattr(scene, "spoken_phrase", ""),
+                    }
+                    # Prefer full-frame Remotion compositions for richer motion and cleaner typography.
+                    # If Node/Chromium/dependencies are unavailable, retain the procedural renderer.
+                    rendered_scene = None
+                    try:
+                        from core import narrative_motion
+                        rendered_scene = narrative_motion.render_scene(
+                            scene_spec,
+                            scene_path,
+                            width=min(base_w, 1280),
+                            height=min(base_h, 720),
+                            fps=max(12, min(int(self.fps), 30)),
+                        )
+                    except Exception:
+                        rendered_scene = None
+                    if rendered_scene is not None:
+                        scene_path = rendered_scene
+                    else:
+                        print("[RenderEngine] Usando renderer Pillow/FFmpeg de respaldo para escena " + str(getattr(scene, "scene_id", scene_index)))
+                        scene_engine.render(
+                            scene_spec, scene_path,
+                            width=min(base_w, 1280), height=min(base_h, 720),
+                        )
+                    overlays.append({
+                        "kind": "scene",
+                        "path": str(scene_path),
+                        "start": mapped_start,
+                        "dur": mapped_duration,
+                        "visual_scene": True,
+                    })
+                except Exception as exc:
+                    say(f"Escena explicativa {getattr(scene, 'scene_id', scene_index)} omitida: {exc}", 0.44)
+
         # Extraer segmentos de zoom y de censura basados en captions importantes
         zoom_segments = []
         censor_segments = []

@@ -96,6 +96,21 @@ class HighlightClip(BaseModel):
     hook: str = Field(description="Frase gancho en los primeros 3 segundos")
     virality_score: int = Field(ge=1, le=100, description="Puntuación estimada de retención/impacto (1-100)")
 
+
+class VisualScene(BaseModel):
+    """Escena explicativa procedimental, sincronizada con una frase concreta."""
+    scene_id: str = Field(description="ID único, por ejemplo visual_1")
+    start_sec: float = Field(ge=0.0, description="Inicio sobre el video original")
+    end_sec: float = Field(gt=0.0, description="Fin sobre el video original; entre 1 y 15 segundos de duración")
+    kind: str = Field(default="concept", description="automation, comparison, cause_effect, concept, timeline, flow, network, stat, sequence, route, layers, title_card, code_terminal, cyber_diagram o pixel_team")
+    title: str = Field(default="", max_length=100, description="Titular breve y claro, no una frase larga")
+    label_a: str = Field(default="PERSONA", max_length=48, description="Etiqueta del elemento de origen")
+    label_b: str = Field(default="SISTEMA", max_length=48, description="Etiqueta del resultado o segundo elemento")
+    spoken_phrase: str = Field(default="", description="Fragmento exacto de la narración que justifica la escena")
+    reasoning: str = Field(default="", description="Qué explica la representación y por qué ayuda a entender")
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    enabled: bool = Field(default=True, description="Permite desactivar esta escena sin borrarla")
+
 class VideoEditingPlan(BaseModel):
     """Plan maestro estructurado de edición generado por Gemini 1.5 Pro."""
     video_summary: str = Field(description="Resumen temático general del video analizado")
@@ -106,3 +121,4 @@ class VideoEditingPlan(BaseModel):
     captions: List[CaptionItem] = Field(default_factory=list, description="Transcripción sincronizada para subtítulos dinámicos")
     highlights: List[HighlightClip] = Field(default_factory=list, description="Segmentos ideales para formato Short vertical")
     info_cards: List[InfoCard] = Field(default_factory=list, description="Datos concretos mencionados que merecen una tarjeta informativa verificada")
+    visual_scenes: List[VisualScene] = Field(default_factory=list, description="Escenas animadas explicativas, solo cuando aclaren visualmente la narración")
