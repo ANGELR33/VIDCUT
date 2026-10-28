@@ -416,13 +416,35 @@ class VideoRenderEngine:
                     if mapped_duration < 1.0:
                         continue
                     scene_path = scene_dir / f"scene_{scene_index:03d}.mov"
-                    scene_engine.render({
+                    scene_spec = {
                         "kind": scene.kind,
                         "duration": mapped_duration,
                         "title": scene.title,
                         "label_a": scene.label_a,
                         "label_b": scene.label_b,
-                    }, scene_path, width=min(base_w, 1280), height=min(base_h, 720))
+                        "spoken_phrase": getattr(scene, "spoken_phrase", ""),
+                    }
+                    # Prefer full-frame Remotion compositions for richer motion and cleaner typography.
+                    # If Node/Chromium/dependencies are unavailable, retain the procedural renderer.
+                    rendered_scene = None
+                    try:
+                        from core import narrative_motion
+                        rendered_scene = narrative_motion.render_scene(
+                            scene_spec,
+                            scene_path,
+                            width=min(base_w, 1280),
+                            height=min(base_h, 720),
+                            fps=max(12, min(int(self.fps), 30)),
+                        )
+                    except Exception:
+                        rendered_scene = None
+                    if rendered_scene is not None:
+                        scene_path = rendered_scene
+                    else:
+                        scene_engine.render(
+                            scene_spec, scene_path,
+                            width=min(base_w, 1280), height=min(base_h, 720),
+                        )
                     overlays.append({
                         "kind": "scene",
                         "path": str(scene_path),
