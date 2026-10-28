@@ -63,11 +63,26 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
       </div>
 
       {p.kind === "title_card" ? (
-        <div style={{ position: "absolute", left: "11%", right: "11%", top: "29%", transform: `translateY(${slide}px)`, textAlign: "center" }}>
-          <div style={{ ...labelStyle, fontSize: Math.max(15, width * .014), color: accent, marginBottom: "2.5%" }}>{a}</div>
-          <div style={{ fontSize: `clamp(36px, ${width * .044}px, 92px)`, fontWeight: 780, lineHeight: 1.02, letterSpacing: "-.045em", textShadow: "0 8px 42px rgba(0,0,0,.45)" }}>{title}</div>
-          <div style={{ width: interpolate(t, [0.15, .55], [0, width * .10], clamp), height: 4, margin: "3% auto", background: accent }} />
-          <div style={{ color: muted, fontSize: Math.max(17, width * .016), letterSpacing: ".025em" }}>{b}</div>
+        <div style={{ position: "absolute", left: "8%", right: "8%", top: "23%", bottom: "12%", transform: `translateY(${slide}px)`, textAlign: "center" }}>
+          <div style={{ ...labelStyle, fontSize: Math.max(15, width * .014), color: accent, marginBottom: "1.8%" }}>{a}</div>
+          <div style={{ fontSize: `clamp(34px, ${width * .041}px, 84px)`, fontWeight: 780, lineHeight: 1.04, letterSpacing: "-.045em", textShadow: "0 8px 42px rgba(0,0,0,.55)", maxWidth: "90%", margin: "0 auto" }}>{title}</div>
+          <div style={{ width: interpolate(visualT, [0.02, .45], [0, width * .12], clamp), height: 4, margin: "2.2% auto 2.5%", background: accent, boxShadow: `0 0 26px ${accent}` }} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2.5%", width: "100%", margin: "0 auto" }}>
+            <div style={{ flex: "0 1 31%", minHeight: 76, padding: "1.8% 2%", borderRadius: 14, border: `1px solid ${cyan}99`, background: "rgba(7,14,23,.82)", boxShadow: `0 12px 40px rgba(0,0,0,.26), 0 0 22px ${cyan}22`, textAlign: "left", opacity: interpolate(visualT, [0, .22], [0, 1], clamp), transform: `translateX(${interpolate(visualT, [0, .22], [-45, 0], clamp)}px)` }}>
+              <div style={{ color: cyan, ...labelStyle, fontSize: Math.max(10, width * .008), marginBottom: 8 }}>01 / CONTEXTO</div>
+              <div style={{ color: paper, fontSize: `clamp(13px, ${width * .013}px, 24px)`, fontWeight: 700 }}>{a}</div>
+            </div>
+            <svg viewBox="0 0 180 54" width="18%" style={{ flex: "0 0 18%", overflow: "visible" }}>
+              <path d="M4 27 H160" fill="none" stroke={accent} strokeWidth="3" strokeDasharray="8 7" strokeDashoffset={-visualT * 90} opacity=".9" />
+              <circle cx={interpolate(visualT, [0, 1], [6, 160], clamp)} cy="27" r="7" fill={paper} stroke={accent} strokeWidth="3" />
+              <path d="M148 14 L164 27 L148 40" fill="none" stroke={accent} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity={visualT > .35 ? 1 : .3} />
+            </svg>
+            <div style={{ flex: "0 1 31%", minHeight: 76, padding: "1.8% 2%", borderRadius: 14, border: `1px solid ${accent}99`, background: "rgba(7,14,23,.86)", boxShadow: `0 12px 40px rgba(0,0,0,.26), 0 0 22px ${accent}22`, textAlign: "left", opacity: interpolate(visualT, [.22, .48], [0, 1], clamp), transform: `translateX(${interpolate(visualT, [.22, .48], [45, 0], clamp)}px)` }}>
+              <div style={{ color: accent, ...labelStyle, fontSize: Math.max(10, width * .008), marginBottom: 8 }}>02 / CONSECUENCIA</div>
+              <div style={{ color: paper, fontSize: `clamp(13px, ${width * .013}px, 24px)`, fontWeight: 700 }}>{b}</div>
+            </div>
+          </div>
+          <div style={{ color: muted, fontSize: Math.max(11, width * .009), marginTop: "2%", letterSpacing: ".13em", opacity: interpolate(visualT, [.35, .65], [0, .95], clamp) }}>IDEA CLAVE · EXPLICACIÓN VISUAL</div>
         </div>
       ) : null}
 
