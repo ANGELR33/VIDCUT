@@ -30,11 +30,11 @@ jobs:
         with:
           node-version: "20"
       - name: Instalar dependencias Remotion
-        run: npm install
+        run: npm ci
       - name: Verificar TypeScript
         run: npx tsc --noEmit
       - name: Construir composición Remotion
-        run: npm run bundle
+        run: npx remotion compositions src/index.ts
 
   tests:
     name: Pruebas (Python ${{ matrix.python }})
