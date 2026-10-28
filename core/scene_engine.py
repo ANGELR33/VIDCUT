@@ -670,9 +670,12 @@ class SceneEngine:
                     "duration": min(45.0, max(3.0, duration)),
                     "theme": {"primary": _theme.get("primary", "#70C8F2"), "accent": _theme.get("accent", "#F46B45"), "bg": _theme.get("bg", "#0B1017")},
                 }
+                _motion_scale = min(1.0, 1280.0 / max(self.W, self.H))
+                _motion_w = max(320, int(self.W * _motion_scale))
+                _motion_h = max(240, int(self.H * _motion_scale))
                 narrative_motion_mov = await asyncio.to_thread(
                     render_narrative_scene, _motion_spec, scene_dir / ("narrative_scene_" + str(scene.scene_id) + ".mov"),
-                    self.W, self.H, int(self.fps), 240,
+                    _motion_w, _motion_h, int(self.fps), 240,
                 )
                 if narrative_motion_mov and narrative_motion_mov.exists() and narrative_motion_mov.stat().st_size > 20000:
                     safe_log(f"[SceneEngine] ESCENA NARRATIVA REMOTION ACTIVA: {scene.scene_id} | tipo={_motion_kind} | duración={min(15.0, duration):.1f}s")
