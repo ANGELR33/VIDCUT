@@ -18,6 +18,26 @@ jobs:
           python-version: "3.12"
       - run: python scripts/check_secrets.py
 
+  remotion:
+    name: Remotion (typecheck y bundle)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: remotion_studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: remotion_studio/package-lock.json
+      - name: Instalar dependencias Remotion
+        run: npm install
+      - name: Verificar TypeScript
+        run: npx tsc --noEmit
+      - name: Construir composición Remotion
+        run: npm run bundle
+
   tests:
     name: Pruebas (Python ${{ matrix.python }})
     runs-on: ubuntu-latest
