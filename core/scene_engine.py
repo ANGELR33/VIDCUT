@@ -663,6 +663,7 @@ class SceneEngine:
                 _motion_spec = {
                     "kind": _motion_kind, "title": _visual_title,
                     "label_a": _label_a, "label_b": _label_b, "spoken_phrase": speech_text,
+                    "words": word_times,
                     "duration": min(15.0, max(3.0, duration)),
                     "theme": {"primary": _theme.get("primary", "#70C8F2"), "accent": _theme.get("accent", "#F46B45"), "bg": _theme.get("bg", "#0B1017")},
                 }
