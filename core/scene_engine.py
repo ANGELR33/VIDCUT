@@ -624,7 +624,7 @@ class SceneEngine:
         dur_str = f"{duration:.2f}"
 
         # NUEVO FLUJO PRINCIPAL: Remotion genera una escena narrativa para cada tramo hablado.
-        # Si el renderer no está disponible, el motor anterior queda como fallback observable.
+        # Si falla, el modo requerido detiene el render; el fallback legado es solo diagnóstico.
         narrative_motion_mov: Optional[Path] = None
         if duration >= 3.0:
             try:
