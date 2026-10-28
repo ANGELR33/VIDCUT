@@ -1,7 +1,6 @@
 import React from "react";
 import {
   AbsoluteFill,
-  Easing,
   interpolate,
   spring,
   useCurrentFrame,
@@ -60,7 +59,7 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
       {p.kind === "title_card" ? (
         <div style={{ position: "absolute", left: "11%", right: "11%", top: "29%", transform: `translateY(${slide}px)`, textAlign: "center" }}>
           <div style={{ ...labelStyle, fontSize: Math.max(15, width * .014), color: accent, marginBottom: "2.5%" }}>{a}</div>
-          <div style={{ fontSize: `clamp(36px, ${width * .044}px, 92px)`, fontWeight: 780, lineHeight: 1.02, letterSpacing: "-.045em", textWrap: "balance" as any, textShadow: "0 8px 42px rgba(0,0,0,.45)" }}>{title}</div>
+          <div style={{ fontSize: `clamp(36px, ${width * .044}px, 92px)`, fontWeight: 780, lineHeight: 1.02, letterSpacing: "-.045em", textShadow: "0 8px 42px rgba(0,0,0,.45)" }}>{title}</div>
           <div style={{ width: interpolate(t, [0.15, .55], [0, width * .10], clamp), height: 4, margin: "3% auto", background: accent }} />
           <div style={{ color: muted, fontSize: Math.max(17, width * .016), letterSpacing: ".025em" }}>{b}</div>
         </div>
