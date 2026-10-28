@@ -1,7 +1,6 @@
 """Bridge from semantic edit plans to Remotion's narrative motion-graphics composition.
 
-The Remotion path is preferred when its local Node dependencies are installed; the existing
-Pillow/FFmpeg renderer remains the fail-open fallback. No external API is required.
+Remotion renders transparent ProRes overlays locally and needs no external API. The bridge returns None on failure; KAI Streamer enforces Remotion by default and raises an explicit error rather than silently returning to the legacy visual path.
 """
 from __future__ import annotations
 
