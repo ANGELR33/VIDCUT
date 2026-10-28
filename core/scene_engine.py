@@ -16,6 +16,7 @@ import asyncio
 import hashlib
 import json
 import math
+import os
 import re
 import subprocess
 import sys
@@ -674,10 +675,16 @@ class SceneEngine:
                     scene.card = None
                 else:
                     narrative_motion_mov = None
-                    safe_log(f"[SceneEngine] Remotion narrativo no disponible para escena {scene.scene_id}; se mantiene fallback legado.")
+                    _required = os.getenv("NARRATIVE_MOTION_REQUIRED", "1").strip().lower() not in {"0", "false", "no", "off"}
+                    _message = f"Remotion no produjo una escena válida para la escena {scene.scene_id}. No se generará silenciosamente el plano antiguo. Revisa Node, remotion_studio/node_modules y los logs [NarrativeMotion]."
+                    safe_log(f"[SceneEngine] ERROR: {_message}")
+                    if _required:
+                        raise RuntimeError(_message)
             except Exception as _narrative_err:
                 narrative_motion_mov = None
                 safe_log(f"[SceneEngine] Error generando escena narrativa Remotion {scene.scene_id}: {_narrative_err}")
+                if os.getenv("NARRATIVE_MOTION_REQUIRED", "1").strip().lower() not in {"0", "false", "no", "off"}:
+                    raise RuntimeError(f"Motor narrativo Remotion requerido pero falló en escena {scene.scene_id}: {_narrative_err}") from _narrative_err
 
         # 2. Curaduría Inteligente de Contenido y Apoyo Visual
         from core.smart_media_curator import SmartMediaCurator, VisualIntentType, VisualNature
