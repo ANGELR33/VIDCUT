@@ -47,7 +47,11 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - code_terminal: muestra un ejemplo esquemático de código/terminal cuando se narra software, automatización o ejecución. Es una ilustración genérica, NO código real del producto ni evidencia de una ejecución real; no atribuyas resultados no mencionados.
    - cyber_diagram: arquitectura o flujo de seguridad con límite de confianza, nodos y un marcador animado. Usa solo relaciones narradas; no lo presentes como un diagrama técnico real si es conceptual.
    - pixel_team: composición de 12 agentes/personajes pixel-art para explicar un equipo, roles múltiples o agentes de IA. Úsala solo si la narración habla de equipos, trabajadores o agentes; no implica que existan 12 personas reales.
-   - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence. Para stat, usa label_a solo con la cifra literal presente en la narración.
+   - Cada escena debe incluir scene_id, start_sec, end_sec, kind, title, label_a, label_b, spoken_phrase, reasoning y confidence.
+   - `spoken_phrase` debe ser una cita literal y corta de la transcripción; no la parafrasees. El intervalo debe cubrir el momento en que se pronuncia esa frase, no un segundo arbitrario ni una pausa sin voz.
+   - Diseña cada escena como una pequeña explicación con progresión visual: establece el contexto, revela el elemento cuando se menciona y resalta la relación/conclusión al final. No generes solo una imagen fija con movimiento decorativo.
+   - Evita solapar escenas explicativas que compitan entre sí. Si una escena nueva continúa la anterior, cambia el estado visual o el foco en lugar de reiniciar todo el diseño.
+   - No inventes tiempos de palabra con falsa precisión: usa la transcripción y los límites temporales disponibles; la renderización anima dentro de ese intervalo y no debe insinuar una alineación fonética que no haya sido medida. Para stat, usa label_a solo con la cifra literal presente en la narración.
    - start_sec y end_sec deben corresponder al fragmento exacto de la narración; duración entre 2 y 8 segundos normalmente, nunca más de 15 segundos. Usa la transcripción para ubicar el fragmento y no inventes tiempos.
    - spoken_phrase debe ser una frase literal de la transcripción. reasoning explica qué entenderá mejor el espectador gracias a esa escena.
    - No uses escenas para sustituir material real de un acontecimiento, persona o lugar específico. Para hechos reales concretos, prioriza B-roll auténtico y verificable; usa animación para explicar procesos o ideas.
