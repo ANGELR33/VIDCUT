@@ -11,7 +11,7 @@ class NarrativeMotionTests(unittest.TestCase):
     def test_rejects_invalid_duration_before_render(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = narrative_motion.render_scene(
-                {"kind": "concept", "duration": 30}, Path(tmp) / "scene.mov", 1280, 720
+                {"kind": "concept", "duration": 60}, Path(tmp) / "scene.mov", 1280, 720
             )
         self.assertIsNone(result)
 
@@ -33,6 +33,8 @@ class NarrativeMotionTests(unittest.TestCase):
                 self.assertEqual(cmd[4], "NarrativeScene")
                 self.assertEqual(props["kind"], "cyber_diagram")
                 self.assertEqual(props["spokenPhrase"], "encuentra una conexión")
+                self.assertEqual(props["words"][0]["word"], "encuentra")
+                self.assertEqual(props["words"][1]["end"], 1.0)
                 self.assertEqual(props["width"], 1280)
                 partial.write_bytes(b"x" * 25000)
 
@@ -47,7 +49,8 @@ class NarrativeMotionTests(unittest.TestCase):
                 result = narrative_motion.render_scene(
                     {"kind": "cyber_diagram", "duration": 4, "title": "Conexiones",
                      "label_a": "Documentos", "label_b": "Hallazgo",
-                     "spoken_phrase": "encuentra una conexión"},
+                     "spoken_phrase": "encuentra una conexión",
+                     "words": [{"word": "encuentra", "start": 0.0, "end": 0.5}, {"word": "conexión", "start": 0.5, "end": 1.0}]},
                     out, 1280, 720, fps=30,
                 )
             self.assertIsNotNone(result)
