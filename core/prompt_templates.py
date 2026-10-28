@@ -56,8 +56,10 @@ REGLAS CRÍTICAS DE EDICIÓN:
    - spoken_phrase debe ser una frase literal de la transcripción. reasoning explica qué entenderá mejor el espectador gracias a esa escena.
    - No uses escenas para sustituir material real de un acontecimiento, persona o lugar específico. Para hechos reales concretos, prioriza B-roll auténtico y verificable; usa animación para explicar procesos o ideas.
    - Evita títulos genéricos, textos largos, estética de plantilla, neón excesivo y llenar toda la pantalla de cajas. Debe parecer una pieza editorial profesional, sobria y legible. Alterna los estilos según el contenido y no repitas una composición idéntica en escenas consecutivas.
-   - Si no hay una escena que realmente aporte claridad, devuelve visual_scenes como lista vacía. Calidad y precisión antes que cantidad.
-   - Devuelve como máximo 8 escenas por cada 5 minutos de narración; no repitas la misma composición varias veces seguidas.
+   - PRIORIDAD VISUAL REAL: en una narración explicativa normal, busca activamente momentos que se beneficien de una escena animada. Como orientación, genera 2–4 escenas por cada minuto cuando haya procesos, relaciones, cambios, comparaciones o conceptos explicables; no conviertas cada frase en una escena ni sacrifiques precisión por cantidad.
+   - No devuelvas visual_scenes vacía solo por ser prudente si el guion contiene ideas explicables. Reserva la lista vacía para clips muy cortos, puramente conversacionales o sin conceptos que puedan representarse honestamente.
+   - Si el contenido explica un proceso a lo largo de varias frases, divide la explicación en escenas sucesivas con focos visuales distintos; evita dejar largos tramos de narración explicativa sin apoyo visual.
+   - Devuelve como máximo 12 escenas por cada 5 minutos de narración; no repitas la misma composición varias veces seguidas. La prioridad es cobertura visual útil, no llenar el video de tarjetas.
 
 6. TARJETAS DE REFERENCIA (ESTILO PLATZI / NATE GENTILE):
    - La tarjeta aparece en el segundo EXACTO en que se pronuncia la entidad o el dato. PRECISIÓN ABSOLUTA: usa la transcripción del audio mentalmente para fijar `start_sec` en el instante exacto en que la persona pronuncia la palabra.
