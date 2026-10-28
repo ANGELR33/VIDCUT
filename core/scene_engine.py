@@ -656,7 +656,10 @@ class SceneEngine:
                 else:
                     _motion_kind = "flow"
 
-                _visual_title = (_card_value("headline") or scene.name or speech_text).strip()[:72]
+                _scene_name = str(scene.name or "").strip()
+                _generic_names = ("hook", "intro", "cierre", "escena", "avatar", "directo", "presentador")
+                _use_scene_name = bool(_scene_name) and not any(token in _scene_name.lower() for token in _generic_names)
+                _visual_title = (_card_value("headline") or (_scene_name if _use_scene_name else speech_text)).strip()[:72]
                 _label_a = (_card_value("badge") or (scene.visual_query or "").split(",")[0] or "IDEA CLAVE").strip()[:48]
                 _label_b = (_card_value("stat") or _card_value("subtitle") or "QUÉ SIGNIFICA").strip()[:48]
                 _theme = getattr(self, "style_spec", None) or {}
