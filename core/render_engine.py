@@ -389,6 +389,8 @@ class VideoRenderEngine:
         # al mismo render final que las tarjetas y el B-roll. Si una escena falla, el render
         # principal continúa sin ella.
         scenes = getattr(plan, "visual_scenes", []) or []
+        if not scenes:
+            say("El plan no contiene escenas narrativas; se revisó la salida del planificador visual.", 0.42)
         if scenes:
             say(f"Preparando {min(len(scenes), 20)} escenas explicativas...", 0.42)
             scene_engine = VisualSceneEngine(fps=max(12, min(int(self.fps), 24)))
@@ -441,6 +443,7 @@ class VideoRenderEngine:
                     if rendered_scene is not None:
                         scene_path = rendered_scene
                     else:
+                        print("[RenderEngine] Usando renderer Pillow/FFmpeg de respaldo para escena " + str(getattr(scene, "scene_id", scene_index)))
                         scene_engine.render(
                             scene_spec, scene_path,
                             width=min(base_w, 1280), height=min(base_h, 720),
