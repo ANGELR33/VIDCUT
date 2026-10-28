@@ -71,7 +71,7 @@ Ejecutar las pruebas del proyecto con el entorno normal de desarrollo. La prueba
 La composición `NarrativeScene` crea overlays transparentes ProRes 4444 con animación determinista por frame. Incluye tratamientos editoriales, terminal de código ilustrativa, diagramas progresivos y equipo pixel-art. El puente `core/narrative_motion.py` valida los parámetros, reutiliza renders válidos y solo promociona el archivo temporal si el render finaliza correctamente.
 
 - Requiere Node.js y dependencias instaladas en `remotion_studio/` (ejecuta `npm install` dentro de esa carpeta).
-- `NARRATIVE_MOTION=1` prefiere Remotion (predeterminado); `NARRATIVE_MOTION=0` usa únicamente Pillow/FFmpeg.
+- `NARRATIVE_MOTION=1` habilita Remotion (predeterminado). Para permitir el fallback legado en diagnóstico, establece `NARRATIVE_MOTION_REQUIRED=0`; para desactivar Remotion por completo, combina `NARRATIVE_MOTION=0` y `NARRATIVE_MOTION_REQUIRED=0`.
 - En KAI Streamer, Remotion es el motor principal y requerido: si falta o falla, el render se detiene con un error explícito para evitar entregar silenciosamente el plano antiguo. `NARRATIVE_MOTION_REQUIRED=0` habilita el fallback procedural solo para diagnóstico.
 - La duración y posición de la escena vienen del plan de edición y se mapean a la línea de tiempo tras los cortes. El estilo de animación progresa dentro de esa ventana; cuando el alineador de palabras entrega marcas temporales, la progresión del diagrama sigue esos tiempos; si no, usa el progreso temporal proporcional.
 - Los diagramas, terminales y agentes pixel-art son representaciones explicativas, no material real ni pruebas de ejecución.
