@@ -15,7 +15,7 @@ from typing import Any, Dict
 from PIL import Image, ImageDraw, ImageFont
 
 
-ALLOWED_SCENES = {"automation", "comparison", "cause_effect", "concept", "timeline", "flow", "network", "stat", "sequence", "route", "layers"}
+ALLOWED_SCENES = {"automation", "comparison", "cause_effect", "concept", "timeline", "flow", "network", "stat", "sequence", "route", "layers", "title_card", "code_terminal", "cyber_diagram", "pixel_team"}
 FPS_DEFAULT = 24
 
 
@@ -138,6 +138,10 @@ class VisualSceneEngine:
                     "sequence": "PASO A PASO",
                     "route": "RECORRIDO ESQUEMÁTICO",
                     "layers": "CÓMO SE COMPONE",
+                    "title_card": "IDEA CENTRAL",
+                    "code_terminal": "EJECUCIÓN DEL SISTEMA",
+                    "cyber_diagram": "ARQUITECTURA DEL SISTEMA",
+                    "pixel_team": "EQUIPO DE AGENTES",
                 }[spec["kind"]]
                 title_font = _font(max(14, width // 52))
                 title = _fit_label(draw, title[:48], title_font, int(width * .60))
@@ -152,7 +156,119 @@ class VisualSceneEngine:
                 label_font = _font(max(12, width // 90))
                 label_a = _fit_label(draw, spec["label_a"], label_font, int(width * .28))
                 label_b = _fit_label(draw, spec["label_b"], label_font, int(width * .28))
-                if spec["kind"] == "automation":
+                if spec["kind"] == "title_card":
+                    # Editorial title treatment: typography and negative space do the work.
+                    kicker = _fit_label(draw, label_a.upper(), _font(max(13, width // 75)), int(width * .62))
+                    kicker_w = draw.textlength(kicker, font=_font(max(13, width // 75)))
+                    draw.text(((width-kicker_w)//2, int(height*.34)), kicker,
+                              font=_font(max(13, width // 75)), fill=(235,125,90,fade))
+                    headline = _fit_label(draw, spec["title"] or label_b, _font(max(24, width // 25)), int(width*.78))
+                    hf = _font(max(24, width // 25))
+                    hw = draw.textlength(headline, font=hf)
+                    draw.text(((width-hw)//2, int(height*.43)), headline, font=hf,
+                              fill=(250,248,242,fade), stroke_width=1, stroke_fill=(13,16,20,fade))
+                    sub = _fit_label(draw, label_b if spec["title"] else "UNA EXPLICACIÓN VISUAL", _font(max(12,width//90)), int(width*.55))
+                    sf = _font(max(12,width//90)); sw = draw.textlength(sub,font=sf)
+                    draw.text(((width-sw)//2,int(height*.56)),sub,font=sf,fill=(190,198,205,fade))
+                    accent_y = int(height*.64)
+                    draw.line((width//2-int(width*.045),accent_y,width//2+int(width*.045),accent_y),
+                              fill=(235,95,63,fade),width=max(2,width//500))
+                    left_label_x = right_label_x = -10000
+                elif spec["kind"] == "code_terminal":
+                    # A restrained terminal/code editor, with an animated active line.
+                    x1, y1 = panel_x + int(panel_w*.12), center_y - int(height*.17)
+                    x2, y2 = panel_x + int(panel_w*.88), center_y + int(height*.18)
+                    draw.rounded_rectangle((x1,y1,x2,y2),radius=max(8,width//100),
+                        fill=(9,12,17,int(fade*.96)),outline=(100,116,130,fade),width=max(2,width//700))
+                    header_h = int(height*.045)
+                    draw.rounded_rectangle((x1,y1,x2,y1+header_h),radius=max(6,width//120),
+                        fill=(28,33,41,fade))
+                    for n,col in enumerate(((235,95,63),(235,180,80),(100,190,140))):
+                        rr=max(3,width//220)
+                        px=x1+int(width*(.025+.025*n)); py=y1+header_h//2
+                        draw.ellipse((px-rr,py-rr,px+rr,py+rr),fill=(*col,fade))
+                    draw.text((x1+int(width*.11),y1+int(header_h*.18)),
+                        _fit_label(draw,label_a or "main.py",_font(max(10,width//110)),int(width*.4)),
+                        font=_font(max(10,width//110)),fill=(190,198,205,fade))
+                    rows = [
+                        ("01", "def analizar_video(entrada):"),
+                        ("02", "    escenas = detectar_patrones(entrada)"),
+                        ("03", "    fuentes = verificar_datos(escenas)"),
+                        ("04", "    montaje = sincronizar(voz, escenas)"),
+                        ("05", "    return renderizar(montaje)"),
+                    ]
+                    row_font=_font(max(10,width//105)); row_h=max(18,int(height*.045))
+                    active=int(_clamp(t)*len(rows))
+                    for ridx,(num,code) in enumerate(rows):
+                        ry=y1+header_h+int(height*.022)+ridx*row_h
+                        if ridx==active:
+                            draw.rounded_rectangle((x1+int(width*.012),ry-2,x2-int(width*.012),ry+row_h-2),
+                                radius=max(2,width//500),fill=(235,95,63,int(fade*.22)))
+                        draw.text((x1+int(width*.025),ry),num,font=row_font,fill=(100,185,230,fade))
+                        draw.text((x1+int(width*.065),ry),_fit_label(draw,code,row_font,int(panel_w*.72)),
+                            font=row_font,fill=(250,248,242,fade) if ridx==active else (170,182,190,fade))
+                    left_label_x = right_label_x = -10000
+                elif spec["kind"] == "cyber_diagram":
+                    # Architecture diagram with a trust boundary and a moving signal.
+                    bx1,bx2=panel_x+int(panel_w*.10),panel_x+int(panel_w*.90)
+                    by1,by2=center_y-int(height*.17),center_y+int(height*.16)
+                    # Dashed boundary communicates a system boundary, not a real-world map.
+                    dash=max(8,int(width*.012))
+                    for dx in range(bx1,bx2,dash*2):
+                        draw.line((dx,by1,min(dx+dash,bx2),by1),fill=(105,185,230,int(fade*.75)),width=2)
+                        draw.line((dx,by2,min(dx+dash,bx2),by2),fill=(105,185,230,int(fade*.75)),width=2)
+                    for dy in range(by1,by2,dash*2):
+                        draw.line((bx1,dy,bx1,min(dy+dash,by2)),fill=(105,185,230,int(fade*.75)),width=2)
+                        draw.line((bx2,dy,bx2,min(dy+dash,by2)),fill=(105,185,230,int(fade*.75)),width=2)
+                    names=[label_a or "ORIGEN","ANÁLISIS","ACCESO","SESIÓN",label_b or "DESTINO"]
+                    xs=[bx1+int((bx2-bx1)*q) for q in (.07,.285,.50,.715,.93)]
+                    node_w=int(width*.115); node_h=int(height*.075); ny=center_y
+                    for idx in range(4):
+                        draw.line((xs[idx]+node_w//2,ny,xs[idx+1]-node_w//2,ny),
+                                  fill=(235,95,63,int(fade*.78)),width=max(2,width//500))
+                    active=min(3,int(_clamp(t)*4))
+                    for idx,(nx,name) in enumerate(zip(xs,names)):
+                        col=(235,95,63) if idx==active else (70,90,105)
+                        draw.rounded_rectangle((nx-node_w//2,ny-node_h//2,nx+node_w//2,ny+node_h//2),
+                            radius=max(4,width//180),fill=(15,20,27,int(fade*.96)),
+                            outline=(*col,fade),width=max(2,width//500))
+                        nf=_font(max(9,width//125)); txt=_fit_label(draw,name,nf,node_w-int(width*.012))
+                        tw=draw.textlength(txt,font=nf)
+                        draw.text((nx-tw/2,ny-int(height*.012)),txt,font=nf,fill=(245,245,240,fade))
+                    mx=int(xs[active]+(xs[active+1]-xs[active])*(_clamp(t)*4-active)) if active<4 else xs[-1]
+                    rr=max(4,int(height*.012))
+                    draw.ellipse((mx-rr,ny-rr,mx+rr,ny+rr),fill=(250,248,242,fade),outline=(235,95,63,fade),width=2)
+                    left_label_x = right_label_x = -10000
+                elif spec["kind"] == "pixel_team":
+                    # Twelve compact pixel-art agent cards, each with a distinct palette.
+                    cols=6; rows=2; gap=int(width*.012)
+                    card_w=int(panel_w*.145); card_h=int(height*.18)
+                    total_w=cols*card_w+(cols-1)*gap
+                    start_x=(width-total_w)//2
+                    start_y=center_y-int(card_h*1.05)
+                    palette=[(235,95,63),(90,170,220),(90,190,140),(180,130,220),
+                             (235,180,80),(100,190,190),(220,110,130),(130,150,230),
+                             (200,160,110),(120,190,140),(210,120,200),(145,170,190)]
+                    for idx in range(12):
+                        row,col=divmod(idx,cols); x=start_x+col*(card_w+gap); y=start_y+row*(card_h+gap)
+                        active_idx=int(_clamp(t)*12)
+                        draw.rounded_rectangle((x,y,x+card_w,y+card_h),radius=max(3,width//260),
+                            fill=(12,16,22,int(fade*.95)),outline=(*palette[idx],fade if idx<=active_idx else int(fade*.35)),
+                            width=max(2,width//650))
+                        # Pixel-style head, torso, arms and legs built from crisp rectangles.
+                        unit=max(3,int(width*.004))
+                        cx=x+card_w//2; head_y=y+int(card_h*.20)
+                        draw.rectangle((cx-unit*2,head_y,cx+unit*2,head_y+unit*3),fill=(245,205,165,fade))
+                        draw.rectangle((cx-unit*3,head_y+unit*3,cx+unit*3,head_y+unit*7),fill=(*palette[idx],fade))
+                        draw.rectangle((cx-unit*5,head_y+unit*4,cx-unit*3,head_y+unit*7),fill=(*palette[idx],fade))
+                        draw.rectangle((cx+unit*3,head_y+unit*4,cx+unit*5,head_y+unit*7),fill=(*palette[idx],fade))
+                        draw.rectangle((cx-unit*2,head_y+unit*7,cx,head_y+unit*10),fill=(210,220,225,fade))
+                        draw.rectangle((cx,head_y+unit*7,cx+unit*2,head_y+unit*10),fill=(210,220,225,fade))
+                        label=_font(max(8,width//145)); name=f"AGENTE {idx+1:02d}"
+                        tw=draw.textlength(name,font=label)
+                        draw.text((cx-tw/2,y+int(card_h*.78)),name,font=label,fill=(215,222,228,fade))
+                    left_label_x = right_label_x = -10000
+                elif spec["kind"] == "automation":
                     self._stick_figure(draw, left_x + travel, center_y, height, fade)
                     self._robot(draw, right_x - travel, center_y, height, fade)
                     self._arrow(draw, left_x + int(width * .09), center_y, right_x - int(width * .09), center_y, fade)
