@@ -3333,6 +3333,12 @@ class SceneEngine:
         progress_cb: Optional[Callable[[float, str], None]] = None,
     ) -> Path:
         """Renderiza todas las escenas y las concatena en el master broadcast final."""
+        # Preflight del motor visual antes de gastar tiempo en el ensamblaje.
+        _motion_required = os.getenv("NARRATIVE_MOTION_REQUIRED", "1").strip().lower() not in {"0", "false", "no", "off"}
+        if _motion_required and any(float(getattr(sc, "duration_est", 0) or 0) >= 3.0 for sc in (plan.scenes or [])):
+            from core.narrative_motion import available as _narrative_renderer_available
+            if not _narrative_renderer_available():
+                raise RuntimeError("KAI Streamer requiere Remotion para generar escenas visuales. Instala Node.js y ejecuta npm install dentro de remotion_studio; no se usará silenciosamente el render antiguo.")
         # Selección de track BGM según preferencia de usuario.
         # Rutas absolutas contra BASE_DIR: relativas al CWD, un lanzamiento desde
         # otro directorio mataba el BGM y los SFX en silencio.
@@ -3402,6 +3408,9 @@ class SceneEngine:
                 except asyncio.CancelledError:
                     raise
                 except Exception as scene_err:
+                    if _motion_required and ("Remotion" in str(scene_err) or "motor narrativo" in str(scene_err).lower()):
+                        safe_log(f"[SceneEngine] Fallo del motor narrativo requerido; no se reintentará con el render legado: {scene_err}")
+                        raise
                     safe_log(f"[SceneEngine] Reintentando escena {sc.scene_id} tras fallo transitorio: {str(scene_err)[:120]}")
                     sc_path = await self.render_scene(
                         scene=sc,
