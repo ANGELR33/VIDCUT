@@ -96,7 +96,8 @@ export const NarrativeScene: React.FC<NarrativeSceneProps> = (p) => {
 
       {p.kind === "cyber_diagram" || p.kind === "flow" || p.kind === "network" || p.kind === "sequence" || p.kind === "cause_effect" || p.kind === "automation" ? (
         <div style={{ position: "absolute", left: "8%", right: "8%", top: "26%", height: "52%", transform: `translateY(${slide}px)` }}>
-          <svg viewBox="0 0 1000 420" width="100%" height="100%" style={{ overflow: "visible" }}>
+          <div style={{ textAlign: "center", fontSize: `clamp(20px, ${width * .026}px, 46px)`, fontWeight: 760, letterSpacing: "-.025em", marginBottom: "1.8%", textShadow: "0 8px 34px rgba(0,0,0,.5)" }}>{title}</div>
+          <svg viewBox="0 0 1000 420" width="100%" height="82%" style={{ overflow: "visible" }}>
             {p.kind === "cyber_diagram" ? <rect x="42" y="62" width="916" height="292" rx="22" fill="rgba(13,21,31,.45)" stroke={cyan} strokeDasharray="9 9" strokeOpacity=".7" /> : null}
             {[150, 325, 500, 675, 850].slice(0, p.kind === "cause_effect" || p.kind === "automation" ? 3 : 5).map((x, i, arr) => {
               const active = Math.min(arr.length - 1, Math.floor(visualT * arr.length)) === i;
