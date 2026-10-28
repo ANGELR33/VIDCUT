@@ -51,7 +51,8 @@ class VisualSceneEngineTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("ffmpeg"), "FFmpeg is required for render smoke test")
     def test_all_scene_types_render_transparent_mov(self):
         kinds = ("automation", "comparison", "cause_effect", "concept",
-                 "timeline", "flow", "network", "stat", "sequence", "route", "layers")
+                 "timeline", "flow", "network", "stat", "sequence", "route", "layers",
+                 "title_card", "code_terminal", "cyber_diagram", "pixel_team")
         with tempfile.TemporaryDirectory(prefix="vidcut-visual-test-") as tmp:
             engine = VisualSceneEngine(fps=12)
             for kind in kinds:
