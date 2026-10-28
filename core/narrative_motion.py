@@ -47,7 +47,7 @@ def render_scene(
         return None
     try:
         duration = float(spec.get("duration", 0))
-        if not 1.0 <= duration <= 15.0 or width < 320 or height < 240 or fps < 12 or fps > 60:
+        if not 1.0 <= duration <= 45.0 or width < 320 or height < 240 or fps < 12 or fps > 60:
             return None
         props = {
             "kind": str(spec.get("kind", "concept"))[:32],
